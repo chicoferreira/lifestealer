@@ -16,6 +16,13 @@ public class LifestealerUserManager {
         this.users = users;
     }
 
+    /**
+     * Gets a {@link LifestealerUser} instance of the user with the given UUID.
+     * If the user does not exist, a new instance is created with the default amount of hearts.
+     *
+     * @param uuid the UUID of the user
+     * @return a {@link LifestealerUser} instance of the user
+     */
     public @NotNull LifestealerUser getUser(UUID uuid) {
         return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, Settings.DEFAULT_HEARTS));
     }
