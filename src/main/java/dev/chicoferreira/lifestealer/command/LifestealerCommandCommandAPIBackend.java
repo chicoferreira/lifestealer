@@ -1,21 +1,26 @@
 package dev.chicoferreira.lifestealer.command;
 
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import static dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import static dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
+
 public class LifestealerCommandCommandAPIBackend {
 
     private final LifestealerCommand command;
+    private final LifestealerHeartItemManager itemManager;
 
-    public LifestealerCommandCommandAPIBackend(LifestealerCommand command) {
+    public LifestealerCommandCommandAPIBackend(LifestealerCommand command, LifestealerHeartItemManager itemManager) {
         this.command = command;
+        this.itemManager = itemManager;
     }
 
     public <T> @NotNull T getArgument(CommandArguments args, String argument) throws WrapperCommandSyntaxException {
@@ -63,7 +68,60 @@ public class LifestealerCommandCommandAPIBackend {
                                         )
                                 )
                         )
-                ).register(plugin);
+                ).then(new LiteralArgument("item")
+                        .then(new LiteralArgument("give")
+                                .then(generateItemArgument("item")
+                                        .then(new IntegerArgument("amount")
+                                                .then(new EntitySelectorArgument.OnePlayer("player")
+                                                        .executes((sender, args) -> {
+                                                            command.subcommandItemGive(sender,
+                                                                    getArgument(args, "item"),
+                                                                    getArgument(args, "amount"),
+                                                                    getArgument(args, "player"));
+                                                        })
+                                                ).executesPlayer((sender, args) -> {
+                                                    command.subcommandItemGive(sender,
+                                                            getArgument(args, "item"),
+                                                            getArgument(args, "amount"),
+                                                            sender);
+                                                })
+                                        )
+                                )
+                        ).then(new LiteralArgument("take")
+                                .then(generateItemArgument("item")
+                                        .then(new IntegerArgument("amount")
+                                                .then(new EntitySelectorArgument.OnePlayer("player")
+                                                        .executes((sender, args) -> {
+                                                            command.subcommandItemTake(sender,
+                                                                    getArgument(args, "item"),
+                                                                    getArgument(args, "amount"),
+                                                                    getArgument(args, "player"));
+                                                        })
+                                                ).executesPlayer((sender, args) -> {
+                                                    command.subcommandItemTake(sender,
+                                                            getArgument(args, "item"),
+                                                            getArgument(args, "amount"),
+                                                            sender);
+                                                })
+                                        )
+                                )
+                        )
+                )
+                .register(plugin);
     }
 
+    public Argument<@NotNull LifestealerHeartItem> generateItemArgument(String name) {
+        return new CustomArgument<>(new StringArgument(name), info -> {
+            String itemName = info.input();
+            LifestealerHeartItem item = itemManager.getItem(itemName);
+            if (item == null) {
+                throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Unknown item: ").appendArgInput());
+            }
+            return item;
+        }).replaceSuggestions(
+                ArgumentSuggestions.strings(
+                        (_s) -> itemManager.getItemTypes().toArray(String[]::new)
+                )
+        );
+    }
 }

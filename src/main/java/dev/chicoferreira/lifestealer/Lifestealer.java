@@ -2,24 +2,39 @@ package dev.chicoferreira.lifestealer;
 
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItemListener;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Lifestealer extends JavaPlugin {
 
     private LifestealerUserManager userManager;
     private LifestealerController controller;
+    private LifestealerHeartItemManager itemManager;
 
     @Override
     public void onEnable() {
         getLogger().info("hello!");
         this.controller = new LifestealerController();
         this.userManager = new LifestealerUserManager(new HashMap<>());
+        List<LifestealerHeartItem> items = List.of(
+                new LifestealerHeartItem("test", 2, new ItemStack(Material.PAPER))
+        );
+        this.itemManager = new LifestealerHeartItemManager(items, "test");
 
-        LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager);
-        LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command);
+        LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager, this.itemManager);
+        LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
+
+        LifestealerHeartItemListener itemListener = new LifestealerHeartItemListener(this.itemManager, this.controller, this.userManager);
+        Bukkit.getPluginManager().registerEvents(itemListener, this);
     }
 
     /**
@@ -38,5 +53,14 @@ public class Lifestealer extends JavaPlugin {
      */
     public LifestealerController getController() {
         return controller;
+    }
+
+    /**
+     * Returns the item manager instance. You can use this to get the item stack to drop when a player dies or register new item types.
+     *
+     * @return the item manager instance
+     */
+    public LifestealerHeartItemManager getItemManager() {
+        return itemManager;
     }
 }
