@@ -70,7 +70,7 @@ public class LifestealerCommandCommandAPIBackend {
                         )
                 ).then(new LiteralArgument("item")
                         .then(new LiteralArgument("give")
-                                .then(generateItemArgument("item")
+                                .then(generateItemTypeArgument("item")
                                         .then(new IntegerArgument("amount")
                                                 .then(new EntitySelectorArgument.OnePlayer("player")
                                                         .executes((sender, args) -> {
@@ -88,7 +88,7 @@ public class LifestealerCommandCommandAPIBackend {
                                         )
                                 )
                         ).then(new LiteralArgument("take")
-                                .then(generateItemArgument("item")
+                                .then(generateItemTypeArgument("item")
                                         .then(new IntegerArgument("amount")
                                                 .then(new EntitySelectorArgument.OnePlayer("player")
                                                         .executes((sender, args) -> {
@@ -110,7 +110,7 @@ public class LifestealerCommandCommandAPIBackend {
                 .register(plugin);
     }
 
-    public Argument<@NotNull LifestealerHeartItem> generateItemArgument(String name) {
+    public Argument<@NotNull LifestealerHeartItem> generateItemTypeArgument(String name) {
         return new CustomArgument<>(new StringArgument(name), info -> {
             String itemName = info.input();
             LifestealerHeartItem item = itemManager.getItem(itemName);

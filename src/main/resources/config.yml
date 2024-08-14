@@ -1,0 +1,15 @@
+heart items:
+  - name: "default"
+    hearts: 1
+    item:
+      type: "paper"
+      display name: "<color:#ff0000>Normal Heart</color>"
+      lore:
+        - "<gray>Right click to add <white>+1<color:#ff0000>♥</color></white> to your health"
+      glint: true
+      enchantments:
+        - name: "unbreaking"
+          level: 1
+      custom model data: 144
+      flags:
+        - "hide enchants"
