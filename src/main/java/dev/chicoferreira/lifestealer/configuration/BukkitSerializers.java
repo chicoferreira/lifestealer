@@ -33,6 +33,7 @@ public class BukkitSerializers {
             String componentString = node.getString();
             Component component = MiniMessage.miniMessage().deserializeOrNull(componentString);
             if (component != null) {
+                // Remove italic to avoid item lore and display name to be italic
                 return component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
             }
             return null;

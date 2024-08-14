@@ -24,6 +24,6 @@ public class LifestealerUserManager {
      * @return a {@link LifestealerUser} instance of the user
      */
     public @NotNull LifestealerUser getUser(UUID uuid) {
-        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, Settings.DEFAULT_HEARTS));
+        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, LifestealerSettings.DEFAULT_HEARTS));
     }
 }
