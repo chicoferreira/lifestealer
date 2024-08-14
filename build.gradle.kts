@@ -25,6 +25,7 @@ dependencies {
 
     paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.5.1")
+    compileOnly("org.spongepowered:configurate-yaml:4.1.2")
 }
 
 tasks {
@@ -51,6 +52,6 @@ tasks {
 bukkitPluginYaml {
     main = "dev.chicoferreira.lifestealer.Lifestealer"
     authors.add("chicoferreira")
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     depend.add("CommandAPI")
 }

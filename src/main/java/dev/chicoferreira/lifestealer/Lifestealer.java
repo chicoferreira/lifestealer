@@ -2,16 +2,13 @@ package dev.chicoferreira.lifestealer;
 
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
-import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemListener;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Lifestealer extends JavaPlugin {
 
@@ -24,10 +21,11 @@ public class Lifestealer extends JavaPlugin {
         getLogger().info("hello!");
         this.controller = new LifestealerController();
         this.userManager = new LifestealerUserManager(new HashMap<>());
-        List<LifestealerHeartItem> items = List.of(
-                new LifestealerHeartItem("test", 2, new ItemStack(Material.PAPER))
-        );
-        this.itemManager = new LifestealerHeartItemManager(items, "test");
+
+        LifestealerConfiguration configuration = new LifestealerConfiguration(this, "config.yml");
+        configuration.getConfig();
+
+        this.itemManager = new LifestealerHeartItemManager(configuration.getHeartItems(), "default");
 
         LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager, this.itemManager);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);

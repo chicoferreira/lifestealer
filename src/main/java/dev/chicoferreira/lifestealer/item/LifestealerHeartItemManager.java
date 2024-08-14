@@ -96,7 +96,7 @@ public class LifestealerHeartItemManager {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-        persistentDataContainer.set(HEARTS_KEY, PersistentDataType.INTEGER, heartItem.amount());
+        persistentDataContainer.set(HEARTS_KEY, PersistentDataType.INTEGER, heartItem.heartAmount());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -149,7 +149,7 @@ public class LifestealerHeartItemManager {
     }
 
     /**
-     * @return An immutable list of all the item types registered in the item manager
+     * @return An immutable list of all the item types registered in the item manager.
      */
     public List<String> getItemTypes() {
         return List.copyOf(this.items.keySet());
