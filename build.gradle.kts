@@ -24,7 +24,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-bukkit-core:9.5.1")
+    compileOnly("dev.jorel:commandapi-bukkit-core:9.5.3")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
 }
 
