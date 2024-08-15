@@ -3,29 +3,44 @@ package dev.chicoferreira.lifestealer;
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
 import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
+import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesController;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemListener;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spongepowered.configurate.serialize.SerializationException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class Lifestealer extends JavaPlugin {
 
     private LifestealerUserManager userManager;
     private LifestealerController controller;
     private LifestealerHeartItemManager itemManager;
+    private LifestealerUserRulesController userRulesController;
 
     @Override
     public void onEnable() {
         getLogger().info("hello!");
-        this.controller = new LifestealerController();
+        LifestealerConfiguration configuration = new LifestealerConfiguration(this, "config.yml");
+        LifestealerConfiguration.Values values;
+
+        try {
+            values = configuration.loadConfig();
+        } catch (SerializationException e) {
+            getLogger().log(Level.SEVERE, "Couldn't load config", e);
+            getLogger().severe("Disabling plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), new ArrayList<>());
+        this.controller = new LifestealerController(this.userRulesController);
         this.userManager = new LifestealerUserManager(new HashMap<>());
 
-        LifestealerConfiguration configuration = new LifestealerConfiguration(this, "config.yml");
-        configuration.getConfig();
-
-        this.itemManager = new LifestealerHeartItemManager(configuration.getHeartItems(), "default");
+        this.itemManager = new LifestealerHeartItemManager(values.heartItems(), "default");
 
         LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager, this.itemManager);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
@@ -60,5 +75,15 @@ public class Lifestealer extends JavaPlugin {
      */
     public LifestealerHeartItemManager getItemManager() {
         return itemManager;
+    }
+
+    /**
+     * Returns the user rules controller instance. You can use this to get the user rules of the plugin.
+     * The rules can be used to get the minimum and maximum amount of hearts a player can have, or their ban time.
+     *
+     * @return the user rules controller instance
+     */
+    public LifestealerUserRulesController getUserRulesController() {
+        return userRulesController;
     }
 }

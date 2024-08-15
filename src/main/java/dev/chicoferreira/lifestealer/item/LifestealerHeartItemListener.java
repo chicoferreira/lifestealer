@@ -22,7 +22,7 @@ public class LifestealerHeartItemListener implements Listener {
         this.userManager = userManager;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemRightClick(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (item == null) {
@@ -38,6 +38,9 @@ public class LifestealerHeartItemListener implements Listener {
 
         item.subtract();
         controller.addHearts(event.getPlayer(), user, hearts);
+
+        event.setCancelled(true);
+        // TODO: cancel and send a message when the player has the maximum amount of hearts
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -54,5 +57,6 @@ public class LifestealerHeartItemListener implements Listener {
         int hearts = heartItemManager.getHearts(itemToDropWhenPlayerDies);
 
         controller.removeHearts(event.getEntity(), user, hearts); // remove the amount of hearts dropped
+        // TODO: ban the player if the player died with the minimum amount of hearts
     }
 }

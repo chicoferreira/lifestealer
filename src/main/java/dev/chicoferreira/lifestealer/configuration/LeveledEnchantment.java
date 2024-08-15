@@ -10,6 +10,8 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 
+import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.require;
+
 /**
  * Represents an enchantment with a level attached to it used for serialization purposes
  *
@@ -22,10 +24,7 @@ public record LeveledEnchantment(Enchantment enchantment, int level) {
 
         @Override
         public LeveledEnchantment deserialize(Type type, ConfigurationNode node) throws SerializationException {
-            NamespacedKey enchantmentKey = node.node("name").get(NamespacedKey.class);
-            if (enchantmentKey == null) {
-                throw new SerializationException("Enchantment name is missing");
-            }
+            NamespacedKey enchantmentKey = require(node.node("name"), NamespacedKey.class);
 
             Registry<Enchantment> enchantmentRegistry = RegistryAccess.registryAccess()
                     .getRegistry(RegistryKey.ENCHANTMENT);

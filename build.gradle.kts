@@ -23,7 +23,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.5.3")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
 }
@@ -44,7 +44,7 @@ tasks {
     runServer {
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
-            hangar("CommandAPI", "9.5.1")
+            hangar("CommandAPI", "9.5.3")
         }
     }
 }

@@ -1,6 +1,6 @@
-heart items:
+items:
   - name: "default"
-    hearts: 1
+    heart amount: 1
     item:
       type: "paper"
       display name: "<color:#ff0000>Normal Heart</color>"
@@ -13,3 +13,16 @@ heart items:
       custom model data: 144
       flags:
         - "hide enchants"
+starting hearts: 10
+rules:
+  default:
+    max hearts: 10
+    min hearts: 5
+    ban time: 1d 12h 30m
+  groups:
+    - permission: "vip"
+      max hearts: 15
+      min hearts: 3
+    - permission: "admin"
+      max hearts: 20
+      ban time: 0s

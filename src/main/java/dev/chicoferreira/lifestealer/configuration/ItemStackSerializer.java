@@ -11,14 +11,13 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.require;
+
 public class ItemStackSerializer implements TypeDeserializer<ItemStack> {
 
     @Override
     public ItemStack deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        String itemMaterialString = node.node("type").getString();
-        if (itemMaterialString == null) {
-            throw new SerializationException("ItemStack type is missing");
-        }
+        String itemMaterialString = require(node.node("type"), String.class);
 
         Material material = Material.matchMaterial(itemMaterialString);
         if (material == null) {

@@ -7,21 +7,16 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 
+import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.require;
+
 public class LifestealerHeartItemSerializer implements TypeDeserializer<LifestealerHeartItem> {
+
 
     @Override
     public LifestealerHeartItem deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        String name = node.node("name").getString();
-        if (name == null) {
-            throw new SerializationException("Heart type name is missing");
-        }
-
-        int heartAmount = node.node("heart amount").getInt(1);
-
-        ItemStack itemStack = node.node("item").get(ItemStack.class);
-        if (itemStack == null) {
-            throw new SerializationException("Heart item is missing in " + name);
-        }
+        String name = require(node.node("name"), String.class);
+        int heartAmount = require(node.node("heart amount"), Integer.class);
+        ItemStack itemStack = require(node.node("item"), ItemStack.class);
 
         return new LifestealerHeartItem(name, heartAmount, itemStack);
     }
