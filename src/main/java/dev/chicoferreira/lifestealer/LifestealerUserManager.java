@@ -11,9 +11,11 @@ import java.util.UUID;
 public class LifestealerUserManager {
 
     private final Map<UUID, LifestealerUser> users;
+    private int startingHearts;
 
-    public LifestealerUserManager(Map<UUID, LifestealerUser> users) {
+    public LifestealerUserManager(Map<UUID, LifestealerUser> users, int startingHearts) {
         this.users = users;
+        this.startingHearts = startingHearts;
     }
 
     /**
@@ -24,6 +26,24 @@ public class LifestealerUserManager {
      * @return a {@link LifestealerUser} instance of the user
      */
     public @NotNull LifestealerUser getUser(UUID uuid) {
-        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, LifestealerSettings.DEFAULT_HEARTS));
+        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, getStartingHearts()));
+    }
+
+    /**
+     * Gets the starting amount of hearts for new users.
+     *
+     * @return the starting amount of hearts for new users
+     */
+    public int getStartingHearts() {
+        return startingHearts;
+    }
+
+    /**
+     * Sets a new starting amount of hearts for new users.
+     *
+     * @param startingHearts the starting amount of hearts for new users
+     */
+    public void setStartingHearts(int startingHearts) {
+        this.startingHearts = startingHearts;
     }
 }

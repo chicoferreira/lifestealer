@@ -1,10 +1,13 @@
 package dev.chicoferreira.lifestealer.command;
 
 import dev.chicoferreira.lifestealer.LifestealerController;
+import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.LifestealerUser;
 import dev.chicoferreira.lifestealer.LifestealerUserManager;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -22,36 +25,73 @@ public class LifestealerCommand {
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        this.controller.setHearts(target, user, amount);
+        int newHealth = this.controller.setHearts(target, user, amount);
 
-        sender.sendMessage("Set " + target.getName() + "'s health to " + amount + " hearts.");
+        LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS.sendTo(sender,
+                Placeholder.component("target", target.name()),
+                Formatter.number("hearts", newHealth));
+
+        LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS_TARGET.sendTo(target,
+                Formatter.number("hearts", newHealth));
     }
 
     public void subcommandHeartsAdd(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        int hearts = this.controller.addHearts(target, user, amount);
+        int newHealth = this.controller.addHearts(target, user, amount);
 
-        sender.sendMessage("Added " + amount + " hearts to " + target.getName() + "'s health. New health: " + hearts + " hearts.");
+        LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS.sendTo(sender,
+                Placeholder.component("target", target.name()),
+                Formatter.number("hearts", amount),
+                Formatter.number("total", newHealth));
+
+        LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS_TARGET.sendTo(target,
+                Formatter.number("hearts", amount),
+                Formatter.number("total", newHealth));
     }
 
     public void subcommandHeartsRemove(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        int hearts = this.controller.removeHearts(target, user, amount);
+        int newHealth = this.controller.removeHearts(target, user, amount);
 
-        sender.sendMessage("Removed " + amount + " hearts from " + target.getName() + "'s health. New health: " + hearts + " hearts.");
+        LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS.sendTo(sender,
+                Placeholder.component("target", target.name()),
+                Formatter.number("hearts", amount),
+                Formatter.number("total", newHealth));
+
+        LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS_TARGET.sendTo(target,
+                Formatter.number("hearts", amount),
+                Formatter.number("total", newHealth));
     }
 
     public void subcommandItemGive(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {
         int rest = itemManager.giveHeartItems(target, item, amount);
         int given = amount - rest;
 
-        sender.sendMessage("Gave " + given + " " + item.typeName() + " items to " + target.getName() + ". Rest: " + rest);
+        LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS.sendTo(sender,
+                Placeholder.component("target", target.name()),
+                Placeholder.unparsed("item", item.typeName()),
+                Formatter.number("amount", given),
+                Formatter.number("rest", rest));
+
+        LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS_TARGET.sendTo(target,
+                Placeholder.unparsed("item", item.typeName()),
+                Formatter.number("amount", given),
+                Formatter.number("rest", rest));
     }
 
     public void subcommandItemTake(CommandSender sender, String itemTypeName, int amount, Player target) {
         int rest = itemManager.takeHeartItems(target, itemTypeName, amount);
         int taken = amount - rest;
 
-        sender.sendMessage("Took " + taken + " " + itemTypeName + " items from " + target.getName() + ". Rest: " + rest);
+        LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS.sendTo(sender,
+                Placeholder.component("target", target.name()),
+                Placeholder.unparsed("item", itemTypeName),
+                Formatter.number("amount", taken),
+                Formatter.number("rest", rest));
+
+        LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS_TARGET.sendTo(target,
+                Placeholder.unparsed("item", itemTypeName),
+                Formatter.number("amount", taken),
+                Formatter.number("rest", rest));
     }
 }

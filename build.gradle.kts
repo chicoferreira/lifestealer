@@ -56,4 +56,5 @@ bukkitPluginYaml {
     authors.add("chicoferreira")
     apiVersion = "1.21"
     depend.add("CommandAPI")
+    softDepend.add("PlaceholderAPI")
 }

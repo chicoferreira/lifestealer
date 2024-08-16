@@ -1,9 +1,12 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import dev.chicoferreira.lifestealer.PlayerNotification;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesGroup;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -83,6 +86,10 @@ public class LifestealerConfiguration {
         return require(getConfig().node("rules").node("default"), LifestealerUserRules.class);
     }
 
+    public PlayerNotification getPlayerNotification(String messagePath) throws SerializationException {
+        return require(getConfig().node("messages").node(messagePath), PlayerNotification.class);
+    }
+
     private YamlConfigurationLoader createLoader() {
         if (!this.configFilePath.toFile().exists()) {
             this.main.saveResource(this.configFileName, false);
@@ -94,11 +101,14 @@ public class LifestealerConfiguration {
                                 .register(Component.class, new BukkitSerializers.MiniMessageComponents())
                                 .register(NamespacedKey.class, new BukkitSerializers.NamespacedKeys())
                                 .register(ItemFlag.class, new BukkitSerializers.ItemFlags())
+                                .register(Sound.class, new BukkitSerializers.Sounds())
+                                .register(Title.Times.class, new BukkitSerializers.TitleTimes())
                                 .register(LeveledEnchantment.class, new LeveledEnchantment.Serializer())
                                 .register(ItemStack.class, new ItemStackSerializer())
                                 .register(LifestealerHeartItem.class, new LifestealerHeartItemSerializer())
                                 .register(LifestealerUserRules.class, new LifestealerUserRulesSerializer())
                                 .register(LifestealerUserRulesGroup.class, new LifestealerUserRulesGroupSerializer())
+                                .register(PlayerNotification.class, new PlayerNotificationSerializer())
                 ))
                 .path(this.configFilePath)
                 .build();

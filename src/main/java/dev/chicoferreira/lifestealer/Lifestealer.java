@@ -29,6 +29,7 @@ public class Lifestealer extends JavaPlugin {
 
         try {
             values = configuration.loadConfig();
+            LifestealerMessages.loadMessages(configuration);
         } catch (SerializationException e) {
             getLogger().log(Level.SEVERE, "Couldn't load config", e);
             getLogger().severe("Disabling plugin...");
@@ -38,7 +39,7 @@ public class Lifestealer extends JavaPlugin {
 
         this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), new ArrayList<>());
         this.controller = new LifestealerController(this.userRulesController);
-        this.userManager = new LifestealerUserManager(new HashMap<>());
+        this.userManager = new LifestealerUserManager(new HashMap<>(), values.startingHearts());
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItems(), "default");
 
