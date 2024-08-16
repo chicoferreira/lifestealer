@@ -7,7 +7,6 @@ import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class LifestealerCommand {
 
@@ -43,31 +42,16 @@ public class LifestealerCommand {
     }
 
     public void subcommandItemGive(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {
-        ItemStack itemStack = itemManager.generateItem(item);
-
-        int rest = 0;
-        for (int i = 0; i < amount; i++) {
-            if (!target.getInventory().addItem(itemStack).isEmpty()) {
-                rest += itemStack.getAmount();
-            }
-        }
-
+        int rest = itemManager.giveHeartItems(target, item, amount);
         int given = amount - rest;
 
         sender.sendMessage("Gave " + given + " " + item.typeName() + " items to " + target.getName() + ". Rest: " + rest);
     }
 
-    public void subcommandItemTake(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {
-        ItemStack itemStack = itemManager.generateItem(item);
-
-        itemStack.setAmount(amount); // not sure if this is the best way to do this
-
-        int rest = target.getInventory().removeItemAnySlot(itemStack).values().stream()
-                .mapToInt(ItemStack::getAmount)
-                .sum();
-
+    public void subcommandItemTake(CommandSender sender, String itemTypeName, int amount, Player target) {
+        int rest = itemManager.takeHeartItems(target, itemTypeName, amount);
         int taken = amount - rest;
 
-        sender.sendMessage("Took " + taken + " " + item.typeName() + " items from " + target.getName() + ". Rest: " + rest);
+        sender.sendMessage("Took " + taken + " " + itemTypeName + " items from " + target.getName() + ". Rest: " + rest);
     }
 }

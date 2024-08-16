@@ -48,6 +48,10 @@ public class Lifestealer extends JavaPlugin {
 
         LifestealerHeartItemListener itemListener = new LifestealerHeartItemListener(this.itemManager, this.controller, this.userManager);
         Bukkit.getPluginManager().registerEvents(itemListener, this);
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new LifestealerPlaceholderExpansion(this).register();
+        }
     }
 
     /**

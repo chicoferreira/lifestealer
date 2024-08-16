@@ -7,6 +7,7 @@ import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,7 +89,7 @@ public class LifestealerCommandCommandAPIBackend {
                                         )
                                 )
                         ).then(new LiteralArgument("take")
-                                .then(generateItemTypeArgument("item")
+                                .then(generateItemTypeNameSuggestion("item")
                                         .then(new IntegerArgument("amount")
                                                 .then(new EntitySelectorArgument.OnePlayer("player")
                                                         .executes((sender, args) -> {
@@ -118,10 +119,14 @@ public class LifestealerCommandCommandAPIBackend {
                 throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Unknown item: ").appendArgInput());
             }
             return item;
-        }).replaceSuggestions(
-                ArgumentSuggestions.strings(
-                        (_s) -> itemManager.getItemTypes().toArray(String[]::new)
-                )
-        );
+        }).replaceSuggestions(itemTypeNameSuggestions());
+    }
+
+    public Argument<String> generateItemTypeNameSuggestion(String name) {
+        return new StringArgument(name).replaceSuggestions(itemTypeNameSuggestions());
+    }
+
+    private @NotNull ArgumentSuggestions<CommandSender> itemTypeNameSuggestions() {
+        return ArgumentSuggestions.strings((_s) -> itemManager.getItemTypes().toArray(String[]::new));
     }
 }
