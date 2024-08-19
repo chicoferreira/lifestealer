@@ -18,11 +18,28 @@ public class LifestealerController {
         this.userRulesController = userRulesController;
     }
 
+    /**
+     * A result of a change for hearts of a player.
+     *
+     * @param previousHearts the previous amount of hearts
+     * @param newHearts      the new amount of hearts
+     */
     public record ChangeHeartsResult(int previousHearts, int newHearts) {
+
+        /**
+         * Checks if the amount of hearts has changed (previousHearts != newHearts).
+         *
+         * @return if the amount of hearts has changed
+         */
         public boolean hasChanged() {
             return previousHearts != newHearts;
         }
 
+        /**
+         * Gets the difference between the new and previous amount of hearts (newHearts - previousHearts).
+         *
+         * @return the difference between the new and previous amount of hearts
+         */
         public int difference() {
             return newHearts - previousHearts;
         }
