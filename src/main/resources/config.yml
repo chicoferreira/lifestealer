@@ -28,16 +28,16 @@ rules:
       ban time: 0s
 messages:
   # TODO: add example for notification style
-  command hearts set success: "<green>Set <white><target><green>'s hearts to <white><hearts><color:#ff0000>❤</color><green>."
+  command hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><color:#ff0000>❤</color><green> (old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts set success target:
     sound: "minecraft:entity.player.levelup"
-  command hearts add success: "<green>Added <white><hearts><green><color:#ff0000>❤</color> to <white><target><green> (new: <white><total><color:#ff0000>❤</color><green>)."
+  command hearts add success: "<green>Added <white><added><green><color:#ff0000>❤</color> to <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts add success target:
     sound:
       key: "minecraft:entity.player.levelup"
       volume: 0.5
       pitch: 0.2
-  command hearts remove success: "<green>Removed <white><hearts><green><color:#ff0000>❤</color> from <white><target><green> (new: <white><total><color:#ff0000>❤</color><green>)."
+  command hearts remove success: "<green>Removed <white><removed><green><color:#ff0000>❤</color> from <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts remove success target:
     sound: "minecraft:entity.player.hurt"
   command item give success: "<green>Gave <white>x<amount> <item></white> heart item to <white><target><green> (<white><rest></white> could not be given due to full inventory)."
@@ -46,3 +46,9 @@ messages:
   command item take success: "<green>Removed <white>x<amount> <item></white> heart item from <white><target><green> (<white><rest></white> could not be removed due to not having enough)."
   command item take success target:
     action bar: "<red>Lost <white>x<amount> <item></white> heart items."
+  consume heart success:
+    action bar: "<white>+<amount><color:#ff0000>❤</color>"
+    sound: "minecraft:entity.player.levelup"
+  consume heart already full:
+    action bar: "<red>You can't consume any more hearts."
+    sound: "minecraft:entity.villager.no"

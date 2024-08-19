@@ -25,42 +25,48 @@ public class LifestealerCommand {
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        int newHealth = this.controller.setHearts(target, user, amount);
+        LifestealerController.ChangeHeartsResult result = this.controller.setHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
-                Formatter.number("hearts", newHealth));
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
 
         LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS_TARGET.sendTo(target,
-                Formatter.number("hearts", newHealth));
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
     }
 
     public void subcommandHeartsAdd(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        int newHealth = this.controller.addHearts(target, user, amount);
+        LifestealerController.ChangeHeartsResult result = this.controller.addHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
-                Formatter.number("hearts", amount),
-                Formatter.number("total", newHealth));
+                Formatter.number("added", result.difference()),
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
 
         LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS_TARGET.sendTo(target,
-                Formatter.number("hearts", amount),
-                Formatter.number("total", newHealth));
+                Formatter.number("added", result.difference()),
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
     }
 
     public void subcommandHeartsRemove(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.userManager.getUser(target.getUniqueId());
-        int newHealth = this.controller.removeHearts(target, user, amount);
+        LifestealerController.ChangeHeartsResult result = this.controller.removeHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
-                Formatter.number("hearts", amount),
-                Formatter.number("total", newHealth));
+                Formatter.number("removed", -result.difference()),
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
 
         LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS_TARGET.sendTo(target,
-                Formatter.number("hearts", amount),
-                Formatter.number("total", newHealth));
+                Formatter.number("removed", -result.difference()),
+                Formatter.number("new", result.newHearts()),
+                Formatter.number("previous", result.previousHearts()));
     }
 
     public void subcommandItemGive(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {

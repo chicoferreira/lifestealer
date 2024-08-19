@@ -1,8 +1,10 @@
 package dev.chicoferreira.lifestealer.item;
 
 import dev.chicoferreira.lifestealer.LifestealerController;
+import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.LifestealerUser;
 import dev.chicoferreira.lifestealer.LifestealerUserManager;
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,6 +26,9 @@ public class LifestealerHeartItemListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemRightClick(PlayerInteractEvent event) {
+        if (!event.getAction().isRightClick()) {
+            return;
+        }
         ItemStack item = event.getItem();
         if (item == null) {
             return;
@@ -36,11 +41,15 @@ public class LifestealerHeartItemListener implements Listener {
 
         LifestealerUser user = userManager.getUser(event.getPlayer().getUniqueId());
 
-        item.subtract();
-        controller.addHearts(event.getPlayer(), user, hearts);
+        LifestealerController.ChangeHeartsResult result = controller.addHearts(event.getPlayer(), user, hearts);
+        if (result.hasChanged()) {
+            item.subtract();
+            LifestealerMessages.CONSUME_HEART_SUCCESS.sendTo(event.getPlayer(), Formatter.number("amount", hearts));
+        } else {
+            LifestealerMessages.CONSUME_HEART_ALREADY_FULL.sendTo(event.getPlayer());
+        }
 
         event.setCancelled(true);
-        // TODO: cancel and send a message when the player has the maximum amount of hearts
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

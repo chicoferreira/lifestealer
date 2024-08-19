@@ -18,18 +18,31 @@ public class LifestealerController {
         this.userRulesController = userRulesController;
     }
 
+    public record ChangeHeartsResult(int previousHearts, int newHearts) {
+        public boolean hasChanged() {
+            return previousHearts != newHearts;
+        }
+
+        public int difference() {
+            return newHearts - previousHearts;
+        }
+    }
+
     /**
      * Sets the amount of hearts a player health has. This also saves the new amount in the database asynchronously.
-     * The amount of hearts is clamped between the minimum and maximum amount of hearts the player can have, based on their permissions.
+     * The amount of hearts is clamped between the minimum and maximum amount of hearts the player can have, based on
+     * their {@link LifestealerUserRules}.
      *
      * @param player the player to set the hearts
      * @param user   the user related to the player
      * @param hearts the amount hearts to set
-     * @return the new amount of hearts
+     * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
      */
-    public int setHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
+    public ChangeHeartsResult setHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
         LifestealerUserRules rules = this.userRulesController.computeRules(player::hasPermission);
         hearts = Math.clamp(hearts, rules.minHearts(), rules.maxHearts());
+
+        int currentHearts = user.getHearts();
 
         user.setHearts(hearts);
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -37,7 +50,7 @@ public class LifestealerController {
             attribute.setBaseValue(hearts * 2);
         }
         // TODO: save in database
-        return hearts;
+        return new ChangeHeartsResult(currentHearts, hearts);
     }
 
     /**
@@ -47,9 +60,9 @@ public class LifestealerController {
      * @param player the player to add hearts
      * @param user   the user related to the player
      * @param hearts the amount of hearts to add
-     * @return the new amount of hearts
+     * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
      */
-    public int addHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
+    public ChangeHeartsResult addHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
         return setHearts(player, user, user.getHearts() + hearts);
     }
 
@@ -60,9 +73,9 @@ public class LifestealerController {
      * @param player the player to add hearts
      * @param user   the user related to the player
      * @param hearts the amount of hearts to remove
-     * @return the new amount of hearts
+     * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
      */
-    public int removeHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
+    public ChangeHeartsResult removeHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
         return setHearts(player, user, user.getHearts() - hearts);
     }
 }
