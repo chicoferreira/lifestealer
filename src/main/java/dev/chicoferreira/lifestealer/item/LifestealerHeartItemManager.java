@@ -47,14 +47,14 @@ public class LifestealerHeartItemManager {
     }
 
     /**
-     * This item has the correct NBT data ready to be used by a player.
+     * Returns the @{@link LifestealerHeartItem} to drop when the player dies.
+     * This method will never return null
      *
-     * @return The item stack to drop when the player dies
+     * @return The @{@link LifestealerHeartItem} to drop when the player dies
      */
-    public @NotNull ItemStack getItemStackToDropWhenPlayerDies() {
-        LifestealerHeartItem lifestealerHeartItem = items.get(this.itemToDropWhenPlayerDies);
+    public @NotNull LifestealerHeartItem getItemToDropWhenPlayerDies() {
         // This will never return null because of the invariant that the item type to drop when the player dies exists inside the map
-        return generateItem(lifestealerHeartItem);
+        return items.get(this.itemToDropWhenPlayerDies);
     }
 
     /**
@@ -62,14 +62,14 @@ public class LifestealerHeartItemManager {
      * The itemTypeToDropWhenPlayerDies must be contained in the items map otherwise {@link IllegalArgumentException}
      * will be thrown.
      *
-     * @param itemTypeToDropWhenPlayerDies The item type name to drop when the player dies
+     * @param itemTypeToDropWhenPlayerDies The item type to drop when the player dies
      * @throws IllegalArgumentException If the item type is not registered
      */
-    public void setItemToDropWhenPlayerDies(@NotNull String itemTypeToDropWhenPlayerDies) {
-        if (!this.items.containsKey(itemTypeToDropWhenPlayerDies)) {
+    public void setItemToDropWhenPlayerDies(@NotNull LifestealerHeartItem itemTypeToDropWhenPlayerDies) {
+        if (!this.items.containsKey(itemTypeToDropWhenPlayerDies.typeName())) {
             throw new IllegalArgumentException("Item type to drop when player dies is not registered.");
         }
-        this.itemToDropWhenPlayerDies = itemTypeToDropWhenPlayerDies;
+        this.itemToDropWhenPlayerDies = itemTypeToDropWhenPlayerDies.typeName();
     }
 
     /**

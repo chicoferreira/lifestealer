@@ -4,6 +4,10 @@ import dev.chicoferreira.lifestealer.LifestealerController;
 import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.LifestealerUser;
 import dev.chicoferreira.lifestealer.LifestealerUserManager;
+import dev.chicoferreira.lifestealer.events.LifestealerPostConsumeHeartEvent;
+import dev.chicoferreira.lifestealer.events.LifestealerPostPlayerDeathEvent;
+import dev.chicoferreira.lifestealer.events.LifestealerPreConsumeHeartEvent;
+import dev.chicoferreira.lifestealer.events.LifestealerPrePlayerDeathEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,9 +43,19 @@ public class LifestealerHeartItemListener implements Listener {
             return;
         }
 
+        event.setCancelled(true);
+
         LifestealerUser user = userManager.getUser(event.getPlayer().getUniqueId());
 
+        LifestealerPreConsumeHeartEvent preConsumeHeartEvent = new LifestealerPreConsumeHeartEvent(event.getPlayer(), user, item, hearts);
+        if (!preConsumeHeartEvent.callEvent()) {
+            return;
+        }
+
+        hearts = preConsumeHeartEvent.getAmount(); // developers can change the amount of hearts
+
         LifestealerController.ChangeHeartsResult result = controller.addHearts(event.getPlayer(), user, hearts);
+
         if (result.hasChanged()) {
             item.subtract();
             LifestealerMessages.CONSUME_HEART_SUCCESS.sendTo(event.getPlayer(), Formatter.number("amount", hearts));
@@ -49,7 +63,8 @@ public class LifestealerHeartItemListener implements Listener {
             LifestealerMessages.CONSUME_HEART_ALREADY_FULL.sendTo(event.getPlayer());
         }
 
-        event.setCancelled(true);
+        LifestealerPostConsumeHeartEvent postConsumeHeartEvent = new LifestealerPostConsumeHeartEvent(event.getPlayer(), user, hearts, item, result);
+        postConsumeHeartEvent.callEvent();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -60,12 +75,25 @@ public class LifestealerHeartItemListener implements Listener {
 
         LifestealerUser user = userManager.getUser(event.getEntity().getUniqueId());
 
-        ItemStack itemToDropWhenPlayerDies = heartItemManager.getItemStackToDropWhenPlayerDies();
-        event.getDrops().add(itemToDropWhenPlayerDies);
+        LifestealerHeartItem itemToDropWhenPlayerDies = heartItemManager.getItemToDropWhenPlayerDies();
 
-        int hearts = heartItemManager.getHearts(itemToDropWhenPlayerDies);
+        ItemStack itemStack = heartItemManager.generateItem(itemToDropWhenPlayerDies);
+        int hearts = heartItemManager.getHearts(itemStack);
 
-        controller.removeHearts(event.getEntity(), user, hearts); // remove the amount of hearts dropped
+        LifestealerPrePlayerDeathEvent prePlayerDeathEvent = new LifestealerPrePlayerDeathEvent(event, event.getEntity(), user, itemStack, hearts);
+        if (!prePlayerDeathEvent.callEvent()) {
+            return;
+        }
+
+        hearts = prePlayerDeathEvent.getHeartsToRemove();
+        itemStack = prePlayerDeathEvent.getItemStackToDrop();
+
+        event.getDrops().add(itemStack);
+
+        LifestealerController.ChangeHeartsResult result = controller.removeHearts(event.getEntity(), user, hearts);
+
+        LifestealerPostPlayerDeathEvent postPlayerDeathEvent = new LifestealerPostPlayerDeathEvent(event, event.getEntity(), user, itemStack, hearts, result);
+        postPlayerDeathEvent.callEvent();
         // TODO: ban the player if the player died with the minimum amount of hearts
     }
 }
