@@ -62,7 +62,9 @@ public class LifestealerConfiguration {
     public record Values(
             int startingHearts,
             LifestealerUserRules defaultUserRules,
-            List<LifestealerHeartItem> heartItems
+            List<LifestealerUserRulesGroup> userGroupRules,
+            List<LifestealerHeartItem> heartItems,
+            String itemToDropWhenPlayerDies
     ) {
     }
 
@@ -70,7 +72,9 @@ public class LifestealerConfiguration {
         return new Values(
                 getStartingHearts(),
                 getDefaultUserRules(),
-                getHeartItems()
+                getUserGroupRules(),
+                getHeartItems(),
+                getItemToDropWhenPlayerDies()
         );
     }
 
@@ -86,8 +90,16 @@ public class LifestealerConfiguration {
         return require(getConfig().node("rules").node("default"), LifestealerUserRules.class);
     }
 
+    private List<LifestealerUserRulesGroup> getUserGroupRules() throws SerializationException {
+        return getConfig().node("rules").node("groups").getList(LifestealerUserRulesGroup.class);
+    }
+
     public PlayerNotification getPlayerNotification(String messagePath) throws SerializationException {
         return require(getConfig().node("messages").node(messagePath), PlayerNotification.class);
+    }
+
+    private String getItemToDropWhenPlayerDies() throws SerializationException {
+        return require(getConfig().node("item to drop when player dies"), String.class);
     }
 
     private YamlConfigurationLoader createLoader() {

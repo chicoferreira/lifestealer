@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -37,11 +36,11 @@ public class Lifestealer extends JavaPlugin {
             return;
         }
 
-        this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), new ArrayList<>());
+        this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), values.userGroupRules());
         this.controller = new LifestealerController(this.userRulesController);
         this.userManager = new LifestealerUserManager(new HashMap<>(), values.startingHearts());
 
-        this.itemManager = new LifestealerHeartItemManager(values.heartItems(), "default");
+        this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
 
         LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager, this.itemManager);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);

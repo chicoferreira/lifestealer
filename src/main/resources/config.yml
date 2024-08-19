@@ -13,33 +13,100 @@ items:
       custom model data: 144
       flags:
         - "hide enchants"
+
+# The name of the item in the list above that should be dropped when a player dies
+# To avoid confusion and misuse, this must exist in the "items" list above
+# The amount of hearts the player will lose will be the same as the "heart amount" defined in the item (unless changed by other plugin that hooks into Lifestealer)
+item to drop when player dies: "default"
+
+# The amount of hearts a player should start with when they first join the server, a heart consists of 2 health points
 starting hearts: 10
+
+# Define rules that will change values based on player's permissions
 rules:
+  # The rules that will be applied to players that don't have any of the groups below (not to be confused with the "default" item, these are not related)
   default:
+    # The maximum amount of hearts a player can have
     max hearts: 10
+    # The minimum amount of hearts a player can have
     min hearts: 5
+    # The amount of time a player will be banned for if they lose more than the minimum amount of hearts
     ban time: 1d 12h 30m
+  # Rules overrides applied to players with specific permissions
   groups:
+    # If the player has permission "vip"
     - permission: "vip"
+      # Change the maximum amount of hearts to 15
       max hearts: 15
+      # and the minimum amount of hearts to 3
       min hearts: 3
+      # The ban time will be the same as the default
+    # If the player has permission "admin"
     - permission: "admin"
+      # Change the maximum amount of hearts to 20
       max hearts: 20
+      # and the ban time to 0 seconds
       ban time: 0s
+    # If the player has multiple groups, the overrides will be applied in the order they are defined here
+    # So if a player has both "vip" and "admin" permissions, they will have 30 max hearts, 3 min hearts and a ban time of 0 seconds
 messages:
-  # TODO: add example for notification style
+  # The messages that will be sent to the player when they perform certain actions
+  #
+  # These messages have many components such as chat message, action bar message,
+  # title, subtitle, sound and more which you can combine to create complex interactions.
+  #
+  # The chat, action bar, title and subtitle components are formatted using the MiniMessage format.
+  # Check https://docs.adventure.kyori.net/minimessage.html for more information and examples.
+  #
+  # Examples:
+
+  # » message key: "<red>Hello"
+  # Sends a red chat message to the player
+
+  # » message key:
+  #     message: "<red>Hello"
+  #     action bar: "<yellow>World"
+  # Sends a red chat message and a yellow action bar message to the player
+
+  # » message key:
+  #     title: "<green>Hi"
+  #     subtitle: "<blue>There"
+  # Sends a green title and a blue subtitle to the player
+
+  # » message key:
+  #     title: "<green>Hi"
+  #     subtitle: "<blue>There"
+  #     title times:
+  #       fade in: 10
+  #       stay: 20
+  #       fade out: 10
+  # Sends a green title and a blue subtitle to the player with the specified fade in, stay and fade out times (in ticks)
+
+  # » message key:
+  #     title: "<green>Hi"
+  #     sound: minecraft:entity.player.levelup
+  # Sends a green title to the player and plays the level up sound
+
+  # » message key:
+  #     action bar: "<green>Hi"
+  #     sound:
+  #       key: minecraft:entity.player.levelup
+  #       volume: 0.5
+  #       pitch: 0.2
+  # Sends a green action bar message to the player and plays the level up sound with a volume of 0.5 and a pitch of 0.2
+
   command hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><color:#ff0000>❤</color><green> (old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts set success target:
-    sound: "minecraft:entity.player.levelup"
+    sound: minecraft:entity.player.levelup
   command hearts add success: "<green>Added <white><added><green><color:#ff0000>❤</color> to <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts add success target:
     sound:
-      key: "minecraft:entity.player.levelup"
+      key: minecraft:entity.player.levelup
       volume: 0.5
       pitch: 0.2
   command hearts remove success: "<green>Removed <white><removed><green><color:#ff0000>❤</color> from <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
   command hearts remove success target:
-    sound: "minecraft:entity.player.hurt"
+    sound: minecraft:entity.player.hurt
   command item give success: "<green>Gave <white>x<amount> <item></white> heart item to <white><target><green> (<white><rest></white> could not be given due to full inventory)."
   command item give success target:
     action bar: "<green>Received <white>x<amount> <item></white> heart items."
@@ -48,7 +115,7 @@ messages:
     action bar: "<red>Lost <white>x<amount> <item></white> heart items."
   consume heart success:
     action bar: "<white>+<amount><color:#ff0000>❤</color>"
-    sound: "minecraft:entity.player.levelup"
+    sound: minecraft:entity.player.levelup
   consume heart already full:
     action bar: "<red>You can't consume any more hearts."
-    sound: "minecraft:entity.villager.no"
+    sound: minecraft:entity.villager.no
