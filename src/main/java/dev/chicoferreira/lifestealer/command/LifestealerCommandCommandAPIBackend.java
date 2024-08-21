@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.command;
 
+import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.jorel.commandapi.CommandAPI;
@@ -10,6 +11,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
 
 import static dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import static dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -107,6 +110,23 @@ public class LifestealerCommandCommandAPIBackend {
                                         )
                                 )
                         )
+                ).then(new LiteralArgument("ban")
+                        .then(new EntitySelectorArgument.OnePlayer("player")
+                                .executes((sender, args) -> {
+                                    command.subcommandBanUser(sender, getArgument(args, "player"));
+                                })
+                                .then(generateDurationArgument("duration")
+                                        .executes((sender, args) -> {
+                                            command.subcommandBanUserDuration(sender, getArgument(args, "player"), getArgument(args, "duration"));
+                                        })
+                                )
+                        )
+                ).then(new LiteralArgument("unban")
+                        .then(new OfflinePlayerArgument("player")
+                                .executes((sender, args) -> {
+                                    command.subcommandUnbanUser(sender, getArgument(args, "player"));
+                                })
+                        )
                 )
                 .register(plugin);
     }
@@ -120,6 +140,17 @@ public class LifestealerCommandCommandAPIBackend {
             }
             return item;
         }).replaceSuggestions(itemTypeNameSuggestions());
+    }
+
+    public Argument<@NotNull Duration> generateDurationArgument(String name) {
+        return new CustomArgument<>(new GreedyStringArgument(name), info -> {
+            String input = info.input();
+            try {
+                return DurationUtils.parse(input);
+            } catch (Exception e) {
+                throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Invalid duration: ").appendArgInput());
+            }
+        }).replaceSuggestions(ArgumentSuggestions.strings("1d", "1h", "1m", "1s"));
     }
 
     public Argument<String> generateItemTypeNameSuggestion(String name) {

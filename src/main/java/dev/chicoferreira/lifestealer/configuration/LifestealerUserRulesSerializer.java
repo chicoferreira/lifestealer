@@ -15,7 +15,8 @@ public class LifestealerUserRulesSerializer implements TypeDeserializer<Lifestea
         Integer maxHearts = require(node.node("max hearts"), Integer.class);
         Integer minHearts = require(node.node("min hearts"), Integer.class);
         Duration banTime = require(node.node("ban time"), Duration.class);
+        Integer returnHearts = require(node.node("return hearts"), Integer.class);
 
-        return new LifestealerUserRules(maxHearts, minHearts, banTime);
+        return new LifestealerUserRules(maxHearts, minHearts, banTime, returnHearts);
     }
 }

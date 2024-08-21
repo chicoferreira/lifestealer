@@ -1,6 +1,6 @@
 package dev.chicoferreira.lifestealer.events;
 
-import dev.chicoferreira.lifestealer.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

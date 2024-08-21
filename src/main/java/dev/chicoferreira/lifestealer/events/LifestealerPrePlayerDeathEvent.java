@@ -1,7 +1,7 @@
 package dev.chicoferreira.lifestealer.events;
 
-import dev.chicoferreira.lifestealer.LifestealerUser;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -138,8 +138,8 @@ public class LifestealerPrePlayerDeathEvent extends Event implements Cancellable
 
     /**
      * Sets if the event should be cancelled.
-     * If the event is cancelled, the player will not lose hearts and the {@link ItemStack} returned by {@link #getItemStackToDrop()}
-     * will not be dropped.
+     * If the event is cancelled, the player will not lose hearts, the {@link ItemStack} returned by {@link #getItemStackToDrop()}
+     * will not be dropped. The player will also not be banned if they have less than the minimum amount of hearts.
      *
      * @param cancel true if you wish to cancel this event and prevent the player from losing hearts and dropping the heart item,
      *               false otherwise

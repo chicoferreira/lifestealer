@@ -1,7 +1,7 @@
 package dev.chicoferreira.lifestealer.events;
 
-import dev.chicoferreira.lifestealer.LifestealerController;
-import dev.chicoferreira.lifestealer.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called when a player dies, after the hearts have been removed from the player.
+ * Called when a player dies, after the hearts have been removed from the player and before the
+ * player gets banned if they have less than the minimum amount of hearts.
  */
 public class LifestealerPostPlayerDeathEvent extends Event {
 
@@ -21,7 +22,7 @@ public class LifestealerPostPlayerDeathEvent extends Event {
     private final LifestealerUser user;
     private final ItemStack itemStackToDrop;
     private final int heartsRemoved;
-    private final LifestealerController.ChangeHeartsResult result;
+    private final LifestealerUserController.ChangeHeartsResult result;
 
     /**
      * Constructs a new LifestealerPostPlayerDeathEvent.
@@ -33,7 +34,7 @@ public class LifestealerPostPlayerDeathEvent extends Event {
      * @param heartsRemoved   the amount of hearts removed from the player
      * @param result          the result of the change of hearts
      */
-    public LifestealerPostPlayerDeathEvent(@NotNull PlayerDeathEvent deathEvent, @NotNull Player player, @NotNull LifestealerUser user, @Nullable ItemStack itemStackToDrop, int heartsRemoved, @NotNull LifestealerController.ChangeHeartsResult result) {
+    public LifestealerPostPlayerDeathEvent(@NotNull PlayerDeathEvent deathEvent, @NotNull Player player, @NotNull LifestealerUser user, @Nullable ItemStack itemStackToDrop, int heartsRemoved, @NotNull LifestealerUserController.ChangeHeartsResult result) {
         this.deathEvent = deathEvent;
         this.player = player;
         this.user = user;
@@ -97,7 +98,7 @@ public class LifestealerPostPlayerDeathEvent extends Event {
      *
      * @return the result of the change of hearts
      */
-    public LifestealerController.ChangeHeartsResult getChangeResult() {
+    public LifestealerUserController.ChangeHeartsResult getChangeResult() {
         return result;
     }
 

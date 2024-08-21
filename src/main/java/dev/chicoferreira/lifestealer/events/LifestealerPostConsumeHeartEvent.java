@@ -1,7 +1,7 @@
 package dev.chicoferreira.lifestealer.events;
 
-import dev.chicoferreira.lifestealer.LifestealerController;
-import dev.chicoferreira.lifestealer.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController;
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * This event is not cancellable.
  *
  * @see LifestealerPreConsumeHeartEvent
- * @see LifestealerController#addHearts(Player, LifestealerUser, int)
+ * @see LifestealerUserController#addHearts(Player, LifestealerUser, int)
  */
 public class LifestealerPostConsumeHeartEvent extends Event {
 
@@ -24,7 +24,7 @@ public class LifestealerPostConsumeHeartEvent extends Event {
     private final LifestealerUser user;
     private final int amount;
     private final ItemStack itemStack;
-    private final LifestealerController.ChangeHeartsResult result;
+    private final LifestealerUserController.ChangeHeartsResult result;
 
     /**
      * Constructs a new LifestealerPostConsumeHeartEvent.
@@ -35,7 +35,7 @@ public class LifestealerPostConsumeHeartEvent extends Event {
      * @param itemStack the item that was consumed
      * @param result    the result of the change of hearts
      */
-    public LifestealerPostConsumeHeartEvent(@NotNull Player player, @NotNull LifestealerUser user, int amount, @NotNull ItemStack itemStack, @NotNull LifestealerController.ChangeHeartsResult result) {
+    public LifestealerPostConsumeHeartEvent(@NotNull Player player, @NotNull LifestealerUser user, int amount, @NotNull ItemStack itemStack, @NotNull LifestealerUserController.ChangeHeartsResult result) {
         this.player = player;
         this.user = user;
         this.amount = amount;
@@ -85,7 +85,7 @@ public class LifestealerPostConsumeHeartEvent extends Event {
      *
      * @return the result of the change of hearts
      */
-    public @NotNull LifestealerController.ChangeHeartsResult getChangeResult() {
+    public @NotNull LifestealerUserController.ChangeHeartsResult getChangeResult() {
         return result;
     }
 

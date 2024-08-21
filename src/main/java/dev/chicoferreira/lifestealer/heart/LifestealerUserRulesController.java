@@ -31,7 +31,8 @@ public class LifestealerUserRulesController {
                 result = new LifestealerUserRules(
                         group.maxHearts().orElse(result.maxHearts()),
                         group.minHearts().orElse(result.minHearts()),
-                        group.banTime().orElse(result.banTime())
+                        group.banTime().orElse(result.banTime()),
+                        group.returnHearts().orElse(result.returnHearts())
                 );
             }
         }

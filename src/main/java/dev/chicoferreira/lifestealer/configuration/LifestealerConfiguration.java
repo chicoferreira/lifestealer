@@ -4,6 +4,7 @@ import dev.chicoferreira.lifestealer.PlayerNotification;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesGroup;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -64,7 +65,8 @@ public class LifestealerConfiguration {
             LifestealerUserRules defaultUserRules,
             List<LifestealerUserRulesGroup> userGroupRules,
             List<LifestealerHeartItem> heartItems,
-            String itemToDropWhenPlayerDies
+            String itemToDropWhenPlayerDies,
+            BanSettings banSettings
     ) {
     }
 
@@ -74,8 +76,13 @@ public class LifestealerConfiguration {
                 getDefaultUserRules(),
                 getUserGroupRules(),
                 getHeartItems(),
-                getItemToDropWhenPlayerDies()
+                getItemToDropWhenPlayerDies(),
+                getBanSettings()
         );
+    }
+
+    private BanSettings getBanSettings() throws SerializationException {
+        return require(getConfig().node("ban settings"), BanSettings.class);
     }
 
     private List<LifestealerHeartItem> getHeartItems() throws SerializationException {
@@ -121,6 +128,7 @@ public class LifestealerConfiguration {
                                 .register(LifestealerUserRules.class, new LifestealerUserRulesSerializer())
                                 .register(LifestealerUserRulesGroup.class, new LifestealerUserRulesGroupSerializer())
                                 .register(PlayerNotification.class, new PlayerNotificationSerializer())
+                                .register(BanSettings.class, new BanSettingsSerializer())
                 ))
                 .path(this.configFilePath)
                 .build();

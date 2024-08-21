@@ -4,8 +4,11 @@ import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
 import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesController;
-import dev.chicoferreira.lifestealer.item.LifestealerHeartItemListener;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController;
+import dev.chicoferreira.lifestealer.user.LifestealerUserListener;
+import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -16,7 +19,7 @@ import java.util.logging.Level;
 public class Lifestealer extends JavaPlugin {
 
     private LifestealerUserManager userManager;
-    private LifestealerController controller;
+    private LifestealerUserController userController;
     private LifestealerHeartItemManager itemManager;
     private LifestealerUserRulesController userRulesController;
 
@@ -37,20 +40,20 @@ public class Lifestealer extends JavaPlugin {
         }
 
         this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), values.userGroupRules());
-        this.controller = new LifestealerController(this.userRulesController);
+        this.userController = new LifestealerUserController(this.userRulesController, values.banSettings());
         this.userManager = new LifestealerUserManager(new HashMap<>(), values.startingHearts());
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
 
-        LifestealerCommand command = new LifestealerCommand(this.controller, this.userManager, this.itemManager);
+        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 
-        LifestealerHeartItemListener itemListener = new LifestealerHeartItemListener(this.itemManager, this.controller, this.userManager);
-        Bukkit.getPluginManager().registerEvents(itemListener, this);
+        LifestealerUserListener listener = new LifestealerUserListener(this.itemManager, this.userController, this.userManager, this.userRulesController);
+        Bukkit.getPluginManager().registerEvents(listener, this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new LifestealerPlaceholderExpansion(this).register();
+            new LifestealerPlaceholderExpansion(this, this.userController).register();
         }
     }
 
@@ -64,12 +67,12 @@ public class Lifestealer extends JavaPlugin {
     }
 
     /**
-     * Returns the controller instance. You can use this for many plugin logic things, such as setting the amount of hearts of a player.
+     * Returns the user controller instance. You can use this for many plugin logic things, such as setting the amount of hearts of a player.
      *
      * @return the controller instance
      */
-    public LifestealerController getController() {
-        return controller;
+    public LifestealerUserController getUserController() {
+        return userController;
     }
 
     /**

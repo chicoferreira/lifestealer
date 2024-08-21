@@ -17,7 +17,8 @@ public class LifestealerUserRulesGroupSerializer implements TypeDeserializer<Lif
         Optional<Integer> maxHearts = Optional.ofNullable(node.node("max hearts").get(Integer.class));
         Optional<Integer> minHearts = Optional.ofNullable(node.node("min hearts").get(Integer.class));
         Optional<Duration> banTime = Optional.ofNullable(node.node("ban time").get(Duration.class));
+        Optional<Integer> returnHearts = Optional.ofNullable(node.node("return hearts").get(Integer.class));
 
-        return new LifestealerUserRulesGroup(permission, maxHearts, minHearts, banTime);
+        return new LifestealerUserRulesGroup(permission, maxHearts, minHearts, banTime, returnHearts);
     }
 }
