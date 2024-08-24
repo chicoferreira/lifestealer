@@ -1,6 +1,6 @@
 package dev.chicoferreira.lifestealer;
 
-import dev.chicoferreira.lifestealer.rules.LifestealerUserRules;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;

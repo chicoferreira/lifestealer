@@ -2,8 +2,8 @@ package dev.chicoferreira.lifestealer.user;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.events.LifestealerPostUserBanEvent;
-import dev.chicoferreira.lifestealer.rules.LifestealerUserRules;
-import dev.chicoferreira.lifestealer.rules.LifestealerUserRulesController;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;

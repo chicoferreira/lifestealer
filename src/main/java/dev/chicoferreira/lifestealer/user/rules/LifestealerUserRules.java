@@ -1,4 +1,4 @@
-package dev.chicoferreira.lifestealer.rules;
+package dev.chicoferreira.lifestealer.user.rules;
 
 
 import org.jetbrains.annotations.NotNull;
