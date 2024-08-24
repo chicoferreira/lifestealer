@@ -2,10 +2,7 @@ package dev.chicoferreira.lifestealer.user;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.LifestealerMessages;
-import dev.chicoferreira.lifestealer.events.LifestealerPostConsumeHeartEvent;
-import dev.chicoferreira.lifestealer.events.LifestealerPostPlayerDeathEvent;
-import dev.chicoferreira.lifestealer.events.LifestealerPreConsumeHeartEvent;
-import dev.chicoferreira.lifestealer.events.LifestealerPrePlayerDeathEvent;
+import dev.chicoferreira.lifestealer.events.*;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesController;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
@@ -23,6 +20,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.time.Duration;
 
 public class LifestealerUserListener implements Listener {
 
@@ -138,7 +137,16 @@ public class LifestealerUserListener implements Listener {
         LifestealerUserRules rules = userRulesController.computeRules(player::hasPermission);
 
         if (heartsWithoutClamp < rules.minHearts()) { // if the player would have less than the minimum amount of hearts
-            userController.banUser(player, user);
+            Duration banDuration = rules.banTime();
+
+            LifestealerPreUserBanEvent banEvent = new LifestealerPreUserBanEvent(player, user, banDuration);
+            if (!banEvent.callEvent()) {
+                return;
+            }
+
+            banDuration = banEvent.getBanDuration();
+
+            userController.banUser(player, user, banDuration);
         }
     }
 }

@@ -2,7 +2,6 @@ package dev.chicoferreira.lifestealer.user;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.events.LifestealerPostUserBanEvent;
-import dev.chicoferreira.lifestealer.events.LifestealerPreUserBanEvent;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
@@ -184,11 +183,6 @@ public class LifestealerUserController {
      * @return the created ban information
      */
     public @NotNull LifestealerUser.Ban banUser(@NotNull Player player, @NotNull LifestealerUser user, @NotNull Duration banDuration) {
-        LifestealerPreUserBanEvent banEvent = new LifestealerPreUserBanEvent(player, user, banDuration);
-        banEvent.callEvent();
-
-        banDuration = banEvent.getBanDuration();
-
         LifestealerUser.Ban ban = new LifestealerUser.Ban(Instant.now(), banDuration);
         user.setBan(ban);
         // TODO: save in database
