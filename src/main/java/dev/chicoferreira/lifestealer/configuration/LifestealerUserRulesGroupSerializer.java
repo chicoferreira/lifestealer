@@ -1,6 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
-import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesGroup;
+import dev.chicoferreira.lifestealer.rules.LifestealerUserRulesGroup;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 

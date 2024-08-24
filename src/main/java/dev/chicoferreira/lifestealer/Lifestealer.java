@@ -3,7 +3,7 @@ package dev.chicoferreira.lifestealer;
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
 import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
-import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesController;
+import dev.chicoferreira.lifestealer.rules.LifestealerUserRulesController;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;

@@ -1,8 +1,8 @@
 package dev.chicoferreira.lifestealer.configuration;
 
 import dev.chicoferreira.lifestealer.PlayerNotification;
-import dev.chicoferreira.lifestealer.heart.LifestealerUserRules;
-import dev.chicoferreira.lifestealer.heart.LifestealerUserRulesGroup;
+import dev.chicoferreira.lifestealer.rules.LifestealerUserRules;
+import dev.chicoferreira.lifestealer.rules.LifestealerUserRulesGroup;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import net.kyori.adventure.sound.Sound;

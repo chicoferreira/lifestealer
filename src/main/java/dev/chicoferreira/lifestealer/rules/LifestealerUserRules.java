@@ -1,4 +1,4 @@
-package dev.chicoferreira.lifestealer.heart;
+package dev.chicoferreira.lifestealer.rules;
 
 
 import org.jetbrains.annotations.NotNull;
