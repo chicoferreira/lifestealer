@@ -8,14 +8,17 @@ import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.List;
 
 public class LifestealerCommand {
 
@@ -105,6 +108,23 @@ public class LifestealerCommand {
                 Placeholder.unparsed("item", itemTypeName),
                 Formatter.number("amount", taken),
                 Formatter.number("rest", rest));
+    }
+
+    public void subcommandItemList(CommandSender sender) {
+        List<LifestealerHeartItem> heartItems = this.itemManager.getHeartItems();
+
+        LifestealerMessages.COMMAND_ITEM_LIST_HEADER.sendTo(sender, Formatter.number("amount", heartItems.size()));
+
+        for (LifestealerHeartItem item : heartItems) {
+            LifestealerMessages.COMMAND_ITEM_LIST_ITEM.sendTo(sender,
+                    Placeholder.unparsed("item", item.typeName()),
+                    Formatter.number("amount", item.heartAmount()),
+                    Placeholder.component("itemstack", generateItemComponent(item.baseItemStack())));
+        }
+    }
+
+    private static @NotNull Component generateItemComponent(ItemStack itemStack) {
+        return itemStack.displayName().hoverEvent(itemStack).color(NamedTextColor.WHITE);
     }
 
     public void subcommandBanUser(CommandSender sender, Player target) {

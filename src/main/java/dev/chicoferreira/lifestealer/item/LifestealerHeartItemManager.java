@@ -254,9 +254,16 @@ public class LifestealerHeartItemManager {
     }
 
     /**
-     * @return An immutable list of all the item types registered in the item manager.
+     * @return An immutable list of all the heart type names registered in the item manager.
      */
-    public List<String> getItemTypes() {
+    public List<String> getItemTypeNames() {
         return List.copyOf(this.items.keySet());
+    }
+
+    /**
+     * @return An immutable list of all the heart items registered in the item manager.
+     */
+    public List<LifestealerHeartItem> getHeartItems() {
+        return List.copyOf(this.items.values());
     }
 }

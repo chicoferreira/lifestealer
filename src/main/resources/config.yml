@@ -189,6 +189,8 @@ messages:
   command item take success target:
     action bar: "<red>Lost <white>x<amount> <item></white> heart items."
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
+  command item list header: "<green>Heart items list (<white><amount></white>):"
+  command item list item: "  <white>'<item>' <gray>-</gray> <amount><color:#ff0000>❤</color> <itemstack>"
   command ban success: "<green>Force banned <white><target></white> for <white><duration:'[d'd'H'h'm'm's's']'></white> (date: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
   command unban success: "<green>Unbanned <white><target></white>."
   command unban not banned: "<red><white><target></white> is not banned."

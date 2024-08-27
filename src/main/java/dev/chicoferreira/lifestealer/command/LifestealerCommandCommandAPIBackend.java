@@ -109,6 +109,10 @@ public class LifestealerCommandCommandAPIBackend {
                                                 })
                                         )
                                 )
+                        ).then(new LiteralArgument("list")
+                                .executes((sender, args) -> {
+                                    command.subcommandItemList(sender);
+                                })
                         )
                 ).then(new LiteralArgument("ban")
                         .then(new EntitySelectorArgument.OnePlayer("player")
@@ -158,6 +162,6 @@ public class LifestealerCommandCommandAPIBackend {
     }
 
     private @NotNull ArgumentSuggestions<CommandSender> itemTypeNameSuggestions() {
-        return ArgumentSuggestions.strings((_s) -> itemManager.getItemTypes().toArray(String[]::new));
+        return ArgumentSuggestions.strings((_s) -> itemManager.getItemTypeNames().toArray(String[]::new));
     }
 }
