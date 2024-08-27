@@ -19,6 +19,45 @@ items:
 # The amount of hearts the player will lose will be the same as the "heart amount" defined in the item (unless changed by other plugin that hooks into Lifestealer)
 item to drop when player dies: "default"
 
+# Restrictions to heart drops when a player dies
+#
+# Possible restrictions:
+# - "death cause": restrict based on the cause of death (fall, drowning, etc.)
+#    - "cause": the cause of death (check https://jd.papermc.io/paper/1.21.1/org/bukkit/event/entity/EntityDamageEvent.DamageCause.html for more causes)
+# - "same ip": restrict based on the player's IP address
+# - "world": restrict based on the world the player is in
+#    - "world": the name of the world
+# Possible actions:
+# - "drop": the player will drop the heart item and lose the hearts (default)
+# - "not drop": the player won't drop the heart item but will still lose the hearts
+# - "not remove hearts": the player won't lose the hearts and won't drop the heart item
+#
+# This restriction list will be checked in order, if a restriction is met, the action will be executed and the rest of the list will be ignored
+heart drop restrictions:
+  - type: "death cause"
+    cause: "fall"
+    # If the cause is fall (player dies by falling)
+    action: "not drop"
+    # They won't drop the item but will still lose the hearts
+  - type: "death cause"
+    cause: "drowning"
+    # If the cause is drowning (player dies by drowning)
+    action: "not remove hearts"
+    # They won't lose the hearts and won't drop the item
+  - type: "same ip"
+    # If the player is killed by someone with the same IP address
+    action: "not drop"
+    # They won't drop the item but will still lose the hearts
+  - type: "world"
+    world: "nether"
+    action: "not drop"
+    # If the player dies in the nether, they won't drop the item but will still lose the hearts
+  - type: "world"
+    world: "end"
+    # If the player dies in a world named "end"
+    action: "not remove hearts"
+    # They won't lose the hearts and won't drop the item
+
 # The amount of hearts a player should start with when they first join the server, a heart consists of 2 health points
 starting hearts: 10
 

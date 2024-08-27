@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.events;
 
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import org.bukkit.entity.Player;
@@ -13,6 +14,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when a player dies, after the hearts have been removed from the player and before the
  * player gets banned if they have less than the minimum amount of hearts.
+ * <p>
+ * This event won't be called if the heart drop was restricted by a {@link dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction}
+ * that produced {@link LifestealerHeartDropAction#shouldRemoveHearts()} true.
  */
 public class LifestealerPostPlayerDeathEvent extends Event {
 

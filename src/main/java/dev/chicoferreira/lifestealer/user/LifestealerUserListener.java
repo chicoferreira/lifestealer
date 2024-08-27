@@ -3,10 +3,12 @@ package dev.chicoferreira.lifestealer.user;
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.events.*;
-import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
-import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionManager;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
@@ -29,12 +31,14 @@ public class LifestealerUserListener implements Listener {
     private final LifestealerHeartItemManager heartItemManager;
     private final LifestealerUserController userController;
     private final LifestealerUserRulesController userRulesController;
+    private final LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
 
-    public LifestealerUserListener(LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerUserRulesController userRulesController) {
+    public LifestealerUserListener(LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerUserRulesController userRulesController, LifestealerHeartDropRestrictionManager heartDropRestrictionManager) {
         this.heartItemManager = heartItemManager;
         this.userController = userController;
         this.userManager = userManager;
         this.userRulesController = userRulesController;
+        this.heartDropRestrictionManager = heartDropRestrictionManager;
     }
 
     @EventHandler
@@ -125,7 +129,15 @@ public class LifestealerUserListener implements Listener {
         hearts = prePlayerDeathEvent.getHeartsToRemove();
         itemStack = prePlayerDeathEvent.getItemStackToDrop();
 
-        event.getDrops().add(itemStack);
+        LifestealerHeartDropAction action = heartDropRestrictionManager.evaluateHeartDropAction(player, user, event);
+
+        if (action.shouldDropItem()) {
+            event.getDrops().add(itemStack);
+        }
+
+        if (!action.shouldRemoveHearts()) {
+            return;
+        }
 
         LifestealerUserController.ChangeHeartsResult result = userController.removeHearts(player, user, hearts);
 

@@ -1,14 +1,21 @@
 package dev.chicoferreira.lifestealer.configuration;
 
 import dev.chicoferreira.lifestealer.PlayerNotification;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionAction;
+import dev.chicoferreira.lifestealer.restriction.restrictions.DamageCauseHeartDropRestriction;
+import dev.chicoferreira.lifestealer.restriction.restrictions.SameIpReasonHeartDropRestriction;
+import dev.chicoferreira.lifestealer.restriction.restrictions.WorldSpecificHeartDropRestriction;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesGroup;
-import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
-import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -65,6 +72,7 @@ public class LifestealerConfiguration {
             LifestealerUserRules defaultUserRules,
             List<LifestealerUserRulesGroup> userGroupRules,
             List<LifestealerHeartItem> heartItems,
+            List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions,
             String itemToDropWhenPlayerDies,
             BanSettings banSettings
     ) {
@@ -76,9 +84,14 @@ public class LifestealerConfiguration {
                 getDefaultUserRules(),
                 getUserGroupRules(),
                 getHeartItems(),
+                getHeartDropRestrictionActions(),
                 getItemToDropWhenPlayerDies(),
                 getBanSettings()
         );
+    }
+
+    private List<LifestealerHeartDropRestrictionAction> getHeartDropRestrictionActions() throws SerializationException {
+        return getConfig().node("heart drop restrictions").getList(LifestealerHeartDropRestrictionAction.class);
     }
 
     private BanSettings getBanSettings() throws SerializationException {
@@ -129,6 +142,13 @@ public class LifestealerConfiguration {
                                 .register(LifestealerUserRulesGroup.class, new LifestealerUserRulesGroupSerializer())
                                 .register(PlayerNotification.class, new PlayerNotificationSerializer())
                                 .register(BanSettings.class, new BanSettingsSerializer())
+                                .register(EntityDamageEvent.DamageCause.class, new EnumSerializer<>(EntityDamageEvent.DamageCause.class))
+                                .register(LifestealerHeartDropAction.class, new EnumSerializer<>(LifestealerHeartDropAction.class))
+                                .register(LifestealerHeartDropRestrictionAction.class, new LifestealerHeartDropRestrictionActionSerializer())
+                                .register(SameIpReasonHeartDropRestriction.class, new SameIpReasonHeartDropRestrictionSerializer())
+                                .register(DamageCauseHeartDropRestriction.class, new DamageCauseHeartDropRestrictionSerializer())
+                                .register(WorldSpecificHeartDropRestriction.class, new WorldSpecificHeartDropRestrictionSerializer())
+                                .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
                 ))
                 .path(this.configFilePath)
                 .build();

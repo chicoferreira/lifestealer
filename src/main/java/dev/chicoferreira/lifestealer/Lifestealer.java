@@ -3,12 +3,13 @@ package dev.chicoferreira.lifestealer;
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
 import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
 import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
-import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
+import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionManager;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserListener;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -22,6 +23,7 @@ public class Lifestealer extends JavaPlugin {
     private LifestealerUserController userController;
     private LifestealerHeartItemManager itemManager;
     private LifestealerUserRulesController userRulesController;
+    private LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
 
     @Override
     public void onEnable() {
@@ -49,7 +51,14 @@ public class Lifestealer extends JavaPlugin {
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 
-        LifestealerUserListener listener = new LifestealerUserListener(this.itemManager, this.userController, this.userManager, this.userRulesController);
+        this.heartDropRestrictionManager = new LifestealerHeartDropRestrictionManager(values.heartDropRestrictionActions());
+
+        LifestealerUserListener listener = new LifestealerUserListener(this.itemManager,
+                this.userController,
+                this.userManager,
+                this.userRulesController,
+                this.heartDropRestrictionManager);
+
         Bukkit.getPluginManager().registerEvents(listener, this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -92,5 +101,14 @@ public class Lifestealer extends JavaPlugin {
      */
     public LifestealerUserRulesController getUserRulesController() {
         return userRulesController;
+    }
+
+    /**
+     * Returns the heart drop restriction manager instance. You can use this to compute if a player should drop their hearts when they die.
+     *
+     * @return the heart drop restriction manager instance
+     */
+    public LifestealerHeartDropRestrictionManager getHeartDropRestrictionManager() {
+        return heartDropRestrictionManager;
     }
 }
