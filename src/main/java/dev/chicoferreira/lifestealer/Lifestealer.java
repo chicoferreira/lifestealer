@@ -47,7 +47,7 @@ public class Lifestealer extends JavaPlugin {
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
 
-        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager);
+        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager, this.userRulesController);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 

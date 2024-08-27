@@ -7,10 +7,15 @@ import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class LifestealerCommand {
@@ -25,11 +31,13 @@ public class LifestealerCommand {
     private final LifestealerUserController controller;
     private final LifestealerUserManager userManager;
     private final LifestealerHeartItemManager itemManager;
+    private final LifestealerUserRulesController rulesController;
 
-    public LifestealerCommand(LifestealerUserController controller, LifestealerUserManager userManager, LifestealerHeartItemManager itemManager) {
+    public LifestealerCommand(LifestealerUserController controller, LifestealerUserManager userManager, LifestealerHeartItemManager itemManager, LifestealerUserRulesController rulesController) {
         this.controller = controller;
         this.userManager = userManager;
         this.itemManager = itemManager;
+        this.rulesController = rulesController;
     }
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
@@ -173,5 +181,39 @@ public class LifestealerCommand {
         }
 
         return Component.text(name);
+    }
+
+    public void subcommandUserInfo(CommandSender sender, @NotNull OfflinePlayer player) {
+        LifestealerUser user = this.userManager.getUser(player.getUniqueId());
+        LifestealerUser.Ban ban = this.controller.getBan(user);
+
+        LifestealerUserRules rules;
+        if (player instanceof Player onlinePlayer) {
+            rules = this.rulesController.computeRules(onlinePlayer::hasPermission);
+        } else {
+            rules = this.rulesController.computeRules((a) -> false);
+        }
+
+        LifestealerMessages.COMMAND_USER_INFO.sendTo(sender,
+                Placeholder.component("player", this.getPlayerName(player)),
+                Formatter.number("hearts", user.getHearts()),
+                either("banned", ban != null),
+                DurationUtils.formatDuration("remaining", ban != null ? ban.duration() : Duration.ZERO),
+                Formatter.date("date", ban != null ? ban.endZoned() : ZonedDateTime.now()),
+                either("online", player.isOnline() && player instanceof Player),
+                Formatter.number("maxhearts", rules.maxHearts()),
+                Formatter.number("minhearts", rules.minHearts()),
+                Formatter.number("returnhearts", rules.returnHearts()),
+                DurationUtils.formatDuration("bantime", rules.banTime())
+        );
+    }
+
+    public static TagResolver either(@TagPattern String name, boolean value) {
+        return TagResolver.resolver(name, (args, context) -> {
+            final String ifFalse = args.popOr("Missing false branch").toString();
+            final String ifTrue = args.popOr("Missing true branch").toString();
+
+            return Tag.inserting(context.deserialize(value ? ifTrue : ifFalse));
+        });
     }
 }

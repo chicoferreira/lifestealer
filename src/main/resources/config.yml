@@ -191,9 +191,18 @@ messages:
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
   command item list header: "<green>Heart items list (<white><amount></white>):"
   command item list item: "  <white>'<item>' <gray>-</gray> <amount><color:#ff0000>❤</color> <itemstack>"
-  command ban success: "<green>Force banned <white><target></white> for <white><duration:'[d'd'H'h'm'm's's']'></white> (date: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
+  command ban success: "<green>Force banned <white><target></white> for <white><duration:'[d'd'H'h'm'm's's']'></white> (will be unbanned at: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
   command unban success: "<green>Unbanned <white><target></white>."
   command unban not banned: "<red><white><target></white> is not banned."
+  command user info: "<green>User info for <white><player></white>:<newline>
+    <white>- <green>Hearts: <white><hearts><color:#ff0000>❤</color><newline>
+    <white>- <green>Ban status: <banned:'<white>Not banned</white>':'<red>Will be unbanned in <white><remaining:'[d'd'H'h'm'm's's']'></white> (at <white><date:'yyyy-MM-dd HH'h'mm'm'ss's''></white>)</red>'><newline>
+    <white>- <green>Rules: <online:'<gray>Needs to be online</gray>':'<newline>
+    <white>-    <green>Max Hearts: <white><maxhearts><color:#ff0000>❤</color></white><newline>
+    <white>-    <green>Min Hearts: <white><minhearts><color:#ff0000>❤</color></white><newline>
+    <white>-    <green>Ban Time: <white><bantime:'[d'd'H'h'm'm's's']'></white><newline>
+    <white>-    <green>Return Hearts: <white><returnhearts><color:#ff0000>❤</color>'>
+    "
   consume heart success:
     action bar: "<white>+<amount><color:#ff0000>❤</color>"
     sound: minecraft:entity.player.levelup

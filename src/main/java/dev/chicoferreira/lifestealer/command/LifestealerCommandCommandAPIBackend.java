@@ -89,7 +89,12 @@ public class LifestealerCommandCommandAPIBackend {
                                                             getArgument(args, "amount"),
                                                             sender);
                                                 })
-                                        )
+                                        ).executesPlayer((sender, args) -> {
+                                            command.subcommandItemGive(sender,
+                                                    getArgument(args, "item"),
+                                                    1,
+                                                    sender);
+                                        })
                                 )
                         ).then(new LiteralArgument("take")
                                 .then(generateItemTypeNameSuggestion("item")
@@ -107,28 +112,43 @@ public class LifestealerCommandCommandAPIBackend {
                                                             getArgument(args, "amount"),
                                                             sender);
                                                 })
-                                        )
+                                        ).executesPlayer((sender, args) -> {
+                                            command.subcommandItemTake(sender,
+                                                    getArgument(args, "item"),
+                                                    1,
+                                                    sender);
+                                        })
                                 )
                         ).then(new LiteralArgument("list")
                                 .executes((sender, args) -> {
                                     command.subcommandItemList(sender);
                                 })
                         )
-                ).then(new LiteralArgument("ban")
-                        .then(new EntitySelectorArgument.OnePlayer("player")
-                                .executes((sender, args) -> {
-                                    command.subcommandBanUser(sender, getArgument(args, "player"));
-                                })
-                                .then(generateDurationArgument("duration")
+                ).then(new LiteralArgument("user")
+                        .then(new LiteralArgument("ban")
+                                .then(new EntitySelectorArgument.OnePlayer("player")
                                         .executes((sender, args) -> {
-                                            command.subcommandBanUserDuration(sender, getArgument(args, "player"), getArgument(args, "duration"));
+                                            command.subcommandBanUser(sender, getArgument(args, "player"));
+                                        })
+                                        .then(generateDurationArgument("duration")
+                                                .executes((sender, args) -> {
+                                                    command.subcommandBanUserDuration(sender, getArgument(args, "player"), getArgument(args, "duration"));
+                                                })
+                                        )
+                                )
+                        ).then(new LiteralArgument("unban")
+                                .then(new OfflinePlayerArgument("player")
+                                        .executes((sender, args) -> {
+                                            command.subcommandUnbanUser(sender, getArgument(args, "player"));
                                         })
                                 )
-                        )
-                ).then(new LiteralArgument("unban")
-                        .then(new OfflinePlayerArgument("player")
-                                .executes((sender, args) -> {
-                                    command.subcommandUnbanUser(sender, getArgument(args, "player"));
+                        ).then(new LiteralArgument("info")
+                                .then(new OfflinePlayerArgument("player")
+                                        .executes((sender, args) -> {
+                                            command.subcommandUserInfo(sender, getArgument(args, "player"));
+                                        })
+                                ).executesPlayer((sender, args) -> {
+                                    command.subcommandUserInfo(sender, sender);
                                 })
                         )
                 )

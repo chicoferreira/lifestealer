@@ -24,7 +24,7 @@ public enum LifestealerMessages {
     COMMAND_BAN_SUCCESS,
     COMMAND_UNBAN_NOT_BANNED,
     COMMAND_UNBAN_SUCCESS,
-    ;
+    COMMAND_USER_INFO;
 
     private PlayerNotification message;
 
