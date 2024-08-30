@@ -70,7 +70,7 @@ public class LifestealerUserController {
      * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
      */
     public ChangeHeartsResult setHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
-        LifestealerUserRules rules = this.userRulesController.computeRules(player::hasPermission);
+        LifestealerUserRules rules = this.computeUserRules(player, user);
         hearts = Math.clamp(hearts, rules.minHearts(), rules.maxHearts());
 
         int currentHearts = user.getHearts();
@@ -165,7 +165,7 @@ public class LifestealerUserController {
      * @return the created ban information
      */
     public @NotNull LifestealerUser.Ban banUser(@NotNull Player player, @NotNull LifestealerUser user) {
-        LifestealerUserRules rules = this.userRulesController.computeRules(player::hasPermission);
+        LifestealerUserRules rules = this.computeUserRules(player, user);
         Duration banDuration = rules.banTime();
 
         return banUser(player, user, banDuration);
@@ -202,7 +202,7 @@ public class LifestealerUserController {
                     banSettings.kickMessage(),
                     Placeholder.component("player", player.name()),
                     Formatter.date("date", ban.endZoned()),
-                    DurationUtils.formatDuration("duration", banDuration));
+                    DurationUtils.formatDurationTag("duration", banDuration));
 
             player.kick(kickMessageComponent);
         }
@@ -251,6 +251,16 @@ public class LifestealerUserController {
      */
     public void unbanUser(@NotNull LifestealerUser user) {
         user.setBan(null);
+        // TODO: save in database
+    }
+
+    public LifestealerUserRules computeUserRules(Player player, LifestealerUser user) {
+        LifestealerUserRules permissionRules = userRulesController.computeRulesByPermission(player::hasPermission);
+        return permissionRules.sum(user.getRulesModifier());
+    }
+
+    public void setRulesModifier(LifestealerUser user, LifestealerUserRules modifierRules) {
+        user.setRulesModifier(modifierRules);
         // TODO: save in database
     }
 }

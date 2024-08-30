@@ -1,5 +1,7 @@
 package dev.chicoferreira.lifestealer.user;
 
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,11 +19,13 @@ public class LifestealerUser {
     private final @NotNull UUID uuid;
     private int hearts;
     private @Nullable Ban ban;
+    private @NotNull LifestealerUserRules modifierRules;
 
-    public LifestealerUser(@NotNull UUID uuid, int hearts, @Nullable Ban ban) {
+    public LifestealerUser(@NotNull UUID uuid, int hearts, @Nullable Ban ban, @NotNull LifestealerUserRules modifierRules) {
         this.uuid = uuid;
         this.hearts = hearts;
         this.ban = ban;
+        this.modifierRules = modifierRules;
     }
 
     /**
@@ -51,7 +55,7 @@ public class LifestealerUser {
 
     /**
      * Sets the ban information of the user.
-     * Only intended to be used by the {@link LifestealerUserController}.
+     * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
      *
      * @param ban the ban information of the user
      */
@@ -61,13 +65,35 @@ public class LifestealerUser {
 
     /**
      * Sets the amount of hearts the user has.
-     * Only intended to be used by the {@link LifestealerUserController}.
-     * If you want to set the amount of hearts of a player, use {@link LifestealerUserController#setHearts(org.bukkit.entity.Player, LifestealerUser, int)}.
+     * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
+     * If you want to set the amount of hearts of a player, use {@link LifestealerUserController#setHearts(Player, LifestealerUser, int)}.
      *
      * @param hearts the amount of hearts to set
      */
     void setHearts(int hearts) {
         this.hearts = hearts;
+    }
+
+
+    /**
+     * Gets the modifier rules of the user.
+     * This rule will have its values summed with the values in the rule given
+     * by the {@link dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController}
+     * which is based on the user's permissions to get the final rule value.
+     */
+    public @NotNull LifestealerUserRules getRulesModifier() {
+        return modifierRules;
+    }
+
+    /**
+     * Sets the modifier for the rules of the user internally without saving to the database.
+     * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
+     * If you want to change the rules modifier of a player, use {@link LifestealerUserController#setRulesModifier(LifestealerUser, LifestealerUserRules)}.
+     *
+     * @param rulesModifier the modifier rules of the user
+     */
+    void setRulesModifier(@NotNull LifestealerUserRules rulesModifier) {
+        this.modifierRules = rulesModifier;
     }
 
     /**

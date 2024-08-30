@@ -47,7 +47,7 @@ public class Lifestealer extends JavaPlugin {
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
 
-        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager, this.userRulesController);
+        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 
@@ -56,7 +56,6 @@ public class Lifestealer extends JavaPlugin {
         LifestealerUserListener listener = new LifestealerUserListener(this.itemManager,
                 this.userController,
                 this.userManager,
-                this.userRulesController,
                 this.heartDropRestrictionManager);
 
         Bukkit.getPluginManager().registerEvents(listener, this);

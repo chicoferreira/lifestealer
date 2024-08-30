@@ -19,12 +19,11 @@ public class DurationUtils {
      * @param duration The duration to format
      * @return A tag resolver that formats the duration using the given format
      */
-    public static TagResolver formatDuration(@TagPattern final @NotNull String key, final @NotNull Duration duration) {
+    public static TagResolver formatDurationTag(@TagPattern final @NotNull String key, final @NotNull Duration duration) {
         return TagResolver.resolver(key, (argumentQueue, context) -> {
             final String format = argumentQueue.popOr("Format expected").value();
-            // Make sure the duration is at least 1 second because the formatter just doesn't output anything if it's 0 and all durations are optional
-            long millis = Math.max(duration.toMillis(), 1000);
-            return Tag.inserting(context.deserialize(DurationFormatUtils.formatDuration(millis, format)));
+            String formattedDuration = DurationFormatUtils.formatDuration(duration.toMillis(), format, true);
+            return Tag.inserting(context.deserialize(formattedDuration));
         });
     }
 

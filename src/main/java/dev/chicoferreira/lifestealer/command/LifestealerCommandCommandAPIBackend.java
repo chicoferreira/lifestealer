@@ -1,6 +1,7 @@
 package dev.chicoferreira.lifestealer.command;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
+import dev.chicoferreira.lifestealer.command.LifestealerCommand.LifestealerRuleModifier;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.jorel.commandapi.CommandAPI;
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.Arrays;
 
 import static dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import static dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -150,9 +152,70 @@ public class LifestealerCommandCommandAPIBackend {
                                 ).executesPlayer((sender, args) -> {
                                     command.subcommandUserInfo(sender, sender);
                                 })
+                        ).then(new LiteralArgument("rulemodifier")
+                                .then(new LiteralArgument("set")
+                                        .then(generateRuleModifierArgument("rule")
+                                                .then(new IntegerArgument("value")
+                                                        .then(new EntitySelectorArgument.OnePlayer("player")
+                                                                .executes((sender, args) -> {
+                                                                    command.subcommandUserSetRuleModifier(sender,
+                                                                            getArgument(args, "player"),
+                                                                            getArgument(args, "rule"),
+                                                                            getArgument(args, "value"));
+                                                                })
+                                                        ).executesPlayer((sender, args) -> {
+                                                            command.subcommandUserSetRuleModifier(sender,
+                                                                    sender,
+                                                                    getArgument(args, "rule"),
+                                                                    getArgument(args, "value"));
+                                                        })
+                                                )
+                                        )
+                                ).then(new LiteralArgument("adjust")
+                                        .then(generateRuleModifierArgument("rule")
+                                                .then(new IntegerArgument("adjustment")
+                                                        .then(new EntitySelectorArgument.OnePlayer("player")
+                                                                .executes((sender, args) -> {
+                                                                    command.subcommandUserAdjustRuleModifier(sender,
+                                                                            getArgument(args, "player"),
+                                                                            getArgument(args, "rule"),
+                                                                            getArgument(args, "adjustment"));
+                                                                })
+                                                        ).executesPlayer((sender, args) -> {
+                                                            command.subcommandUserAdjustRuleModifier(sender,
+                                                                    sender,
+                                                                    getArgument(args, "rule"),
+                                                                    getArgument(args, "adjustment"));
+                                                        })
+                                                )
+                                        )
+                                ).then(new LiteralArgument("reset")
+                                        .then(new EntitySelectorArgument.OnePlayer("player")
+                                                .executes((sender, args) -> {
+                                                    command.subcommandUserResetRuleModifiers(sender, getArgument(args, "player"));
+                                                })
+                                        ).executesPlayer((sender, args) -> {
+                                            command.subcommandUserResetRuleModifiers(sender, sender);
+                                        })
+                                )
                         )
                 )
                 .register(plugin);
+    }
+
+    public Argument<@NotNull LifestealerRuleModifier> generateRuleModifierArgument(String name) {
+        return new CustomArgument<>(new StringArgument(name), info -> {
+            String modifierName = info.input();
+            LifestealerRuleModifier modifier = LifestealerRuleModifier.fromName(modifierName);
+            if (modifier == null) {
+                throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Unknown rule modifier: ").appendArgInput());
+            }
+            return modifier;
+        }).replaceSuggestions(ArgumentSuggestions.strings(
+                Arrays.stream(LifestealerRuleModifier.values())
+                        .map(LifestealerRuleModifier::getRule)
+                        .toArray(String[]::new))
+        );
     }
 
     public Argument<@NotNull LifestealerHeartItem> generateItemTypeArgument(String name) {

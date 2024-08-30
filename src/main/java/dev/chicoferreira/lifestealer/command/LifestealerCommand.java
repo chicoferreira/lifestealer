@@ -8,7 +8,6 @@ import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
-import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -21,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -31,13 +31,11 @@ public class LifestealerCommand {
     private final LifestealerUserController controller;
     private final LifestealerUserManager userManager;
     private final LifestealerHeartItemManager itemManager;
-    private final LifestealerUserRulesController rulesController;
 
-    public LifestealerCommand(LifestealerUserController controller, LifestealerUserManager userManager, LifestealerHeartItemManager itemManager, LifestealerUserRulesController rulesController) {
+    public LifestealerCommand(LifestealerUserController controller, LifestealerUserManager userManager, LifestealerHeartItemManager itemManager) {
         this.controller = controller;
         this.userManager = userManager;
         this.itemManager = itemManager;
-        this.rulesController = rulesController;
     }
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
@@ -152,7 +150,7 @@ public class LifestealerCommand {
     private void subcommandBanSendSuccessMessage(CommandSender sender, Player target, LifestealerUser.Ban ban) {
         LifestealerMessages.COMMAND_BAN_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
-                DurationUtils.formatDuration("remaining", ban.duration()),
+                DurationUtils.formatDurationTag("remaining", ban.duration()),
                 Formatter.date("date", ban.endZoned()));
     }
 
@@ -187,25 +185,126 @@ public class LifestealerCommand {
         LifestealerUser user = this.userManager.getUser(player.getUniqueId());
         LifestealerUser.Ban ban = this.controller.getBan(user);
 
-        LifestealerUserRules rules;
-        if (player instanceof Player onlinePlayer) {
-            rules = this.rulesController.computeRules(onlinePlayer::hasPermission);
-        } else {
-            rules = this.rulesController.computeRules((a) -> false);
-        }
+        LifestealerUserRules rules = player instanceof Player onlinePlayer
+                ? this.controller.computeUserRules(onlinePlayer, user)
+                : null;
 
+        int modifierMaxHearts = user.getRulesModifier().maxHearts();
+        int modifierMinHearts = user.getRulesModifier().minHearts();
+        int modifierReturnHearts = user.getRulesModifier().returnHearts();
+        Duration modifierBanTime = user.getRulesModifier().banTime();
         LifestealerMessages.COMMAND_USER_INFO.sendTo(sender,
                 Placeholder.component("player", this.getPlayerName(player)),
                 Formatter.number("hearts", user.getHearts()),
                 either("banned", ban != null),
-                DurationUtils.formatDuration("remaining", ban != null ? ban.duration() : Duration.ZERO),
+                DurationUtils.formatDurationTag("remaining", ban != null ? ban.duration() : Duration.ZERO),
                 Formatter.date("date", ban != null ? ban.endZoned() : ZonedDateTime.now()),
                 either("online", player.isOnline() && player instanceof Player),
-                Formatter.number("maxhearts", rules.maxHearts()),
-                Formatter.number("minhearts", rules.minHearts()),
-                Formatter.number("returnhearts", rules.returnHearts()),
-                DurationUtils.formatDuration("bantime", rules.banTime())
+                Formatter.number("maxhearts", rules != null ? rules.maxHearts() : 0),
+                Formatter.number("minhearts", rules != null ? rules.minHearts() : 0),
+                Formatter.number("returnhearts", rules != null ? rules.returnHearts() : 0),
+                DurationUtils.formatDurationTag("bantime", rules != null ? rules.banTime() : Duration.ZERO),
+                Formatter.number("modifiermaxhearts", modifierMaxHearts),
+                Formatter.number("modifierminhearts", modifierMinHearts),
+                Formatter.number("modifierreturnhearts", modifierReturnHearts),
+                DurationUtils.formatDurationTag("modifierbantime", modifierBanTime),
+                Formatter.number("permissionmaxhearts", rules != null ? rules.maxHearts() - modifierMaxHearts : 0),
+                Formatter.number("permissionminhearts", rules != null ? rules.minHearts() - modifierMinHearts : 0),
+                Formatter.number("permissionreturnhearts", rules != null ? rules.returnHearts() - modifierReturnHearts : 0),
+                DurationUtils.formatDurationTag("permissionbantime", rules != null ? rules.banTime().minus(modifierBanTime) : Duration.ZERO)
         );
+    }
+
+    public enum LifestealerRuleModifier {
+        MAXHEARTS("maxhearts"),
+        MINHEARTS("minhearts"),
+        BANTIME("bantime"),
+        RETURNHEARTS("returnhearts");
+
+        private final String rule;
+
+        LifestealerRuleModifier(String rule) {
+            this.rule = rule;
+        }
+
+        public static @Nullable LifestealerRuleModifier fromName(String modifierName) {
+            for (LifestealerRuleModifier modifier : values()) {
+                if (modifier.getRule().equalsIgnoreCase(modifierName)) {
+                    return modifier;
+                }
+            }
+            return null;
+        }
+
+        public String getRule() {
+            return rule;
+        }
+    }
+
+    public void subcommandUserSetRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
+        LifestealerUser targetUser = this.userManager.getUser(target.getUniqueId());
+        LifestealerUserRules modifierRules = targetUser.getRulesModifier();
+
+        LifestealerUserRules newModifierRules = modifierRules.with(builder -> switch (rule) {
+            case MAXHEARTS -> builder.maxHearts(value);
+            case MINHEARTS -> builder.minHearts(value);
+            case BANTIME -> builder.banTime(Duration.ofSeconds(value));
+            case RETURNHEARTS -> builder.returnHearts(value);
+        });
+
+        this.controller.setRulesModifier(targetUser, newModifierRules);
+
+        LifestealerMessages.COMMAND_USER_SET_RULE_MODIFIER_SUCCESS.sendTo(sender,
+                Placeholder.component("target", this.getPlayerName(target)),
+                Placeholder.component("rule", Component.text(rule.getRule())),
+                Formatter.number("value", value));
+
+        if (target.isOnline() && target instanceof Player targetPlayer) {
+            LifestealerMessages.COMMAND_USER_SET_RULE_MODIFIER_SUCCESS_TARGET.sendTo(targetPlayer,
+                    Placeholder.component("rule", Component.text(rule.getRule())),
+                    Formatter.number("value", value));
+        }
+    }
+
+    public void subcommandUserAdjustRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
+        LifestealerUser targetUser = this.userManager.getUser(target.getUniqueId());
+        LifestealerUserRules modifierRules = targetUser.getRulesModifier();
+
+        LifestealerUserRules newModifierRules = modifierRules.withSum(builder -> switch (rule) {
+            case MAXHEARTS -> builder.maxHearts(value);
+            case MINHEARTS -> builder.minHearts(value);
+            case BANTIME -> builder.banTime(Duration.ofSeconds(value));
+            case RETURNHEARTS -> builder.returnHearts(value);
+        });
+
+        this.controller.setRulesModifier(targetUser, newModifierRules);
+
+        String adjustment = value > 0 ? "+" + value : String.valueOf(value);
+
+        LifestealerMessages.COMMAND_USER_ADJUST_RULE_MODIFIER_SUCCESS.sendTo(sender,
+                Placeholder.component("target", this.getPlayerName(target)),
+                Placeholder.component("rule", Component.text(rule.getRule())),
+                Placeholder.unparsed("adjustment", adjustment));
+
+        if (target.isOnline() && target instanceof Player targetPlayer) {
+            LifestealerMessages.COMMAND_USER_ADJUST_RULE_MODIFIER_SUCCESS_TARGET.sendTo(targetPlayer,
+                    Placeholder.component("rule", Component.text(rule.getRule())),
+                    Placeholder.unparsed("adjustment", adjustment));
+        }
+    }
+
+    public void subcommandUserResetRuleModifiers(CommandSender sender, OfflinePlayer target) {
+        LifestealerUser targetUser = this.userManager.getUser(target.getUniqueId());
+
+        LifestealerUserRules newModifierRules = LifestealerUserRules.zeroed();
+        this.controller.setRulesModifier(targetUser, newModifierRules);
+
+        LifestealerMessages.COMMAND_USER_RESET_RULE_MODIFIERS_SUCCESS.sendTo(sender,
+                Placeholder.component("target", this.getPlayerName(target)));
+
+        if (target.isOnline() && target instanceof Player targetPlayer) {
+            LifestealerMessages.COMMAND_USER_RESET_RULE_MODIFIERS_SUCCESS_TARGET.sendTo(targetPlayer);
+        }
     }
 
     public static TagResolver either(@TagPattern String name, boolean value) {
@@ -213,7 +312,7 @@ public class LifestealerCommand {
             final String ifFalse = args.popOr("Missing false branch").toString();
             final String ifTrue = args.popOr("Missing true branch").toString();
 
-            return Tag.inserting(context.deserialize(value ? ifTrue : ifFalse));
+            return Tag.selfClosingInserting(context.deserialize(value ? ifTrue : ifFalse));
         });
     }
 }

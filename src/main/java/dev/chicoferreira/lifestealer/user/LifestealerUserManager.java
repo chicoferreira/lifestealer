@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.user;
 
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -26,7 +27,7 @@ public class LifestealerUserManager {
      * @return a {@link LifestealerUser} instance of the user
      */
     public @NotNull LifestealerUser getUser(UUID uuid) {
-        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, getStartingHearts(), null));
+        return users.computeIfAbsent(uuid, u -> new LifestealerUser(u, getStartingHearts(), null, LifestealerUserRules.zeroed()));
     }
 
     /**

@@ -2,7 +2,9 @@ package dev.chicoferreira.lifestealer;
 
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
@@ -50,7 +52,13 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
      * @param resolvers the adventure-api resolvers to apply to the messages (they act basically as placeholders)
      */
     public void sendTo(CommandSender sender, TagResolver... resolvers) {
-        Function<String, Component> parseComponent = string -> MiniMessage.miniMessage().deserialize(string, resolvers);
+        Function<String, Component> parseComponent = string -> MiniMessage
+                .builder()
+                .editTags(tag -> tag
+                        .tag("heart", Tag.selfClosingInserting(Component.text("❤").color(TextColor.color(255, 0, 0))))
+                )
+                .build()
+                .deserialize(string, resolvers);
 
         textMessage.map(parseComponent).ifPresent(sender::sendMessage);
         actionBarMessage.map(parseComponent).ifPresent(sender::sendActionBar);

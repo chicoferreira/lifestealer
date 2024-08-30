@@ -1,5 +1,8 @@
 package dev.chicoferreira.lifestealer.user.rules;
 
+import dev.chicoferreira.lifestealer.user.LifestealerUser;
+import org.bukkit.entity.Player;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -19,11 +22,15 @@ public class LifestealerUserRulesController {
      * If no group matches the permissions, the default cap is returned.
      * If multiple groups match the permissions, the last one is returned, falling back to previous ones when
      * it does not have a min or max hearts.
+     * <p>
+     * This will only compute the rules based on the permissions. If you want to compute the rules based on the user
+     * and the permissions, use {@link dev.chicoferreira.lifestealer.user.LifestealerUserController#computeUserRules(Player, LifestealerUser)}
+     * as it will also take into account the user's rules modifiers.
      *
      * @param permissionTester a function that tests if something has a permission (e.g. <pre>player::hasPermission</pre>)
      * @return the {@link LifestealerUserRules} that the permissions tested indicates
      */
-    public LifestealerUserRules computeRules(Function<String, Boolean> permissionTester) {
+    public LifestealerUserRules computeRulesByPermission(Function<String, Boolean> permissionTester) {
         LifestealerUserRules result = this.defaultRule;
 
         for (LifestealerUserRulesGroup group : groups) {

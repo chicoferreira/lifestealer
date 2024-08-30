@@ -8,7 +8,6 @@ import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionManager;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
-import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
@@ -30,14 +29,12 @@ public class LifestealerUserListener implements Listener {
     private final LifestealerUserManager userManager;
     private final LifestealerHeartItemManager heartItemManager;
     private final LifestealerUserController userController;
-    private final LifestealerUserRulesController userRulesController;
     private final LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
 
-    public LifestealerUserListener(LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerUserRulesController userRulesController, LifestealerHeartDropRestrictionManager heartDropRestrictionManager) {
+    public LifestealerUserListener(LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerHeartDropRestrictionManager heartDropRestrictionManager) {
         this.heartItemManager = heartItemManager;
         this.userController = userController;
         this.userManager = userManager;
-        this.userRulesController = userRulesController;
         this.heartDropRestrictionManager = heartDropRestrictionManager;
     }
 
@@ -54,7 +51,7 @@ public class LifestealerUserListener implements Listener {
                         userController.getBanSettings().joinMessage(),
                         Placeholder.component("player", player.name()),
                         Formatter.date("date", ban.endZoned()),
-                        DurationUtils.formatDuration("remaining", ban.remaining()));
+                        DurationUtils.formatDurationTag("remaining", ban.remaining()));
                 event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMessageComponent);
             }
         }
@@ -146,7 +143,7 @@ public class LifestealerUserListener implements Listener {
 
         int heartsWithoutClamp = result.previousHearts() - hearts;
 
-        LifestealerUserRules rules = userRulesController.computeRules(player::hasPermission);
+        LifestealerUserRules rules = userController.computeUserRules(player, user);
 
         if (heartsWithoutClamp < rules.minHearts()) { // if the player would have less than the minimum amount of hearts
             Duration banDuration = rules.banTime();

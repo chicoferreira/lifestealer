@@ -5,7 +5,7 @@ items:
       type: "paper"
       display name: "<color:#ff0000>Normal Heart</color>"
       lore:
-        - "<gray>Right click to add <white>+1<color:#ff0000>❤</color></white> to your health"
+        - "<gray>Right click to add <white>+1<heart></white> to your health"
       glint: true
       enchantments:
         - name: "unbreaking"
@@ -170,16 +170,16 @@ messages:
   #       pitch: 0.2
   # Sends a green action bar message to the player and plays the level up sound with a volume of 0.5 and a pitch of 0.2
 
-  command hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><color:#ff0000>❤</color><green> (old: <white><previous><color:#ff0000>❤</color><green>)."
+  command hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><heart><green> (old: <white><previous><heart><green>)."
   command hearts set success target:
     sound: minecraft:entity.player.levelup
-  command hearts add success: "<green>Added <white><added><green><color:#ff0000>❤</color> to <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
+  command hearts add success: "<green>Added <white><added><green><heart> to <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
   command hearts add success target:
     sound:
       key: minecraft:entity.player.levelup
       volume: 0.5
       pitch: 0.2
-  command hearts remove success: "<green>Removed <white><removed><green><color:#ff0000>❤</color> from <white><target><green> (new: <white><new><color:#ff0000>❤</color><green>, old: <white><previous><color:#ff0000>❤</color><green>)."
+  command hearts remove success: "<green>Removed <white><removed><green><heart> from <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
   command hearts remove success target:
     sound: minecraft:entity.player.hurt
   command item give success: "<green>Gave <white>x<amount> <item></white> heart item to <white><target><green> (<white><rest></white> could not be given due to full inventory)."
@@ -190,21 +190,26 @@ messages:
     action bar: "<red>Lost <white>x<amount> <item></white> heart items."
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
   command item list header: "<green>Heart items list (<white><amount></white>):"
-  command item list item: "  <white>'<item>' <gray>-</gray> <amount><color:#ff0000>❤</color> <itemstack>"
+  command item list item: "  <white>'<item>' <gray>-</gray> <amount><heart> <itemstack>"
   command ban success: "<green>Force banned <white><target></white> for <white><duration:'[d'd'H'h'm'm's's']'></white> (will be unbanned at: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
   command unban success: "<green>Unbanned <white><target></white>."
   command unban not banned: "<red><white><target></white> is not banned."
   command user info: "<green>User info for <white><player></white>:<newline>
-    <white>- <green>Hearts: <white><hearts><color:#ff0000>❤</color><newline>
+    <white>- <green>Hearts: <white><hearts><heart><newline>
     <white>- <green>Ban status: <banned:'<white>Not banned</white>':'<red>Will be unbanned in <white><remaining:'[d'd'H'h'm'm's's']'></white> (at <white><date:'yyyy-MM-dd HH'h'mm'm'ss's''></white>)</red>'><newline>
-    <white>- <green>Rules: <online:'<gray>Needs to be online</gray>':'<newline>
-    <white>-    <green>Max Hearts: <white><maxhearts><color:#ff0000>❤</color></white><newline>
-    <white>-    <green>Min Hearts: <white><minhearts><color:#ff0000>❤</color></white><newline>
-    <white>-    <green>Ban Time: <white><bantime:'[d'd'H'h'm'm's's']'></white><newline>
-    <white>-    <green>Return Hearts: <white><returnhearts><color:#ff0000>❤</color>'>
-    "
+    <white>- <green>Rules:<newline>
+    <white>-    <green>Max Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionmaxhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifiermaxhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<maxhearts><heart>'><newline>
+    <white>-    <green>Min Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionminhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierminhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<minhearts><heart>'><newline>
+    <white>-    <green>Ban Time: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionbantime:'[d'd'H'h'm'm's's']'>'> <dark_gray>(permission)</dark_gray> + <modifierbantime:'[d'd'H'h'm'm's's']'> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<bantime:'[d'd'H'h'm'm's's']'>'><newline>
+    <white>-    <green>Return Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionreturnhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierreturnhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<returnhearts><heart>'>"
+  command user set rule modifier success: "<green>Set <white><target></white>'s rule modifier <white><rule></white> to <white><value></white>."
+  command user set rule modifier success target: [ ]
+  command user adjust rule modifier success: "<green>Adjusted <white><target></white>'s rule modifier <white><rule></white> by <white><adjustment></white>."
+  command user adjust rule modifier success target: [ ]
+  command user reset rule modifiers success: "<green>Reset <white><target></white>'s rule modifiers."
+  command user reset rule modifiers success target: [ ]
   consume heart success:
-    action bar: "<white>+<amount><color:#ff0000>❤</color>"
+    action bar: "<white>+<amount><heart>"
     sound: minecraft:entity.player.levelup
   consume heart already full:
     action bar: "<red>You can't consume any more hearts."
