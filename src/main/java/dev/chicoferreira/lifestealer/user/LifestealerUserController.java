@@ -24,10 +24,12 @@ import java.util.List;
  */
 public class LifestealerUserController {
 
+    private final LifestealerUserManager userManager;
     private final LifestealerUserRulesController userRulesController;
     private @NotNull BanSettings banSettings;
 
-    public LifestealerUserController(LifestealerUserRulesController userRulesController, @NotNull BanSettings banSettings) {
+    public LifestealerUserController(LifestealerUserManager userManager, LifestealerUserRulesController userRulesController, @NotNull BanSettings banSettings) {
+        this.userManager = userManager;
         this.userRulesController = userRulesController;
         this.banSettings = banSettings;
     }
@@ -78,7 +80,8 @@ public class LifestealerUserController {
         user.setHearts(hearts);
         updatePlayerHearts(player, user);
 
-        // TODO: save in database
+        this.userManager.saveUserAsync(user);
+
         return new ChangeHeartsResult(currentHearts, hearts);
     }
 
@@ -185,7 +188,8 @@ public class LifestealerUserController {
     public @NotNull LifestealerUser.Ban banUser(@NotNull Player player, @NotNull LifestealerUser user, @NotNull Duration banDuration) {
         LifestealerUser.Ban ban = new LifestealerUser.Ban(Instant.now(), banDuration);
         user.setBan(ban);
-        // TODO: save in database
+
+        userManager.saveUserAsync(user);
 
         for (String command : banSettings.commands()) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
@@ -221,7 +225,7 @@ public class LifestealerUserController {
      * @return the ban information of the user, or null if the user is not banned
      */
     public @Nullable LifestealerUser.Ban getBan(@NotNull LifestealerUser user) {
-        LifestealerUser.Ban ban = user.getBan();
+        LifestealerUser.Ban ban = user.getInternalBan();
         if (ban == null) {
             return null;
         }
@@ -251,7 +255,6 @@ public class LifestealerUserController {
      */
     public void unbanUser(@NotNull LifestealerUser user) {
         user.setBan(null);
-        // TODO: save in database
     }
 
     public LifestealerUserRules computeUserRules(Player player, LifestealerUser user) {
@@ -261,6 +264,6 @@ public class LifestealerUserController {
 
     public void setRulesModifier(LifestealerUser user, LifestealerUserRules modifierRules) {
         user.setRulesModifier(modifierRules);
-        // TODO: save in database
+        userManager.saveUserAsync(user);
     }
 }

@@ -28,6 +28,10 @@ dependencies {
     compileOnly("dev.jorel:commandapi-bukkit-core:9.5.3")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
+    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("com.h2database:h2:2.3.232")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.4.1")
+    implementation("org.postgresql:postgresql:42.7.4")
 }
 
 tasks {
@@ -57,4 +61,8 @@ bukkitPluginYaml {
     apiVersion = "1.21"
     depend.add("CommandAPI")
     softDepend.add("PlaceholderAPI")
+    libraries.add("com.zaxxer:HikariCP:5.1.0")
+    libraries.add("com.h2database:h2:2.3.232")
+    libraries.add("org.mariadb.jdbc:mariadb-java-client:3.4.1")
+    libraries.add("org.postgresql:postgresql:42.7.4")
 }

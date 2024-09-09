@@ -49,7 +49,7 @@ public class LifestealerUser {
      *
      * @return the ban information of the user if they have a banning record, otherwise null
      */
-    @Nullable Ban getBan() {
+    public @Nullable Ban getInternalBan() {
         return ban;
     }
 

@@ -1,6 +1,7 @@
 package dev.chicoferreira.lifestealer.user;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
+import dev.chicoferreira.lifestealer.LifestealerExecutor;
 import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.events.*;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
@@ -17,31 +18,66 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LifestealerUserListener implements Listener {
 
+    private final LifestealerExecutor executor;
+    private final Logger logger;
     private final LifestealerUserManager userManager;
     private final LifestealerHeartItemManager heartItemManager;
     private final LifestealerUserController userController;
     private final LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
+    private Component errorKickMessage;
 
-    public LifestealerUserListener(LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerHeartDropRestrictionManager heartDropRestrictionManager) {
+    public LifestealerUserListener(LifestealerExecutor executor, Logger logger, LifestealerHeartItemManager heartItemManager, LifestealerUserController userController, LifestealerUserManager userManager, LifestealerHeartDropRestrictionManager heartDropRestrictionManager, Component errorKickMessage) {
+        this.executor = executor;
+        this.logger = logger;
         this.heartItemManager = heartItemManager;
         this.userController = userController;
         this.userManager = userManager;
         this.heartDropRestrictionManager = heartDropRestrictionManager;
+        this.errorKickMessage = errorKickMessage;
+    }
+
+    public void setErrorKickMessage(Component errorKickMessage) {
+        this.errorKickMessage = errorKickMessage;
+    }
+
+    @EventHandler
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        // This runs in a separate thread so it's safe to do blocking operations
+        try {
+            if (userManager.getOnlineUser(event.getUniqueId()) != null) {
+                // user already loaded
+                return;
+            }
+            LifestealerUser lifestealerUser = userManager.loadUser(event.getUniqueId());
+            if (lifestealerUser == null) {
+                // this already needs to run in the main thread (createUser is not thread-safe)
+                executor.sync().execute(() -> userManager.createUser(event.getUniqueId()));
+            } else {
+                // same here
+                executor.sync().execute(() -> userManager.registerLoadedUser(lifestealerUser));
+            }
+        } catch (Exception e) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, errorKickMessage);
+            logger.log(Level.SEVERE, "An error occurred while loading user data", e);
+        }
     }
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        LifestealerUser user = userManager.getUser(player.getUniqueId());
+        LifestealerUser user = userManager.getOnlineUser(player);
 
         if (!userController.getBanSettings().external()) {
             LifestealerUser.Ban ban = userController.getBan(user);
@@ -60,7 +96,7 @@ public class LifestealerUserListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        LifestealerUser user = userManager.getUser(player.getUniqueId());
+        LifestealerUser user = userManager.getOnlineUser(player);
 
         userController.updatePlayerHearts(player, user);
     }
@@ -82,7 +118,7 @@ public class LifestealerUserListener implements Listener {
 
         event.setCancelled(true);
 
-        LifestealerUser user = userManager.getUser(event.getPlayer().getUniqueId());
+        LifestealerUser user = userManager.getOnlineUser(event.getPlayer());
 
         LifestealerPreConsumeHeartEvent preConsumeHeartEvent = new LifestealerPreConsumeHeartEvent(event.getPlayer(), user, item, hearts);
         if (!preConsumeHeartEvent.callEvent()) {
@@ -111,7 +147,7 @@ public class LifestealerUserListener implements Listener {
         }
 
         Player player = event.getEntity();
-        LifestealerUser user = userManager.getUser(player.getUniqueId());
+        LifestealerUser user = userManager.getOnlineUser(player);
 
         LifestealerHeartItem itemToDropWhenPlayerDies = heartItemManager.getItemToDropWhenPlayerDies();
 

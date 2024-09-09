@@ -9,8 +9,13 @@ import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserListener;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
+import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage;
+import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
+import dev.chicoferreira.lifestealer.user.persistent.sql.SQLUserPersistentStorage;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -24,6 +29,8 @@ public class Lifestealer extends JavaPlugin {
     private LifestealerHeartItemManager itemManager;
     private LifestealerUserRulesController userRulesController;
     private LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
+    private LifestealerExecutor executor;
+    private UserPersistentStorage userPersistentStorage;
 
     @Override
     public void onEnable() {
@@ -41,27 +48,79 @@ public class Lifestealer extends JavaPlugin {
             return;
         }
 
+        SQLConnectionProvider connectionProvider = values.connectionProvider();
+        this.userPersistentStorage = new SQLUserPersistentStorage(connectionProvider);
+        try {
+            this.userPersistentStorage.init();
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Couldn't initialize user persistent storage", e);
+            getLogger().severe("Disabling plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        getLogger().info("Connected to database (" + this.userPersistentStorage.getDatabaseName() + ")");
+
+        this.executor = new LifestealerExecutor(this);
+
         this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), values.userGroupRules());
-        this.userController = new LifestealerUserController(this.userRulesController, values.banSettings());
-        this.userManager = new LifestealerUserManager(new HashMap<>(), values.startingHearts());
+        this.userManager = new LifestealerUserManager(new HashMap<>(), this.userPersistentStorage, this.executor, values.startingHearts());
+        this.userController = new LifestealerUserController(this.userManager, this.userRulesController, values.banSettings());
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
 
-        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager);
+        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager, this.getLogger());
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 
         this.heartDropRestrictionManager = new LifestealerHeartDropRestrictionManager(values.heartDropRestrictionActions());
 
-        LifestealerUserListener listener = new LifestealerUserListener(this.itemManager,
+        LifestealerUserListener listener = new LifestealerUserListener(
+                this.executor,
+                this.getLogger(),
+                this.itemManager,
                 this.userController,
                 this.userManager,
-                this.heartDropRestrictionManager);
+                this.heartDropRestrictionManager,
+                values.errorKickMessage()
+        );
 
         Bukkit.getPluginManager().registerEvents(listener, this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LifestealerPlaceholderExpansion(this, this.userController).register();
+        }
+
+        // Load all online players
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            try {
+                this.userManager.getOrLoadUser(onlinePlayer.getUniqueId());
+            } catch (Exception e) {
+                onlinePlayer.kick(Component.text("An error occurred while loading your user."));
+                getLogger().log(Level.SEVERE, "Couldn't load user for player " + onlinePlayer.getName(), e);
+            }
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        try {
+            if (this.executor != null) {
+                getLogger().info("Waiting for all save tasks to finish...");
+                if (!this.executor.shutdown()) {
+                    getLogger().warning("Some tasks didn't finish in time, forcing shutdown...");
+                }
+            }
+        } catch (InterruptedException e) {
+            getLogger().log(Level.SEVERE, "An error occurred while shutting down", e);
+        }
+
+        if (this.userPersistentStorage != null) {
+            try {
+                this.userPersistentStorage.close();
+            } catch (Exception e) {
+                getLogger().log(Level.SEVERE, "An error occurred while shutting down database", e);
+            }
         }
     }
 
@@ -109,5 +168,23 @@ public class Lifestealer extends JavaPlugin {
      */
     public LifestealerHeartDropRestrictionManager getHeartDropRestrictionManager() {
         return heartDropRestrictionManager;
+    }
+
+    /**
+     * Returns the executor instance. You can use this to run tasks in the main or async thread.
+     *
+     * @return the executor instance
+     */
+    public LifestealerExecutor getExecutor() {
+        return executor;
+    }
+
+    /**
+     * Returns the user persistent storage instance. You can use this to save and load users from the database.
+     *
+     * @return the user persistent storage instance
+     */
+    public UserPersistentStorage getUserPersistentStorage() {
+        return userPersistentStorage;
     }
 }

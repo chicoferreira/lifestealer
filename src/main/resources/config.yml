@@ -1,3 +1,18 @@
+storage:
+  # The kick message when a player tries to join, but its information couldn't be retrieved from the storage system
+  error kick message: "<red>There was an error with the storage system, please contact an administrator."
+  type: "h2" # Possible values: "sqlite", "h2", "mysql", "postgresql"
+  path: "users.db"
+## Example for MySQL/PostgreSQL/MariaDB:
+#  type: "mysql" or "postgresql" or "mariadb"
+#  address: "localhost:3306"
+#  database: "mysql" # The name of the database
+#  username: "root"
+#  password: "12345678"
+## Extra properties for HikariCP, check https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#gear-configuration-knobs-baby for more configuration options
+## The properties for MySQL are already optimized for the best performance as in https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+#  extra properties: []
+
 items:
   - name: "default"
     heart amount: 1
@@ -214,3 +229,4 @@ messages:
   consume heart already full:
     action bar: "<red>You can't consume any more hearts."
     sound: minecraft:entity.villager.no
+  command error retrieving user: "<red>Could not retrieve target user. Check console for more information. Database unreachable?"

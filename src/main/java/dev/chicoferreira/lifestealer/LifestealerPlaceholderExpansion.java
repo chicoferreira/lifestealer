@@ -62,7 +62,12 @@ public class LifestealerPlaceholderExpansion extends PlaceholderExpansion {
             return null;
         }
 
-        LifestealerUser user = plugin.getUserManager().getUser(player.getUniqueId());
+        LifestealerUser user;
+        try {
+            user = plugin.getUserManager().getOrLoadUser(player.getUniqueId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         String result = switch (params) {
             case "max_hearts_modifier" -> String.valueOf(user.getRulesModifier().maxHearts());
@@ -90,7 +95,12 @@ public class LifestealerPlaceholderExpansion extends PlaceholderExpansion {
             return null;
         }
 
-        LifestealerUser user = plugin.getUserManager().getUser(player.getUniqueId());
+        LifestealerUser user;
+        try {
+            user = plugin.getUserManager().getOrLoadUser(player.getUniqueId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return switch (params) {
             case "health" -> String.valueOf(player.getHealth());

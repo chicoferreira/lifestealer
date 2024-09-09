@@ -9,6 +9,7 @@ import dev.chicoferreira.lifestealer.restriction.restrictions.DamageCauseHeartDr
 import dev.chicoferreira.lifestealer.restriction.restrictions.SameIpReasonHeartDropRestriction;
 import dev.chicoferreira.lifestealer.restriction.restrictions.WorldSpecificHeartDropRestriction;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
+import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesGroup;
 import net.kyori.adventure.sound.Sound;
@@ -74,7 +75,9 @@ public class LifestealerConfiguration {
             List<LifestealerHeartItem> heartItems,
             List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions,
             String itemToDropWhenPlayerDies,
-            BanSettings banSettings
+            BanSettings banSettings,
+            SQLConnectionProvider connectionProvider,
+            Component errorKickMessage
     ) {
     }
 
@@ -86,8 +89,14 @@ public class LifestealerConfiguration {
                 getHeartItems(),
                 getHeartDropRestrictionActions(),
                 getItemToDropWhenPlayerDies(),
-                getBanSettings()
+                getBanSettings(),
+                getConnectionProvider(),
+                getErrorKickMessage()
         );
+    }
+
+    private Component getErrorKickMessage() throws SerializationException {
+        return getConfig().node("storage").node("error kick message").require(Component.class);
     }
 
     private List<LifestealerHeartDropRestrictionAction> getHeartDropRestrictionActions() throws SerializationException {
@@ -122,6 +131,10 @@ public class LifestealerConfiguration {
         return require(getConfig().node("item to drop when player dies"), String.class);
     }
 
+    private SQLConnectionProvider getConnectionProvider() throws SerializationException {
+        return require(getConfig().node("storage"), SQLConnectionProvider.class);
+    }
+
     private YamlConfigurationLoader createLoader() {
         if (!this.configFilePath.toFile().exists()) {
             this.main.saveResource(this.configFileName, false);
@@ -149,6 +162,7 @@ public class LifestealerConfiguration {
                                 .register(DamageCauseHeartDropRestriction.class, new DamageCauseHeartDropRestrictionSerializer())
                                 .register(WorldSpecificHeartDropRestriction.class, new WorldSpecificHeartDropRestrictionSerializer())
                                 .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
+                                .register(SQLConnectionProvider.class, new ConnectionProviderSerializer(main.getDataPath()))
                 ))
                 .path(this.configFilePath)
                 .build();
