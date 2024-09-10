@@ -2,6 +2,8 @@ package dev.chicoferreira.lifestealer.user.rules;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Required;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -21,7 +23,11 @@ import java.util.function.Function;
  * @param banTime      The duration that a player will be banned if they have less than the minimum amount of hearts.
  * @param returnHearts The amount of hearts a player will have when they return from a ban.
  */
-public record LifestealerUserRules(int maxHearts, int minHearts, @NotNull Duration banTime, int returnHearts) {
+@ConfigSerializable
+public record LifestealerUserRules(@Required int maxHearts,
+                                   @Required int minHearts,
+                                   @Required @NotNull Duration banTime,
+                                   @Required int returnHearts) {
 
     public static LifestealerUserRules zeroed() {
         return new LifestealerUserRules(0, 0, Duration.ZERO, 0);

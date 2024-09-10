@@ -14,6 +14,8 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Required;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -135,7 +137,11 @@ public class LifestealerUserController {
      * @param commands    the commands to execute when the player is banned
      * @param external    if the player should be kicked and not let be joined when they are banned
      */
-    public record BanSettings(String kickMessage, String joinMessage, List<String> commands, boolean external) {
+    @ConfigSerializable
+    public record BanSettings(@Required String kickMessage,
+                              @Required String joinMessage,
+                              List<String> commands,
+                              boolean external) {
     }
 
     /**

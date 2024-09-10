@@ -1,6 +1,9 @@
 package dev.chicoferreira.lifestealer.item;
 
 import org.bukkit.inventory.ItemStack;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Required;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 /**
  * Represents a lifestealer heart item.
@@ -12,5 +15,8 @@ import org.bukkit.inventory.ItemStack;
  * @param heartAmount   The amount of hearts the item gives
  * @param baseItemStack The base item stack model of the item
  */
-public record LifestealerHeartItem(String typeName, int heartAmount, ItemStack baseItemStack) {
+@ConfigSerializable
+public record LifestealerHeartItem(@Setting(value = "name") @Required String typeName,
+                                   @Required int heartAmount,
+                                   @Setting(value = "item") @Required ItemStack baseItemStack) {
 }

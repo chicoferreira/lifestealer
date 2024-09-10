@@ -9,13 +9,11 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 
-import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.require;
-
 public class LifestealerHeartDropRestrictionSerializer implements TypeDeserializer<LifestealerHeartDropRestriction> {
 
     @Override
     public LifestealerHeartDropRestriction deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        String restrictionType = require(node.node("type"), String.class);
+        String restrictionType = node.node("type").require(String.class);
 
         if (restrictionType.equalsIgnoreCase("death cause")) {
             return node.get(DamageCauseHeartDropRestriction.class);

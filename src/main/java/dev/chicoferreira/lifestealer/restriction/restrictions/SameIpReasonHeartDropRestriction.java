@@ -7,10 +7,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 /**
  * Represents a restriction based on the killer having the same IP as the player
  */
+@ConfigSerializable
 public class SameIpReasonHeartDropRestriction implements LifestealerHeartDropRestriction {
 
     @SuppressWarnings("UnstableApiUsage")

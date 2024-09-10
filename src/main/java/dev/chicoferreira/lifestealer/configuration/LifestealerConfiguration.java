@@ -5,9 +5,6 @@ import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionAction;
-import dev.chicoferreira.lifestealer.restriction.restrictions.DamageCauseHeartDropRestriction;
-import dev.chicoferreira.lifestealer.restriction.restrictions.SameIpReasonHeartDropRestriction;
-import dev.chicoferreira.lifestealer.restriction.restrictions.WorldSpecificHeartDropRestriction;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
@@ -22,7 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.util.NamingSchemes;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
@@ -139,30 +138,28 @@ public class LifestealerConfiguration {
         if (!this.configFilePath.toFile().exists()) {
             this.main.saveResource(this.configFileName, false);
         }
+
+        final ObjectMapper.Factory customFactory = ObjectMapper.factoryBuilder()
+                .defaultNamingScheme((input) -> NamingSchemes.LOWER_CASE_DASHED.coerce(input).replace("-", " "))
+                .build();
+
         return YamlConfigurationLoader.builder()
-                .defaultOptions(opts -> opts.serializers(build ->
-                        build
-                                .register(Duration.class, new DurationSerializer())
-                                .register(Component.class, new BukkitSerializers.MiniMessageComponents())
-                                .register(NamespacedKey.class, new BukkitSerializers.NamespacedKeys())
-                                .register(ItemFlag.class, new BukkitSerializers.ItemFlags())
-                                .register(Sound.class, new BukkitSerializers.Sounds())
-                                .register(Title.Times.class, new BukkitSerializers.TitleTimes())
-                                .register(LeveledEnchantment.class, new LeveledEnchantment.Serializer())
-                                .register(ItemStack.class, new ItemStackSerializer())
-                                .register(LifestealerHeartItem.class, new LifestealerHeartItemSerializer())
-                                .register(LifestealerUserRules.class, new LifestealerUserRulesSerializer())
-                                .register(LifestealerUserRulesGroup.class, new LifestealerUserRulesGroupSerializer())
-                                .register(PlayerNotification.class, new PlayerNotificationSerializer())
-                                .register(BanSettings.class, new BanSettingsSerializer())
-                                .register(EntityDamageEvent.DamageCause.class, new EnumSerializer<>(EntityDamageEvent.DamageCause.class))
-                                .register(LifestealerHeartDropAction.class, new EnumSerializer<>(LifestealerHeartDropAction.class))
-                                .register(LifestealerHeartDropRestrictionAction.class, new LifestealerHeartDropRestrictionActionSerializer())
-                                .register(SameIpReasonHeartDropRestriction.class, new SameIpReasonHeartDropRestrictionSerializer())
-                                .register(DamageCauseHeartDropRestriction.class, new DamageCauseHeartDropRestrictionSerializer())
-                                .register(WorldSpecificHeartDropRestriction.class, new WorldSpecificHeartDropRestrictionSerializer())
-                                .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
-                                .register(SQLConnectionProvider.class, new ConnectionProviderSerializer(main.getDataPath()))
+                .defaultOptions(opts -> opts.serializers(build -> build
+                        .registerAnnotatedObjects(customFactory)
+                        .register(Duration.class, new DurationSerializer())
+                        .register(Component.class, new BukkitSerializers.MiniMessageComponents())
+                        .register(NamespacedKey.class, new BukkitSerializers.NamespacedKeys())
+                        .register(ItemFlag.class, new BukkitSerializers.ItemFlags())
+                        .register(Sound.class, new BukkitSerializers.Sounds())
+                        .register(Title.Times.class, new BukkitSerializers.TitleTimes())
+                        .register(LeveledEnchantment.class, new LeveledEnchantment.Serializer())
+                        .register(ItemStack.class, new ItemStackSerializer())
+                        .register(PlayerNotification.class, new PlayerNotificationSerializer())
+                        .register(EntityDamageEvent.DamageCause.class, new EnumSerializer<>(EntityDamageEvent.DamageCause.class))
+                        .register(LifestealerHeartDropAction.class, new EnumSerializer<>(LifestealerHeartDropAction.class))
+                        .register(LifestealerHeartDropRestrictionAction.class, new LifestealerHeartDropRestrictionActionSerializer())
+                        .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
+                        .register(SQLConnectionProvider.class, new ConnectionProviderSerializer(main.getDataPath()))
                 ))
                 .path(this.configFilePath)
                 .build();

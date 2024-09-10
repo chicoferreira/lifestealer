@@ -9,7 +9,7 @@ import java.util.Map;
 @ConfigSerializable
 public record SQLHikariConnectionProperties(@Required @NotNull String address,
                                             @Required @NotNull String database,
-                                            @NotNull String username,
+                                            @Required @NotNull String username,
                                             String password,
                                             @NotNull Map<String, String> extraProperties) {
 }
