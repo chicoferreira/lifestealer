@@ -118,6 +118,18 @@ public class LifestealerUserManager {
     }
 
     /**
+     * Checks if a user hasn't changed from the default values.
+     *
+     * @param user the user to check
+     * @return true if the user is the default user, false otherwise
+     */
+    public boolean isDefaultUser(LifestealerUser user) {
+        return user.getHearts() == getStartingHearts()
+                && user.getInternalBan() == null
+                && user.getRulesModifier().equals(LifestealerUserRules.zeroed());
+    }
+
+    /**
      * Saves a user to the database asynchronously.
      * This method is thread-safe and can be called from any thread.
      *
@@ -142,7 +154,11 @@ public class LifestealerUserManager {
      * @throws Exception if an error occurs while saving the user
      */
     public void saveUserSync(LifestealerUser user) throws Exception {
-        persistentStorage.saveUser(user);
+        if (isDefaultUser(user)) {
+            persistentStorage.deleteUser(user);
+        } else {
+            persistentStorage.saveUser(user);
+        }
     }
 
     /**

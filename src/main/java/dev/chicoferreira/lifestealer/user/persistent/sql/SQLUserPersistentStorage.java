@@ -30,6 +30,7 @@ public class SQLUserPersistentStorage implements UserPersistentStorage {
     private static final String SELECT_USER_UUID_STATEMENT = "SELECT uuid FROM lifestealer_users";
     private static final String INSERT_USER_STATEMENT = "INSERT INTO lifestealer_users (uuid, hearts, ban_instant, ban_duration_seconds, max_hearts_modifier, min_hearts_modifier, ban_time_modifier_seconds, return_hearts_modifier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_USER_STATEMENT = "UPDATE lifestealer_users SET hearts = ?, ban_instant = ?, ban_duration_seconds = ?, max_hearts_modifier = ?, min_hearts_modifier = ?, ban_time_modifier_seconds = ?, return_hearts_modifier = ? WHERE uuid = ?";
+    private static final String DELETE_USER_STATEMENT = "DELETE FROM lifestealer_users WHERE uuid = ?";
 
     public SQLUserPersistentStorage(SQLConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
@@ -144,6 +145,16 @@ public class SQLUserPersistentStorage implements UserPersistentStorage {
                     statement.setInt(8, user.getRulesModifier().returnHearts());
                     statement.execute();
                 }
+            }
+        }
+    }
+
+    @Override
+    public void deleteUser(LifestealerUser user) throws Exception {
+        try (Connection connection = connectionProvider.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_USER_STATEMENT)) {
+                statement.setString(1, user.getUuid().toString());
+                statement.execute();
             }
         }
     }

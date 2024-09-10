@@ -29,8 +29,10 @@ public record LifestealerUserRules(@Required int maxHearts,
                                    @Required @NotNull Duration banTime,
                                    @Required int returnHearts) {
 
+    private static final LifestealerUserRules ZEROED = new LifestealerUserRules(0, 0, Duration.ZERO, 0);
+
     public static LifestealerUserRules zeroed() {
-        return new LifestealerUserRules(0, 0, Duration.ZERO, 0);
+        return ZEROED;
     }
 
     public static class Builder {

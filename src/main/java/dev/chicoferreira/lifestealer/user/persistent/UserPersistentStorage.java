@@ -1,6 +1,7 @@
 package dev.chicoferreira.lifestealer.user.persistent;
 
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public interface UserPersistentStorage {
 
     /**
      * Loads a user from the database. This operation is blocking.
-     * Use {@link dev.chicoferreira.lifestealer.user.LifestealerUserManager#getOrLoadUser(UUID)} if you
+     * Use {@link LifestealerUserManager#getOrLoadUser(UUID)} if you
      * want to get the user if it is already loaded or load it from the database if it is not loaded.
      *
      * @param uuid the uuid of the user to load
@@ -43,7 +44,7 @@ public interface UserPersistentStorage {
 
     /**
      * Saves a user to the database.
-     * This operation is blocking. Use {@link dev.chicoferreira.lifestealer.user.LifestealerUserManager#saveUserAsync(LifestealerUser)}
+     * This operation is blocking. Use {@link LifestealerUserManager#saveUserAsync(LifestealerUser)}
      * if you want to save the user asynchronously.
      *
      * @param user the user to save
@@ -51,4 +52,13 @@ public interface UserPersistentStorage {
      */
     void saveUser(LifestealerUser user) throws Exception;
 
+    /**
+     * Deletes a user from the database.
+     * This is used to delete a user from the database if they have no difference from the default values when saving
+     * through {@link LifestealerUserManager}
+     *
+     * @param user the user to delete
+     * @throws Exception if an error occurs while deleting the user
+     */
+    void deleteUser(LifestealerUser user) throws Exception;
 }
