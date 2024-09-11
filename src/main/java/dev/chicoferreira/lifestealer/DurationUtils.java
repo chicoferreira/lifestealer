@@ -5,11 +5,23 @@ import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class DurationUtils {
+
+    private static DurationFormatSettings FORMAT;
+
+    public static void setDurationFormat(DurationFormatSettings format) {
+        FORMAT = format;
+    }
 
     /**
      * Creates a @{link {@link net.kyori.adventure.text.minimessage.MiniMessage}} tag resolver that formats a duration using the given format
@@ -20,11 +32,70 @@ public class DurationUtils {
      * @return A tag resolver that formats the duration using the given format
      */
     public static TagResolver formatDurationTag(@TagPattern final @NotNull String key, final @NotNull Duration duration) {
-        return TagResolver.resolver(key, (argumentQueue, context) -> {
-            final String format = argumentQueue.popOr("Format expected").value();
-            String formattedDuration = DurationFormatUtils.formatDuration(duration.toMillis(), format, true);
-            return Tag.inserting(context.deserialize(formattedDuration));
-        });
+        return TagResolver.resolver(key, (argumentQueue, context) -> Tag.selfClosingInserting(context.deserialize(FORMAT.format(duration))));
+    }
+
+    @ConfigSerializable
+    public record DurationFormatSettings(
+            Map<TimeUnit, TimeUnitTranslation> translations,
+            String separator,
+            String lastSeparator,
+            long amountOfUnitsToShow
+    ) {
+
+        @ConfigSerializable
+        public record TimeUnitTranslation(String singular, String plural) {
+            public String format(long amount) {
+                return amount + (amount == 1 ? singular : plural);
+            }
+        }
+
+        public String format(Duration duration) {
+            long daysPart = duration.toDaysPart();
+            long hoursPart = duration.toHoursPart();
+            long minutesPart = duration.toMinutesPart();
+            long secondsPart = duration.toSecondsPart();
+
+            List<String> parts = new ArrayList<>();
+            long amount = amountOfUnitsToShow;
+            boolean foundFirst = false;
+
+            if (daysPart > 0) {
+                parts.add(translations.get(TimeUnit.DAYS).format(daysPart));
+                foundFirst = true;
+                amount--;
+            }
+            if (amount != 0 && (hoursPart > 0 || foundFirst)) {
+                parts.add(translations.get(TimeUnit.HOURS).format(hoursPart));
+                foundFirst = true;
+                amount--;
+            }
+            if (amount != 0 && (minutesPart > 0 || foundFirst)) {
+                parts.add(translations.get(TimeUnit.MINUTES).format(minutesPart));
+                foundFirst = true;
+                amount--;
+            }
+            if ((amount != 0 && (secondsPart > 0 || foundFirst)) || !foundFirst) {
+                parts.add(translations.get(TimeUnit.SECONDS).format(secondsPart));
+            }
+
+            return join(parts, separator, lastSeparator);
+        }
+    }
+
+    private static <E> String join(Iterable<E> objects, String separator, String lastSeparator) {
+        final StringBuilder builder = new StringBuilder();
+
+        final Iterator<E> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            final E next = iterator.next();
+            if (!builder.isEmpty()) {
+                builder.append(iterator.hasNext() ? separator : lastSeparator);
+            }
+            builder.append(next);
+        }
+
+        return builder.toString();
     }
 
     /**

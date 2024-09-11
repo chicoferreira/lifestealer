@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
@@ -76,7 +77,8 @@ public class LifestealerConfiguration {
             String itemToDropWhenPlayerDies,
             BanSettings banSettings,
             SQLConnectionProvider connectionProvider,
-            Component errorKickMessage
+            Component errorKickMessage,
+            DurationUtils.DurationFormatSettings durationFormat
     ) {
     }
 
@@ -90,7 +92,8 @@ public class LifestealerConfiguration {
                 getItemToDropWhenPlayerDies(),
                 getBanSettings(),
                 getConnectionProvider(),
-                getErrorKickMessage()
+                getErrorKickMessage(),
+                getDurationFormatSettings()
         );
     }
 
@@ -132,6 +135,10 @@ public class LifestealerConfiguration {
 
     private SQLConnectionProvider getConnectionProvider() throws SerializationException {
         return require(getConfig().node("storage"), SQLConnectionProvider.class);
+    }
+
+    private DurationUtils.DurationFormatSettings getDurationFormatSettings() throws SerializationException {
+        return require(getConfig().node("duration format"), DurationUtils.DurationFormatSettings.class);
     }
 
     private YamlConfigurationLoader createLoader() {

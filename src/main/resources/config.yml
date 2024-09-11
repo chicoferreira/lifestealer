@@ -139,6 +139,24 @@ ban settings:
   # it for anything (you can lookup that data using the developer API)
   external: false
 
+duration format:
+  translations:
+    days:
+      singular: " day"
+      plural: " days"
+    hours:
+      singular: " hour"
+      plural: " hours"
+    minutes:
+      singular: " minute"
+      plural: " minutes"
+    seconds:
+      singular: " second"
+      plural: " seconds"
+  separator: ", "
+  last separator: " and "
+  amount of units to show: 2
+
 messages:
   # The messages that will be sent to the player when they perform certain actions
   #
