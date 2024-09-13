@@ -13,7 +13,6 @@ import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage;
 import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
 import dev.chicoferreira.lifestealer.user.persistent.sql.SQLUserPersistentStorage;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -97,7 +96,7 @@ public class Lifestealer extends JavaPlugin {
             try {
                 this.userManager.getOrLoadUser(onlinePlayer.getUniqueId());
             } catch (Exception e) {
-                onlinePlayer.kick(Component.text("An error occurred while loading your user."));
+                onlinePlayer.kick(values.errorKickMessage());
                 getLogger().log(Level.SEVERE, "Couldn't load user for player " + onlinePlayer.getName(), e);
             }
         }
