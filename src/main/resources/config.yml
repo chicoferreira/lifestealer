@@ -116,12 +116,12 @@ ban settings:
   # The message that will be sent to the player when they get banned and is online
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
   # For the date placeholder check https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html for usage and more examples
-  kick message: "<red>You have been banned for <white><duration:'[d'd'H'h'm'm's's']'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
+  kick message: "<red>You have been banned for <white><duration:'extended'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
 
   # The message that will be sent to the player when they try to join while banned
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
   # For the date placeholder check https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html for usage and more examples
-  join message: "<red>You are banned for <white><remaining:'[d'd'H'h'm'm's's']'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
+  join message: "<red>You are banned for <white><remaining:'extended'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
 
   # The commands that will be executed by the console when a player gets bellow the minimum amount of hearts
   # The following placeholders can be used:
@@ -139,23 +139,52 @@ ban settings:
   # it for anything (you can lookup that data using the developer API)
   external: false
 
+# The format for the duration placeholders
 duration format:
-  translations:
-    days:
-      singular: " day"
-      plural: " days"
-    hours:
-      singular: " hour"
-      plural: " hours"
-    minutes:
-      singular: " minute"
-      plural: " minutes"
-    seconds:
-      singular: " second"
-      plural: " seconds"
-  separator: ", "
-  last separator: " and "
-  amount of units to show: 2
+  # You can add more formats and use them in the messages with <duration:'<format>'>
+  extended:
+    # The separator between the different units
+    separator: ", "
+    # The separator between the last two units
+    last separator: " and "
+    # The translations for the units
+    translations:
+      days:
+        singular: " day"
+        plural: " days"
+      hours:
+        singular: " hour"
+        plural: " hours"
+      minutes:
+        singular: " minute"
+        plural: " minutes"
+      seconds:
+        singular: " second"
+        plural: " seconds"
+    # The amount of units to show, 0 will show all units
+    # Example: For the duration 1d 2h 3m 4s with 3 units, it will show "1 day, 2 hours and 3 minutes"
+    amount of units to show: 3
+    # If it should show zero values
+    show zero values: false
+  short:
+    separator: ""
+    last separator: ""
+    translations:
+      days:
+        singular: "d"
+        plural: "d"
+      hours:
+        singular: "h"
+        plural: "h"
+      minutes:
+        singular: "m"
+        plural: "m"
+      seconds:
+        singular: "s"
+        plural: "s"
+    amount of units to show: 0
+    show zero values: true
+  # You can add more formats here
 
 messages:
   # The messages that will be sent to the player when they perform certain actions
@@ -224,16 +253,16 @@ messages:
   # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
   command item list header: "<green>Heart items list (<white><amount></white>):"
   command item list item: "  <white>'<item>' <gray>-</gray> <amount><heart> <itemstack>"
-  command ban success: "<green>Force banned <white><target></white> for <white><duration:'[d'd'H'h'm'm's's']'></white> (will be unbanned at: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
+  command ban success: "<green>Force banned <white><target></white> for <white><duration:short></white> (will be unbanned at: <white><date:'yyyy-MM-dd HH:mm:ss'></white>)."
   command unban success: "<green>Unbanned <white><target></white>."
   command unban not banned: "<red><white><target></white> is not banned."
   command user info: "<green>User info for <white><player></white>:<newline>
     <white>- <green>Hearts: <white><hearts><heart><newline>
-    <white>- <green>Ban status: <banned:'<white>Not banned</white>':'<red>Will be unbanned in <white><remaining:'[d'd'H'h'm'm's's']'></white> (at <white><date:'yyyy-MM-dd HH'h'mm'm'ss's''></white>)</red>'><newline>
+    <white>- <green>Ban status: <banned:'<white>Not banned</white>':'<red>Will be unbanned in <white><remaining:short></white> (at <white><date:'yyyy-MM-dd HH'h'mm'm'ss's''></white>)</red>'><newline>
     <white>- <green>Rules:<newline>
     <white>-    <green>Max Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionmaxhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifiermaxhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<maxhearts><heart>'><newline>
     <white>-    <green>Min Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionminhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierminhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<minhearts><heart>'><newline>
-    <white>-    <green>Ban Time: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionbantime:'[d'd'H'h'm'm's's']'>'> <dark_gray>(permission)</dark_gray> + <modifierbantime:'[d'd'H'h'm'm's's']'> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<bantime:'[d'd'H'h'm'm's's']'>'><newline>
+    <white>-    <green>Ban Time: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionbantime:short>'> <dark_gray>(permission)</dark_gray> + <modifierbantime:short> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<bantime:short>'><newline>
     <white>-    <green>Return Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionreturnhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierreturnhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<returnhearts><heart>'>"
   command user set rule modifier success: "<green>Set <white><target></white>'s rule modifier <white><rule></white> to <white><value></white>."
   command user set rule modifier success target: [ ]
