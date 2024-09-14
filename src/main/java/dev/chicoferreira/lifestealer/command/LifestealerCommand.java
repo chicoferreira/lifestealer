@@ -154,7 +154,7 @@ public class LifestealerCommand {
     private void subcommandBanSendSuccessMessage(CommandSender sender, Player target, LifestealerUser.Ban ban) {
         LifestealerMessages.COMMAND_BAN_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
-                DurationUtils.formatDurationTag("remaining", ban.duration()),
+                DurationUtils.formatDurationTag("duration", ban.duration()),
                 Formatter.date("date", ban.endZoned()));
     }
 
