@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 public class DurationUtils {
 
-    private static DurationFormatSettings FORMAT;
+    private static Map<String, DurationFormatSettings> FORMATS;
 
-    public static void setDurationFormat(DurationFormatSettings format) {
-        FORMAT = format;
+    public static void setFormats(Map<String, DurationFormatSettings> formats) {
+        FORMATS = formats;
     }
 
     /**
@@ -32,7 +32,16 @@ public class DurationUtils {
      * @return A tag resolver that formats the duration using the given format
      */
     public static TagResolver formatDurationTag(@TagPattern final @NotNull String key, final @NotNull Duration duration) {
-        return TagResolver.resolver(key, (argumentQueue, context) -> Tag.selfClosingInserting(context.deserialize(FORMAT.format(duration))));
+        return TagResolver.resolver(key,
+                (argumentQueue, context) -> {
+                    String formatType = argumentQueue.popOr("Missing format type").value();
+                    DurationFormatSettings format = FORMATS.get(formatType);
+                    if (format == null) {
+                        throw new IllegalArgumentException("Invalid format type: " + formatType);
+                    }
+                    return Tag.selfClosingInserting(context.deserialize(format.format(duration)));
+                }
+        );
     }
 
     @ConfigSerializable
@@ -40,7 +49,8 @@ public class DurationUtils {
             Map<TimeUnit, TimeUnitTranslation> translations,
             String separator,
             String lastSeparator,
-            long amountOfUnitsToShow
+            long amountOfUnitsToShow,
+            boolean showZeroValues
     ) {
 
         @ConfigSerializable
@@ -65,17 +75,17 @@ public class DurationUtils {
                 foundFirst = true;
                 amount--;
             }
-            if (amount != 0 && (hoursPart > 0 || foundFirst)) {
+            if ((amount != 0 && (hoursPart > 0 || foundFirst)) && (showZeroValues || hoursPart > 0)) {
                 parts.add(translations.get(TimeUnit.HOURS).format(hoursPart));
                 foundFirst = true;
                 amount--;
             }
-            if (amount != 0 && (minutesPart > 0 || foundFirst)) {
+            if ((amount != 0 && (minutesPart > 0 || foundFirst)) && (showZeroValues || minutesPart > 0)) {
                 parts.add(translations.get(TimeUnit.MINUTES).format(minutesPart));
                 foundFirst = true;
                 amount--;
             }
-            if ((amount != 0 && (secondsPart > 0 || foundFirst)) || !foundFirst) {
+            if (((amount != 0 && (secondsPart > 0 || foundFirst)) && (showZeroValues || secondsPart > 0)) || !foundFirst) {
                 parts.add(translations.get(TimeUnit.SECONDS).format(secondsPart));
             }
 

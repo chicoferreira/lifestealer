@@ -40,7 +40,7 @@ public class Lifestealer extends JavaPlugin {
         try {
             values = configuration.loadConfig();
             LifestealerMessages.loadMessages(configuration);
-            DurationUtils.setDurationFormat(values.durationFormat());
+            DurationUtils.setFormats(values.durationFormats());
         } catch (SerializationException e) {
             getLogger().log(Level.SEVERE, "Couldn't load config", e);
             getLogger().severe("Disabling plugin...");

@@ -77,19 +77,23 @@ public class LifestealerUserListener implements Listener {
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        LifestealerUser user = userManager.getOnlineUser(player);
+        try {
+            LifestealerUser user = userManager.getOrLoadUser(player.getUniqueId());
+            if (!userController.getBanSettings().external()) {
+                LifestealerUser.Ban ban = userController.getBan(user);
 
-        if (!userController.getBanSettings().external()) {
-            LifestealerUser.Ban ban = userController.getBan(user);
-
-            if (ban != null) {
-                Component kickMessageComponent = MiniMessage.builder().build().deserialize(
-                        userController.getBanSettings().joinMessage(),
-                        Placeholder.component("player", player.name()),
-                        Formatter.date("date", ban.endZoned()),
-                        DurationUtils.formatDurationTag("remaining", ban.remaining()));
-                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMessageComponent);
+                if (ban != null) {
+                    Component kickMessageComponent = MiniMessage.builder().build().deserialize(
+                            userController.getBanSettings().joinMessage(),
+                            Placeholder.component("player", player.name()),
+                            Formatter.date("date", ban.endZoned()),
+                            DurationUtils.formatDurationTag("remaining", ban.remaining()));
+                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMessageComponent);
+                }
             }
+        } catch (Exception e) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, errorKickMessage);
+            logger.log(Level.SEVERE, "An error occurred while loading user data", e);
         }
     }
 

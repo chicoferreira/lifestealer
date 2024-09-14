@@ -10,6 +10,7 @@ import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
 import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesGroup;
+import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -28,6 +29,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.require;
 
@@ -78,7 +80,7 @@ public class LifestealerConfiguration {
             BanSettings banSettings,
             SQLConnectionProvider connectionProvider,
             Component errorKickMessage,
-            DurationUtils.DurationFormatSettings durationFormat
+            Map<String, DurationUtils.DurationFormatSettings> durationFormats
     ) {
     }
 
@@ -93,7 +95,7 @@ public class LifestealerConfiguration {
                 getBanSettings(),
                 getConnectionProvider(),
                 getErrorKickMessage(),
-                getDurationFormatSettings()
+                getDurationFormatsSettings()
         );
     }
 
@@ -137,8 +139,9 @@ public class LifestealerConfiguration {
         return require(getConfig().node("storage"), SQLConnectionProvider.class);
     }
 
-    private DurationUtils.DurationFormatSettings getDurationFormatSettings() throws SerializationException {
-        return require(getConfig().node("duration format"), DurationUtils.DurationFormatSettings.class);
+    private Map<String, DurationUtils.DurationFormatSettings> getDurationFormatsSettings() throws SerializationException {
+        return getConfig().node("duration format").get(new TypeToken<>() {
+        });
     }
 
     private YamlConfigurationLoader createLoader() {

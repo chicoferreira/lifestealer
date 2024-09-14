@@ -28,9 +28,9 @@ class DurationUtilsFormatSettingsTest {
 
     @Test
     void testFormatSettings2UnitsToShow() {
-        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 2);
+        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 2, false);
 
-        assertEquals("1 minute and 0 seconds", settings.format(Duration.ofSeconds(60)));
+        assertEquals("1 minute", settings.format(Duration.ofSeconds(60)));
         assertEquals("1 day and 1 hour", settings.format(Duration.ofDays(1).plusHours(1).plusMinutes(1)));
         assertEquals("2 days and 3 hours", settings.format(Duration.ofDays(2).plusHours(3)));
         assertEquals("30 seconds", settings.format(Duration.ofSeconds(30)));
@@ -38,7 +38,7 @@ class DurationUtilsFormatSettingsTest {
 
     @Test
     void testFormatSettings3UnitsToShow() {
-        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 3);
+        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 3, true);
 
         assertEquals("1 minute and 0 seconds", settings.format(Duration.ofSeconds(60)));
         assertEquals("1 day, 1 hour and 1 minute", settings.format(Duration.ofDays(1).plusHours(1).plusMinutes(1)));
@@ -47,7 +47,7 @@ class DurationUtilsFormatSettingsTest {
 
     @Test
     void testFormatSettings1UnitToShow() {
-        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 1);
+        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 1, true);
 
         assertEquals("1 minute", settings.format(Duration.ofSeconds(60)));
         assertEquals("1 day", settings.format(Duration.ofDays(1).plusHours(1).plusMinutes(1)));
@@ -56,7 +56,7 @@ class DurationUtilsFormatSettingsTest {
 
     @Test
     void testFormatSettingsAllUnitsToShow() {
-        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 0);
+        DurationFormatSettings settings = new DurationFormatSettings(EXTENDED_TRANSLATIONS, ", ", " and ", 0, true);
 
         assertEquals("1 day, 1 hour, 1 minute and 0 seconds", settings.format(Duration.ofDays(1).plusHours(1).plusMinutes(1)));
         assertEquals("2 days, 3 hours, 0 minutes and 0 seconds", settings.format(Duration.ofDays(2).plusHours(3)));
@@ -64,7 +64,7 @@ class DurationUtilsFormatSettingsTest {
 
     @Test
     void testFormatSettingsShortTranslations() {
-        DurationFormatSettings settings = new DurationFormatSettings(SHORT_TRANSLATIONS, "", "", 3);
+        DurationFormatSettings settings = new DurationFormatSettings(SHORT_TRANSLATIONS, "", "", 3, true);
 
         assertEquals("1m0s", settings.format(Duration.ofSeconds(60)));
         assertEquals("1d1h1m", settings.format(Duration.ofDays(1).plusHours(1).plusMinutes(1)));
