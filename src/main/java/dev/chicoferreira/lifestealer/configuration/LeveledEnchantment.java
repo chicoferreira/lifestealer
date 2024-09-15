@@ -5,6 +5,7 @@ import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -23,7 +24,7 @@ public record LeveledEnchantment(Enchantment enchantment, int level) {
     public static class Serializer implements TypeDeserializer<LeveledEnchantment> {
 
         @Override
-        public LeveledEnchantment deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public LeveledEnchantment deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
             NamespacedKey enchantmentKey = require(node.node("name"), NamespacedKey.class);
 
             Registry<Enchantment> enchantmentRegistry = RegistryAccess.registryAccess()

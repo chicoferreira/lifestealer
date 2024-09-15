@@ -1,6 +1,7 @@
 package dev.chicoferreira.lifestealer.configuration;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
@@ -15,7 +16,7 @@ import java.lang.reflect.Type;
 public interface TypeDeserializer<T> extends TypeSerializer<T> {
 
     @Override
-    default void serialize(Type type, @Nullable T obj, ConfigurationNode node) {
+    default void serialize(@NotNull Type type, @Nullable T obj, @NotNull ConfigurationNode node) {
         throw new UnsupportedOperationException();
     }
 }

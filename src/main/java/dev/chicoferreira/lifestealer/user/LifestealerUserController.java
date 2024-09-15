@@ -37,6 +37,16 @@ public class LifestealerUserController {
     }
 
     /**
+     * Sets new ban settings.
+     * Used when the configuration is reloaded.
+     *
+     * @param banSettings the new ban settings
+     */
+    public void setBanSettings(@NotNull BanSettings banSettings) {
+        this.banSettings = banSettings;
+    }
+
+    /**
      * A result of a change for hearts of a player.
      *
      * @param previousHearts the previous amount of hearts
@@ -210,16 +220,6 @@ public class LifestealerUserController {
     }
 
     /**
-     * Sets the ban settings.
-     * Used when the config is reloaded.
-     *
-     * @param banSettings the new ban settings
-     */
-    public void setBanSettings(@NotNull BanSettings banSettings) {
-        this.banSettings = banSettings;
-    }
-
-    /**
      * Bans a user for the default ban time depending on its {@link LifestealerUserRules}.
      * <p>
      * The ban commands will be executed. The player will be kicked if the external flag is disabled.
@@ -253,19 +253,19 @@ public class LifestealerUserController {
 
         userManager.saveUserAsync(user);
 
-        for (String command : banSettings.commands()) {
+        for (String command : getBanSettings().commands()) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
                     .replace("<player>", player.getName())
                     .replace("<duration>", Long.toString(banDuration.toSeconds())));
         }
 
-        if (!banSettings.external()) {
+        if (!getBanSettings().external()) {
             if (player.isDead()) {
                 player.spigot().respawn();
             }
 
             Component kickMessageComponent = MiniMessage.builder().build().deserialize(
-                    banSettings.kickMessage(),
+                    getBanSettings().kickMessage(),
                     Placeholder.component("player", player.name()),
                     Formatter.date("date", ban.endZoned()),
                     DurationUtils.formatDurationTag("duration", banDuration));

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -16,7 +17,7 @@ import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.requir
 public class ItemStackSerializer implements TypeDeserializer<ItemStack> {
 
     @Override
-    public ItemStack deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public ItemStack deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         String itemMaterialString = require(node.node("type"), String.class);
 
         Material material = Material.matchMaterial(itemMaterialString);

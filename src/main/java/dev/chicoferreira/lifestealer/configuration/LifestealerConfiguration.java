@@ -3,6 +3,7 @@ package dev.chicoferreira.lifestealer.configuration;
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
+import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionAction;
@@ -56,14 +57,17 @@ public class LifestealerConfiguration {
     }
 
     public CommentedConfigurationNode getConfig() {
+        if (this.configLoadedNode == null) {
+            reloadConfig();
+        }
+        return this.configLoadedNode;
+    }
+
+    public void reloadConfig() {
         try {
-            if (this.configLoadedNode == null) {
-                this.configLoadedNode = getConfigLoader().load();
-            }
-            return this.configLoadedNode;
+            this.configLoadedNode = getConfigLoader().load();
         } catch (ConfigurateException e) {
-            main.getLogger().severe("Error loading configuration file: " + e.getMessage());
-            return null;
+            main.getLogger().severe("Error reloading configuration file: " + e.getMessage());
         }
     }
 
@@ -71,12 +75,11 @@ public class LifestealerConfiguration {
      * Holds every configuratable data
      */
     public record Values(
-            int startingHearts,
+            Integer startingHearts,
             LifestealerUserRules defaultUserRules,
             List<LifestealerUserRulesGroup> userGroupRules,
-            List<LifestealerHeartItem> heartItems,
+            LifestealerHeartItemManager.Settings heartItemSettings,
             List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions,
-            String itemToDropWhenPlayerDies,
             BanSettings banSettings,
             SQLConnectionProvider connectionProvider,
             Component errorKickMessage,
@@ -89,9 +92,8 @@ public class LifestealerConfiguration {
                 getStartingHearts(),
                 getDefaultUserRules(),
                 getUserGroupRules(),
-                getHeartItems(),
+                getHeartItemSettings(),
                 getHeartDropRestrictionActions(),
-                getItemToDropWhenPlayerDies(),
                 getBanSettings(),
                 getConnectionProvider(),
                 getErrorKickMessage(),
@@ -111,8 +113,11 @@ public class LifestealerConfiguration {
         return require(getConfig().node("ban settings"), BanSettings.class);
     }
 
-    private List<LifestealerHeartItem> getHeartItems() throws SerializationException {
-        return getConfig().node("items").getList(LifestealerHeartItem.class);
+    private LifestealerHeartItemManager.Settings getHeartItemSettings() throws SerializationException {
+        return new LifestealerHeartItemManager.Settings(
+                getConfig().node("items").getList(LifestealerHeartItem.class),
+                require(getConfig().node("item to drop when player dies"), String.class)
+        );
     }
 
     private int getStartingHearts() throws SerializationException {
@@ -129,10 +134,6 @@ public class LifestealerConfiguration {
 
     public PlayerNotification getPlayerNotification(String messagePath) throws SerializationException {
         return require(getConfig().node("messages").node(messagePath), PlayerNotification.class);
-    }
-
-    private String getItemToDropWhenPlayerDies() throws SerializationException {
-        return require(getConfig().node("item to drop when player dies"), String.class);
     }
 
     private SQLConnectionProvider getConnectionProvider() throws SerializationException {

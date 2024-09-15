@@ -25,15 +25,34 @@ public class LifestealerHeartItemManager {
      */
     private String itemToDropWhenPlayerDies;
 
-    public LifestealerHeartItemManager(List<LifestealerHeartItem> itemList, String itemToDropWhenPlayerDies) {
+    public LifestealerHeartItemManager(Settings itemManagerSettings) {
         this.items = new HashMap<>();
-        itemList.forEach(this::registerItem);
 
-        this.itemToDropWhenPlayerDies = itemToDropWhenPlayerDies;
+        load(itemManagerSettings);
+    }
+
+    private void load(Settings itemManagerSettings) {
+        this.items.clear();
+
+        itemManagerSettings.itemList().forEach(this::registerItem);
+        this.itemToDropWhenPlayerDies = itemManagerSettings.itemToDropWhenPlayerDies();
 
         if (itemToDropWhenPlayerDies == null || !this.items.containsKey(itemToDropWhenPlayerDies)) {
             throw new IllegalArgumentException("Item type to drop when player dies does not exist.");
         }
+    }
+
+    /**
+     * Updates this item manager with new settings.
+     * Used when the configuration is reloaded.
+     *
+     * @param settings the new settings
+     */
+    public void updateSettings(Settings settings) {
+        load(settings);
+    }
+
+    public record Settings(List<LifestealerHeartItem> itemList, String itemToDropWhenPlayerDies) {
     }
 
     /**
@@ -55,21 +74,6 @@ public class LifestealerHeartItemManager {
     public @NotNull LifestealerHeartItem getItemToDropWhenPlayerDies() {
         // This will never return null because of the invariant that the item type to drop when the player dies exists inside the map
         return items.get(this.itemToDropWhenPlayerDies);
-    }
-
-    /**
-     * This method sets the item type name to drop when the player dies. This is intended to use when the plugin reloads.
-     * The itemTypeToDropWhenPlayerDies must be contained in the items map otherwise {@link IllegalArgumentException}
-     * will be thrown.
-     *
-     * @param itemTypeToDropWhenPlayerDies The item type to drop when the player dies
-     * @throws IllegalArgumentException If the item type is not registered
-     */
-    public void setItemToDropWhenPlayerDies(@NotNull LifestealerHeartItem itemTypeToDropWhenPlayerDies) {
-        if (!this.items.containsKey(itemTypeToDropWhenPlayerDies.typeName())) {
-            throw new IllegalArgumentException("Item type to drop when player dies is not registered.");
-        }
-        this.itemToDropWhenPlayerDies = itemTypeToDropWhenPlayerDies.typeName();
     }
 
     /**

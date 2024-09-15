@@ -3,6 +3,7 @@ package dev.chicoferreira.lifestealer.configuration;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.title.Title;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class PlayerNotificationSerializer implements TypeDeserializer<PlayerNotification> {
     @Override
-    public PlayerNotification deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public PlayerNotification deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         String simpleTextMessage = node.getString();
         if (simpleTextMessage != null) {
             return new PlayerNotification(simpleTextMessage);

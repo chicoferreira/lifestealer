@@ -1,12 +1,11 @@
 package dev.chicoferreira.lifestealer.command;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
+import dev.chicoferreira.lifestealer.Lifestealer;
 import dev.chicoferreira.lifestealer.LifestealerMessages;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
-import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
-import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -26,25 +25,18 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LifestealerCommand {
 
-    private final LifestealerUserController controller;
-    private final LifestealerUserManager userManager;
-    private final LifestealerHeartItemManager itemManager;
-    private final Logger logger;
+    private final Lifestealer lifestealer;
 
-    public LifestealerCommand(LifestealerUserController controller, LifestealerUserManager userManager, LifestealerHeartItemManager itemManager, Logger logger) {
-        this.controller = controller;
-        this.userManager = userManager;
-        this.itemManager = itemManager;
-        this.logger = logger;
+    public LifestealerCommand(Lifestealer lifestealer) {
+        this.lifestealer = lifestealer;
     }
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
-        LifestealerUser user = this.userManager.getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.controller.setHearts(target, user, amount);
+        LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
+        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().setHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -57,8 +49,8 @@ public class LifestealerCommand {
     }
 
     public void subcommandHeartsAdd(CommandSender sender, int amount, Player target) {
-        LifestealerUser user = this.userManager.getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.controller.addHearts(target, user, amount);
+        LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
+        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().addHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -73,8 +65,8 @@ public class LifestealerCommand {
     }
 
     public void subcommandHeartsRemove(CommandSender sender, int amount, Player target) {
-        LifestealerUser user = this.userManager.getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.controller.removeHearts(target, user, amount);
+        LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
+        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().removeHearts(target, user, amount);
 
         LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -89,7 +81,7 @@ public class LifestealerCommand {
     }
 
     public void subcommandItemGive(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {
-        int rest = itemManager.giveHeartItems(target, item, amount);
+        int rest = this.lifestealer.getItemManager().giveHeartItems(target, item, amount);
         int given = amount - rest;
 
         LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS.sendTo(sender,
@@ -105,7 +97,7 @@ public class LifestealerCommand {
     }
 
     public void subcommandItemTake(CommandSender sender, String itemTypeName, int amount, Player target) {
-        int rest = itemManager.takeHeartItems(target, itemTypeName, amount);
+        int rest = this.lifestealer.getItemManager().takeHeartItems(target, itemTypeName, amount);
         int taken = amount - rest;
 
         LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS.sendTo(sender,
@@ -121,7 +113,7 @@ public class LifestealerCommand {
     }
 
     public void subcommandItemList(CommandSender sender) {
-        List<LifestealerHeartItem> heartItems = this.itemManager.getHeartItems();
+        List<LifestealerHeartItem> heartItems = this.lifestealer.getItemManager().getHeartItems();
 
         LifestealerMessages.COMMAND_ITEM_LIST_HEADER.sendTo(sender, Formatter.number("amount", heartItems.size()));
 
@@ -138,16 +130,16 @@ public class LifestealerCommand {
     }
 
     public void subcommandBanUser(CommandSender sender, Player target) {
-        LifestealerUser targetUser = this.userManager.getOnlineUser(target);
+        LifestealerUser targetUser = this.lifestealer.getUserManager().getOnlineUser(target);
 
-        LifestealerUser.Ban ban = this.controller.banUser(target, targetUser);
+        LifestealerUser.Ban ban = this.lifestealer.getUserController().banUser(target, targetUser);
         subcommandBanSendSuccessMessage(sender, target, ban);
     }
 
     public void subcommandBanUserDuration(CommandSender sender, @NotNull Player target, @NotNull Duration duration) {
-        LifestealerUser targetUser = this.userManager.getOnlineUser(target);
+        LifestealerUser targetUser = this.lifestealer.getUserManager().getOnlineUser(target);
 
-        LifestealerUser.Ban ban = this.controller.banUser(target, targetUser, duration);
+        LifestealerUser.Ban ban = this.lifestealer.getUserController().banUser(target, targetUser, duration);
         subcommandBanSendSuccessMessage(sender, target, ban);
     }
 
@@ -160,19 +152,19 @@ public class LifestealerCommand {
 
     public void subcommandUnbanUser(CommandSender sender, OfflinePlayer target) {
         try {
-            LifestealerUser targetUser = this.userManager.getOrLoadUser(target.getUniqueId());
+            LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
             Component targetName = this.getPlayerName(target);
 
-            if (!this.controller.isBanned(targetUser)) {
+            if (!this.lifestealer.getUserController().isBanned(targetUser)) {
                 LifestealerMessages.COMMAND_UNBAN_NOT_BANNED.sendTo(sender, Placeholder.component("target", targetName));
                 return;
             }
 
-            this.controller.unbanUser(targetUser);
+            this.lifestealer.getUserController().unbanUser(targetUser);
             LifestealerMessages.COMMAND_UNBAN_SUCCESS.sendTo(sender, Placeholder.component("target", targetName));
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
-            logger.log(Level.SEVERE, "An error occurred while retrieving user", e);
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while retrieving user", e);
         }
     }
 
@@ -192,11 +184,11 @@ public class LifestealerCommand {
 
     public void subcommandUserInfo(CommandSender sender, @NotNull OfflinePlayer player) {
         try {
-            LifestealerUser user = this.userManager.getOrLoadUser(player.getUniqueId());
-            LifestealerUser.Ban ban = this.controller.getBan(user);
+            LifestealerUser user = this.lifestealer.getUserManager().getOrLoadUser(player.getUniqueId());
+            LifestealerUser.Ban ban = this.lifestealer.getUserController().getBan(user);
 
             LifestealerUserRules rules = player instanceof Player onlinePlayer
-                    ? this.controller.computeUserRules(onlinePlayer, user)
+                    ? this.lifestealer.getUserController().computeUserRules(onlinePlayer, user)
                     : null;
 
             int modifierMaxHearts = user.getRulesModifier().maxHearts();
@@ -225,7 +217,7 @@ public class LifestealerCommand {
             );
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
-            logger.log(Level.SEVERE, "An error occurred while retrieving user", e);
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while retrieving user", e);
         }
     }
 
@@ -258,7 +250,7 @@ public class LifestealerCommand {
     public void subcommandUserSetRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
         try {
 
-            LifestealerUser targetUser = this.userManager.getOrLoadUser(target.getUniqueId());
+            LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
             LifestealerUserRules modifierRules = targetUser.getRulesModifier();
 
             LifestealerUserRules newModifierRules = modifierRules.with(builder -> switch (rule) {
@@ -268,7 +260,7 @@ public class LifestealerCommand {
                 case RETURNHEARTS -> builder.returnHearts(value);
             });
 
-            this.controller.setRulesModifier(targetUser, newModifierRules);
+            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
 
             LifestealerMessages.COMMAND_USER_SET_RULE_MODIFIER_SUCCESS.sendTo(sender,
                     Placeholder.component("target", this.getPlayerName(target)),
@@ -282,13 +274,13 @@ public class LifestealerCommand {
             }
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
-            logger.log(Level.SEVERE, "An error occurred while retrieving user", e);
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while retrieving user", e);
         }
     }
 
     public void subcommandUserAdjustRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
         try {
-            LifestealerUser targetUser = this.userManager.getOrLoadUser(target.getUniqueId());
+            LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
             LifestealerUserRules modifierRules = targetUser.getRulesModifier();
 
             LifestealerUserRules newModifierRules = modifierRules.withSum(builder -> switch (rule) {
@@ -298,7 +290,7 @@ public class LifestealerCommand {
                 case RETURNHEARTS -> builder.returnHearts(value);
             });
 
-            this.controller.setRulesModifier(targetUser, newModifierRules);
+            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
 
             String adjustment = value > 0 ? "+" + value : String.valueOf(value);
 
@@ -314,16 +306,16 @@ public class LifestealerCommand {
             }
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
-            logger.log(Level.SEVERE, "An error occurred while retrieving user", e);
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while retrieving user", e);
         }
     }
 
     public void subcommandUserResetRuleModifiers(CommandSender sender, OfflinePlayer target) {
         try {
-            LifestealerUser targetUser = this.userManager.getOrLoadUser(target.getUniqueId());
+            LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
 
             LifestealerUserRules newModifierRules = LifestealerUserRules.zeroed();
-            this.controller.setRulesModifier(targetUser, newModifierRules);
+            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
 
             LifestealerMessages.COMMAND_USER_RESET_RULE_MODIFIERS_SUCCESS.sendTo(sender,
                     Placeholder.component("target", this.getPlayerName(target)));
@@ -333,7 +325,17 @@ public class LifestealerCommand {
             }
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
-            logger.log(Level.SEVERE, "An error occurred while retrieving user", e);
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while retrieving user", e);
+        }
+    }
+
+    public void subcommandReload(CommandSender sender) {
+        try {
+            this.lifestealer.reloadConfiguration();
+            LifestealerMessages.COMMAND_RELOAD_SUCCESS.sendTo(sender);
+        } catch (Exception e) {
+            LifestealerMessages.COMMAND_RELOAD_ERROR.sendTo(sender);
+            lifestealer.getLogger().log(Level.SEVERE, "An error occurred while reloading configuration", e);
         }
     }
 

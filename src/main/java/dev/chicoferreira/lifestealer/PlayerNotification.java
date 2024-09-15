@@ -36,7 +36,7 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
                                  @NotNull Optional<Sound> sound
 ) {
 
-    public static MiniMessage MINI_MESSAGE = MiniMessage
+    public static final MiniMessage MINI_MESSAGE = MiniMessage
             .builder()
             .editTags(tag -> tag
                     .tag("heart", Tag.selfClosingInserting(Component.text("❤").color(TextColor.color(255, 0, 0))))

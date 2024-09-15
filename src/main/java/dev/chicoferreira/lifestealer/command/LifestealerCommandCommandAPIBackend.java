@@ -199,6 +199,10 @@ public class LifestealerCommandCommandAPIBackend {
                                         })
                                 )
                         )
+                ).then(new LiteralArgument("reload")
+                        .executes((sender, args) -> {
+                            command.subcommandReload(sender);
+                        })
                 )
                 .register(plugin);
     }

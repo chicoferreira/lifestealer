@@ -30,16 +30,18 @@ public class Lifestealer extends JavaPlugin {
     private LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
     private LifestealerExecutor executor;
     private UserPersistentStorage userPersistentStorage;
+    private LifestealerConfiguration configuration;
+    private LifestealerUserListener userListener;
 
     @Override
     public void onEnable() {
         getLogger().info("hello!");
-        LifestealerConfiguration configuration = new LifestealerConfiguration(this, "config.yml");
+        this.configuration = new LifestealerConfiguration(this, "config.yml");
         LifestealerConfiguration.Values values;
 
         try {
-            values = configuration.loadConfig();
-            LifestealerMessages.loadMessages(configuration);
+            values = this.configuration.loadConfig();
+            LifestealerMessages.loadMessages(this.configuration);
             DurationUtils.setFormats(values.durationFormats());
         } catch (SerializationException e) {
             getLogger().log(Level.SEVERE, "Couldn't load config", e);
@@ -67,15 +69,15 @@ public class Lifestealer extends JavaPlugin {
         this.userManager = new LifestealerUserManager(new HashMap<>(), this.userPersistentStorage, this.executor, values.startingHearts());
         this.userController = new LifestealerUserController(this.userManager, this.userRulesController, values.banSettings());
 
-        this.itemManager = new LifestealerHeartItemManager(values.heartItems(), values.itemToDropWhenPlayerDies());
+        this.itemManager = new LifestealerHeartItemManager(values.heartItemSettings());
 
-        LifestealerCommand command = new LifestealerCommand(this.userController, this.userManager, this.itemManager, this.getLogger());
+        LifestealerCommand command = new LifestealerCommand(this);
         LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
         commandAPIBackend.registerCommand(this);
 
         this.heartDropRestrictionManager = new LifestealerHeartDropRestrictionManager(values.heartDropRestrictionActions());
 
-        LifestealerUserListener listener = new LifestealerUserListener(
+        this.userListener = new LifestealerUserListener(
                 this.executor,
                 this.getLogger(),
                 this.itemManager,
@@ -85,7 +87,7 @@ public class Lifestealer extends JavaPlugin {
                 values.errorKickMessage()
         );
 
-        Bukkit.getPluginManager().registerEvents(listener, this);
+        Bukkit.getPluginManager().registerEvents(this.userListener, this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LifestealerPlaceholderExpansion(this, this.userController).register();
@@ -100,6 +102,21 @@ public class Lifestealer extends JavaPlugin {
                 getLogger().log(Level.SEVERE, "Couldn't load user for player " + onlinePlayer.getName(), e);
             }
         }
+    }
+
+    public void reloadConfiguration() throws SerializationException {
+        this.configuration.reloadConfig();
+        LifestealerConfiguration.Values values = this.configuration.loadConfig();
+        LifestealerMessages.loadMessages(this.configuration);
+        DurationUtils.setFormats(values.durationFormats());
+
+        this.userRulesController.setDefaultRule(values.defaultUserRules());
+        this.userRulesController.setGroupRules(values.userGroupRules());
+        this.userController.setBanSettings(values.banSettings());
+        this.userManager.setStartingHearts(values.startingHearts());
+        this.itemManager.updateSettings(values.heartItemSettings());
+        this.heartDropRestrictionManager.setActions(values.heartDropRestrictionActions());
+        this.userListener.setErrorKickMessage(values.errorKickMessage());
     }
 
     @Override

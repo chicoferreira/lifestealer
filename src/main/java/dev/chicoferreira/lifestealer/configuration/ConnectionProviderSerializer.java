@@ -7,6 +7,7 @@ import dev.chicoferreira.lifestealer.user.persistent.sql.impl.MySQLConnectionPro
 import dev.chicoferreira.lifestealer.user.persistent.sql.impl.PostgreSQLConnectionProvider;
 import dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.H2ConnectionProvider;
 import dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.SQLiteConnectionProvider;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -24,7 +25,7 @@ public class ConnectionProviderSerializer implements TypeDeserializer<SQLConnect
     }
 
     @Override
-    public SQLConnectionProvider deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public SQLConnectionProvider deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         String databaseTypeName = require(node.node("type"), String.class);
         return switch (databaseTypeName) {
             case "h2" -> new H2ConnectionProvider(basePath.resolve(require(node.node("path"), String.class)));

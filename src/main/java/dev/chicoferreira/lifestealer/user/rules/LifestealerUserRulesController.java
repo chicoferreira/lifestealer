@@ -8,13 +8,33 @@ import java.util.function.Function;
 
 public class LifestealerUserRulesController {
 
-    public LifestealerUserRulesController(LifestealerUserRules defaultRules, List<LifestealerUserRulesGroup> groups) {
+    private LifestealerUserRules defaultRule;
+    private List<LifestealerUserRulesGroup> groups;
+
+    public LifestealerUserRulesController(LifestealerUserRules defaultRules, List<LifestealerUserRulesGroup> groupRules) {
         this.defaultRule = defaultRules;
-        this.groups = groups;
+        this.groups = groupRules;
     }
 
-    private final LifestealerUserRules defaultRule;
-    private final List<LifestealerUserRulesGroup> groups;
+    /**
+     * Sets the default rule that will be used when no group matches the permissions.
+     * Used when the configuration is reloaded.
+     *
+     * @param defaultRule the default rule to set
+     */
+    public void setDefaultRule(LifestealerUserRules defaultRule) {
+        this.defaultRule = defaultRule;
+    }
+
+    /**
+     * Sets the groups that will be used to calculate the rules based on the permissions.
+     * Used when the configuration is reloaded.
+     *
+     * @param groups the groups to set
+     */
+    public void setGroupRules(List<LifestealerUserRulesGroup> groups) {
+        this.groups = groups;
+    }
 
     /**
      * Calculates the {@link LifestealerUserRules} that the permissions tested indicates.

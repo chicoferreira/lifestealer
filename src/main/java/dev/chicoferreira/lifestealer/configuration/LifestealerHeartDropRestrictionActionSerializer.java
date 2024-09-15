@@ -3,6 +3,7 @@ package dev.chicoferreira.lifestealer.configuration;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionAction;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -13,7 +14,7 @@ import static dev.chicoferreira.lifestealer.configuration.SerializerUtils.requir
 public class LifestealerHeartDropRestrictionActionSerializer implements TypeDeserializer<LifestealerHeartDropRestrictionAction> {
 
     @Override
-    public LifestealerHeartDropRestrictionAction deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public LifestealerHeartDropRestrictionAction deserialize(@NotNull Type type, @NotNull ConfigurationNode node) throws SerializationException {
         LifestealerHeartDropRestriction heartDropRestriction = require(node, LifestealerHeartDropRestriction.class);
         LifestealerHeartDropAction action = require(node.node("action"), LifestealerHeartDropAction.class);
 

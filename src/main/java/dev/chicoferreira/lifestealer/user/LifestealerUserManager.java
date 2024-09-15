@@ -171,7 +171,8 @@ public class LifestealerUserManager {
     }
 
     /**
-     * Sets a new starting amount of hearts for new users.
+     * Sets the starting amount of hearts for new users.
+     * Used when reloading the configuration.
      *
      * @param startingHearts the starting amount of hearts for new users
      */

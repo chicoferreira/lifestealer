@@ -280,3 +280,5 @@ messages:
     action bar: "<red>Consuming this heart item will exceed your max hearts, wasting <white><overflow></white><heart> extra. Sneak to use it anyway."
     sound: minecraft:entity.villager.no
   command error retrieving user: "<red>Could not retrieve target user. Check console for more information. Database unreachable?"
+  command reload success: "<green>Configuration reloaded."
+  command reload error: "<red>There was an error while reloading the configuration. Check console for more information. The plugin will run with the old configuration."

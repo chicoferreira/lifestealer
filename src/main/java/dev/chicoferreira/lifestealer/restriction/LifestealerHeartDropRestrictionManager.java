@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +15,9 @@ public class LifestealerHeartDropRestrictionManager {
 
     private final List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions;
 
-    public LifestealerHeartDropRestrictionManager(List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions) {
-        this.heartDropRestrictionActions = heartDropRestrictionActions;
+    public LifestealerHeartDropRestrictionManager(List<LifestealerHeartDropRestrictionAction> actions) {
+        this.heartDropRestrictionActions = new ArrayList<>();
+        this.heartDropRestrictionActions.addAll(actions);
     }
 
     /**
@@ -33,5 +35,16 @@ public class LifestealerHeartDropRestrictionManager {
             }
         }
         return LifestealerHeartDropAction.DROP;
+    }
+
+    /**
+     * Sets a new list of restriction actions.
+     * Used when the configuration is reloaded.
+     *
+     * @param actions the new actions list
+     */
+    public void setActions(List<LifestealerHeartDropRestrictionAction> actions) {
+        this.heartDropRestrictionActions.clear();
+        this.heartDropRestrictionActions.addAll(actions);
     }
 }

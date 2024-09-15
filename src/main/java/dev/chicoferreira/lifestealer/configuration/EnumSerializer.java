@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -14,7 +15,7 @@ public class EnumSerializer<T extends Enum<T>> implements TypeDeserializer<T> {
     }
 
     @Override
-    public T deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public T deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         String valueString = node.getString();
 
         for (T enumConstant : enumClass.getEnumConstants()) {
