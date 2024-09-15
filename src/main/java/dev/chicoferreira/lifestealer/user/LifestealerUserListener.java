@@ -122,25 +122,36 @@ public class LifestealerUserListener implements Listener {
 
         event.setCancelled(true);
 
-        LifestealerUser user = userManager.getOnlineUser(event.getPlayer());
+        Player player = event.getPlayer();
+        LifestealerUser user = userManager.getOnlineUser(player);
 
-        LifestealerPreConsumeHeartEvent preConsumeHeartEvent = new LifestealerPreConsumeHeartEvent(event.getPlayer(), user, item, hearts);
+        LifestealerPreConsumeHeartEvent preConsumeHeartEvent = new LifestealerPreConsumeHeartEvent(player, user, item, hearts);
         if (!preConsumeHeartEvent.callEvent()) {
             return;
         }
 
         hearts = preConsumeHeartEvent.getAmount(); // developers can change the amount of hearts
 
-        LifestealerUserController.ChangeHeartsResult result = userController.addHearts(event.getPlayer(), user, hearts);
+        LifestealerUserRules rules = userController.computeUserRules(player, user);
 
-        if (result.hasChanged()) {
-            item.subtract();
-            LifestealerMessages.CONSUME_HEART_SUCCESS.sendTo(event.getPlayer(), Formatter.number("amount", hearts));
-        } else {
-            LifestealerMessages.CONSUME_HEART_ALREADY_FULL.sendTo(event.getPlayer());
+        if (userController.isOverflowing(user, rules, hearts) && !player.isSneaking()) {
+            LifestealerMessages.CONSUME_HEART_OVERFLOW_NOT_SNEAKING.sendTo(player,
+                    Formatter.number("overflow", userController.getOverflowAmount(user, rules, hearts))
+            );
+            return;
         }
 
-        LifestealerPostConsumeHeartEvent postConsumeHeartEvent = new LifestealerPostConsumeHeartEvent(event.getPlayer(), user, hearts, item, result);
+        LifestealerUserController.ChangeHeartsResult result = userController.addHearts(player, user, rules, hearts);
+
+        if (!result.hasChanged()) {
+            LifestealerMessages.CONSUME_HEART_ALREADY_FULL.sendTo(player);
+            return;
+        }
+
+        item.subtract();
+        LifestealerMessages.CONSUME_HEART_SUCCESS.sendTo(player, Formatter.number("amount", result.difference()));
+
+        LifestealerPostConsumeHeartEvent postConsumeHeartEvent = new LifestealerPostConsumeHeartEvent(player, user, hearts, item, result);
         postConsumeHeartEvent.callEvent();
     }
 

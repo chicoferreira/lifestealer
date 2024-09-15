@@ -36,6 +36,13 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
                                  @NotNull Optional<Sound> sound
 ) {
 
+    public static MiniMessage MINI_MESSAGE = MiniMessage
+            .builder()
+            .editTags(tag -> tag
+                    .tag("heart", Tag.selfClosingInserting(Component.text("❤").color(TextColor.color(255, 0, 0))))
+            )
+            .build();
+
     /**
      * Creates player notification with a text message.
      *
@@ -52,13 +59,7 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
      * @param resolvers the adventure-api resolvers to apply to the messages (they act basically as placeholders)
      */
     public void sendTo(CommandSender sender, TagResolver... resolvers) {
-        Function<String, Component> parseComponent = string -> MiniMessage
-                .builder()
-                .editTags(tag -> tag
-                        .tag("heart", Tag.selfClosingInserting(Component.text("❤").color(TextColor.color(255, 0, 0))))
-                )
-                .build()
-                .deserialize(string, resolvers);
+        Function<String, Component> parseComponent = string -> MINI_MESSAGE.deserialize(string, resolvers);
 
         textMessage.map(parseComponent).ifPresent(sender::sendMessage);
         actionBarMessage.map(parseComponent).ifPresent(sender::sendActionBar);

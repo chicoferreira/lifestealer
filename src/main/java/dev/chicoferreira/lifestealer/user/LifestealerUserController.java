@@ -71,10 +71,10 @@ public class LifestealerUserController {
      * @param player the player to set the hearts
      * @param user   the user related to the player
      * @param hearts the amount hearts to set
+     * @param rules  the precomputed rules of the user
      * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
      */
-    public ChangeHeartsResult setHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
-        LifestealerUserRules rules = this.computeUserRules(player, user);
+    public ChangeHeartsResult setHearts(@NotNull Player player, @NotNull LifestealerUser user, @NotNull LifestealerUserRules rules, int hearts) {
         hearts = Math.clamp(hearts, rules.minHearts(), rules.maxHearts());
 
         int currentHearts = user.getHearts();
@@ -85,6 +85,48 @@ public class LifestealerUserController {
         this.userManager.saveUserAsync(user);
 
         return new ChangeHeartsResult(currentHearts, hearts);
+    }
+
+    /**
+     * Sets the amount of hearts a player health has. This also saves the new amount in the database asynchronously.
+     * The amount of hearts is clamped between the minimum and maximum amount of hearts the player can have, based on
+     * their {@link LifestealerUserRules}.
+     *
+     * @param player the player to set the hearts
+     * @param user   the user related to the player
+     * @param hearts the amount hearts to set
+     * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
+     */
+    public ChangeHeartsResult setHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
+        LifestealerUserRules rules = this.computeUserRules(player, user);
+        return setHearts(player, user, rules, hearts);
+    }
+
+    /**
+     * Checks if adding the additional hearts to the user will make them overflow over the maximum
+     * amount of hearts they can have in their {@link LifestealerUserRules}.
+     *
+     * @param user             the user to check
+     * @param rules            the rules of the user
+     * @param additionalHearts the amount of hearts to add
+     * @return if the user is overflowing with the additional hearts
+     */
+    public boolean isOverflowing(@NotNull LifestealerUser user, @NotNull LifestealerUserRules rules, int additionalHearts) {
+        return user.getHearts() + additionalHearts > rules.maxHearts() && user.getHearts() < rules.maxHearts();
+    }
+
+    /**
+     * Gets the amount of hearts that will overflow if the additional hearts are added
+     * to the user based on their {@link LifestealerUserRules}.
+     * If the additional hearts won't overflow, it will return 0.
+     *
+     * @param user             the user to check
+     * @param rules            the rules of the user
+     * @param additionalHearts the amount of hearts to add
+     * @return the amount of hearts that will overflow if the additional hearts are added
+     */
+    public int getOverflowAmount(@NotNull LifestealerUser user, @NotNull LifestealerUserRules rules, int additionalHearts) {
+        return Math.max(0, user.getHearts() + additionalHearts - rules.maxHearts());
     }
 
     /**
@@ -111,6 +153,20 @@ public class LifestealerUserController {
      */
     public ChangeHeartsResult addHearts(@NotNull Player player, @NotNull LifestealerUser user, int hearts) {
         return setHearts(player, user, user.getHearts() + hearts);
+    }
+
+    /**
+     * Adds hearts to the player health bar and saves the new amount in the database asynchronously.
+     * If the new amount exceeds the maximum amount of hearts the player can have, it will be clamped to the maximum value.
+     *
+     * @param player the player to add hearts
+     * @param user   the user related to the player
+     * @param hearts the amount of hearts to add
+     * @param rules  the precomputed rules of the user
+     * @return a {@link ChangeHeartsResult} with the previous and new amount of hearts
+     */
+    public ChangeHeartsResult addHearts(@NotNull Player player, @NotNull LifestealerUser user, @NotNull LifestealerUserRules rules, int hearts) {
+        return setHearts(player, user, rules, user.getHearts() + hearts);
     }
 
     /**

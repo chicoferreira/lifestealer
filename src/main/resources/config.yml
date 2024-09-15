@@ -276,4 +276,7 @@ messages:
   consume heart already full:
     action bar: "<red>You can't consume any more hearts."
     sound: minecraft:entity.villager.no
+  consume heart overflow not sneaking:
+    action bar: "<red>Consuming this heart item will exceed your max hearts, wasting <white><overflow></white><heart> extra. Sneak to use it anyway."
+    sound: minecraft:entity.villager.no
   command error retrieving user: "<red>Could not retrieve target user. Check console for more information. Database unreachable?"

@@ -63,6 +63,7 @@ public class LifestealerPostConsumeHeartEvent extends Event {
 
     /**
      * Gets the amount of hearts contained in the item.
+     * Use {@link #getDifference()} to get the final amount of hearts added to the player.
      *
      * @return the amount of hearts contained in the item (guaranteed to be higher than 0)
      */
@@ -103,7 +104,6 @@ public class LifestealerPostConsumeHeartEvent extends Event {
 
     /**
      * Gets the difference between the new and previous amount of hearts.
-     * This will return 0 if the player's hearts have not changed (e.g. the player is already at maximum hearts).
      * Equivalent to {@code event.getChangeResult().difference()}.
      *
      * @return the difference between the new and previous amount of hearts (newHearts - previousHearts)

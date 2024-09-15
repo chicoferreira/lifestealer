@@ -1,14 +1,15 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import dev.chicoferreira.lifestealer.PlayerNotification;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.intellij.lang.annotations.Subst;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -21,7 +22,7 @@ public class BukkitSerializers {
 
     public static class NamespacedKeys implements TypeDeserializer<NamespacedKey> {
         @Override
-        public NamespacedKey deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public NamespacedKey deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
             String string = node.getString();
             if (string == null) {
                 return null;
@@ -36,9 +37,9 @@ public class BukkitSerializers {
 
     public static class MiniMessageComponents implements TypeDeserializer<Component> {
         @Override
-        public Component deserialize(Type type, ConfigurationNode node) {
+        public Component deserialize(@NotNull Type type, ConfigurationNode node) {
             String componentString = node.getString();
-            Component component = MiniMessage.miniMessage().deserializeOrNull(componentString);
+            Component component = PlayerNotification.MINI_MESSAGE.deserializeOrNull(componentString);
             if (component != null) {
                 // Remove italic to avoid item lore and display name to be italic
                 return component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
@@ -49,7 +50,7 @@ public class BukkitSerializers {
 
     public static class ItemFlags implements TypeDeserializer<ItemFlag> {
         @Override
-        public ItemFlag deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public ItemFlag deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
             String string = node.getString();
             if (string == null) {
                 return null;
@@ -66,7 +67,7 @@ public class BukkitSerializers {
     public static class Sounds implements TypeDeserializer<Sound> {
 
         @Override
-        public Sound deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public Sound deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
             @Subst("empty") String simpleSoundString = node.getString();
             if (simpleSoundString != null) {
                 return Sound.sound(Key.key(simpleSoundString), Sound.Source.PLAYER, 1, 1);
@@ -95,7 +96,7 @@ public class BukkitSerializers {
 
     public static class TitleTimes implements TypeDeserializer<Title.Times> {
         @Override
-        public Title.Times deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public Title.Times deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
             if (node.virtual()) {
                 return null;
             }
