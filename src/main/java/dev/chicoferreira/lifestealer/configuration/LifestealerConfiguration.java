@@ -8,7 +8,8 @@ import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropAction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionAction;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings;
-import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
+import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageProperties;
+import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageType;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesGroup;
 import io.leangen.geantyref.TypeToken;
@@ -81,7 +82,7 @@ public class LifestealerConfiguration {
             LifestealerHeartItemManager.Settings heartItemSettings,
             List<LifestealerHeartDropRestrictionAction> heartDropRestrictionActions,
             BanSettings banSettings,
-            SQLConnectionProvider connectionProvider,
+            UserPersistentStorageProperties storageProperties,
             Component errorKickMessage,
             Map<String, DurationUtils.DurationFormatSettings> durationFormats
     ) {
@@ -95,7 +96,7 @@ public class LifestealerConfiguration {
                 getHeartItemSettings(),
                 getHeartDropRestrictionActions(),
                 getBanSettings(),
-                getConnectionProvider(),
+                getStorageProperties(),
                 getErrorKickMessage(),
                 getDurationFormatsSettings()
         );
@@ -136,8 +137,8 @@ public class LifestealerConfiguration {
         return require(getConfig().node("messages").node(messagePath), PlayerNotification.class);
     }
 
-    private SQLConnectionProvider getConnectionProvider() throws SerializationException {
-        return require(getConfig().node("storage"), SQLConnectionProvider.class);
+    private UserPersistentStorageProperties getStorageProperties() throws SerializationException {
+        return require(getConfig().node("storage"), UserPersistentStorageProperties.class);
     }
 
     private Map<String, DurationUtils.DurationFormatSettings> getDurationFormatsSettings() throws SerializationException {
@@ -170,7 +171,8 @@ public class LifestealerConfiguration {
                         .register(LifestealerHeartDropAction.class, new EnumSerializer<>(LifestealerHeartDropAction.class))
                         .register(LifestealerHeartDropRestrictionAction.class, new LifestealerHeartDropRestrictionActionSerializer())
                         .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
-                        .register(SQLConnectionProvider.class, new ConnectionProviderSerializer(main.getDataPath()))
+                        .register(UserPersistentStorageProperties.class, new StoragePropertiesSerializer(main.getDataPath()))
+                        .register(UserPersistentStorageType.class, new EnumSerializer<>(UserPersistentStorageType.class))
                 ))
                 .path(this.configFilePath)
                 .build();

@@ -12,9 +12,9 @@ public abstract class FileConnectionProvider extends SQLDriverConnectionProvider
     private final Path path;
     private NonClosableConnectionWrapper connection;
 
-    public FileConnectionProvider(Path path) {
+    public FileConnectionProvider(FileConnectionProperties properties) {
         super();
-        this.path = path;
+        this.path = properties.path();
     }
 
     protected abstract @NotNull Connection createConnection(Path path) throws SQLException;

@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class H2ConnectionProvider extends FileConnectionProvider {
 
-    public H2ConnectionProvider(Path path) {
-        super(path);
+    public H2ConnectionProvider(FileConnectionProperties properties) {
+        super(properties);
     }
 
     @Override

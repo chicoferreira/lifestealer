@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class SQLiteConnectionProvider extends FileConnectionProvider {
 
-    public SQLiteConnectionProvider(Path path) {
-        super(path);
+    public SQLiteConnectionProvider(FileConnectionProperties properties) {
+        super(properties);
     }
 
     @Override

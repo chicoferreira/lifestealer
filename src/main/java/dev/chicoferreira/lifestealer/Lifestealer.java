@@ -10,8 +10,8 @@ import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserListener;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage;
-import dev.chicoferreira.lifestealer.user.persistent.sql.SQLConnectionProvider;
-import dev.chicoferreira.lifestealer.user.persistent.sql.SQLUserPersistentStorage;
+import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageFactory;
+import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageProperties;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -50,8 +50,8 @@ public class Lifestealer extends JavaPlugin {
             return;
         }
 
-        SQLConnectionProvider connectionProvider = values.connectionProvider();
-        this.userPersistentStorage = new SQLUserPersistentStorage(connectionProvider);
+        UserPersistentStorageProperties connectionProvider = values.storageProperties();
+        this.userPersistentStorage = UserPersistentStorageFactory.create(connectionProvider);
         try {
             this.userPersistentStorage.init();
         } catch (Exception e) {
