@@ -1,9 +1,9 @@
 package dev.chicoferreira.lifestealer.command;
 
 import dev.chicoferreira.lifestealer.DurationUtils;
+import dev.chicoferreira.lifestealer.Lifestealer;
 import dev.chicoferreira.lifestealer.command.LifestealerCommand.LifestealerRuleModifier;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
-import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
@@ -13,20 +13,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import static dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 
-public class LifestealerCommandCommandAPIBackend {
+public class LifestealerCommandBackend {
 
     private final LifestealerCommand command;
-    private final LifestealerHeartItemManager itemManager;
+    private final Lifestealer lifestealer;
 
-    public LifestealerCommandCommandAPIBackend(LifestealerCommand command, LifestealerHeartItemManager itemManager) {
+    public LifestealerCommandBackend(LifestealerCommand command, Lifestealer lifestealer) {
         this.command = command;
-        this.itemManager = itemManager;
+        this.lifestealer = lifestealer;
     }
 
     public <T> @NotNull T getArgument(CommandArguments args, String argument) throws WrapperCommandSyntaxException {
@@ -203,9 +206,30 @@ public class LifestealerCommandCommandAPIBackend {
                         .executes((sender, args) -> {
                             command.subcommandReload(sender);
                         })
+                ).then(new LiteralArgument("storage")
+                        .then(new LiteralArgument("import")
+                                .then(generateFileImportArgument("file")
+                                        .executes((sender, args) -> {
+                                            command.subcommandStorageImport(sender, getArgument(args, "file"));
+                                        })
+                                )
+                        )
+                        .then(new LiteralArgument("export")
+                                .executes((sender, args) -> {
+                                    String fileName = "lifestealer_users_" + DEFAULT_EXPORT_FILENAME_FORMAT.format(LocalDateTime.now()) + ".json";
+                                    command.subcommandStorageExport(sender, fileName);
+                                })
+                                .then(new StringArgument("file")
+                                        .executes((sender, args) -> {
+                                            command.subcommandStorageExport(sender, getArgument(args, "file"));
+                                        })
+                                )
+                        )
                 )
                 .register(plugin);
     }
+
+    private static final DateTimeFormatter DEFAULT_EXPORT_FILENAME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 
     public Argument<@NotNull LifestealerRuleModifier> generateRuleModifierArgument(String name) {
         return new CustomArgument<>(new StringArgument(name), info -> {
@@ -225,7 +249,7 @@ public class LifestealerCommandCommandAPIBackend {
     public Argument<@NotNull LifestealerHeartItem> generateItemTypeArgument(String name) {
         return new CustomArgument<>(new StringArgument(name), info -> {
             String itemName = info.input();
-            LifestealerHeartItem item = itemManager.getItem(itemName);
+            LifestealerHeartItem item = lifestealer.getItemManager().getItem(itemName);
             if (item == null) {
                 throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Unknown item: ").appendArgInput());
             }
@@ -244,11 +268,17 @@ public class LifestealerCommandCommandAPIBackend {
         }).replaceSuggestions(ArgumentSuggestions.strings("1d", "1h", "1m", "1s"));
     }
 
+    public Argument<@NotNull String> generateFileImportArgument(String name) {
+        return new StringArgument(name).replaceSuggestions(ArgumentSuggestions.strings((_s) ->
+                lifestealer.getImportExportStorage().listFiles().stream().map(Path::toString).toArray(String[]::new)
+        ));
+    }
+
     public Argument<String> generateItemTypeNameSuggestion(String name) {
         return new StringArgument(name).replaceSuggestions(itemTypeNameSuggestions());
     }
 
     private @NotNull ArgumentSuggestions<CommandSender> itemTypeNameSuggestions() {
-        return ArgumentSuggestions.strings((_s) -> itemManager.getItemTypeNames().toArray(String[]::new));
+        return ArgumentSuggestions.strings((_s) -> lifestealer.getItemManager().getItemTypeNames().toArray(String[]::new));
     }
 }

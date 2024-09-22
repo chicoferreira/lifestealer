@@ -4,6 +4,7 @@ import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -14,6 +15,7 @@ import java.util.UUID;
 /**
  * Stores lifesteal information about a player, such has the amount of hearts they have, the heart cap, etc.
  */
+@ConfigSerializable
 public class LifestealerUser {
 
     private final @NotNull UUID uuid;

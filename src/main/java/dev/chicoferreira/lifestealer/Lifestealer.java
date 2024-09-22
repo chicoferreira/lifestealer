@@ -1,7 +1,7 @@
 package dev.chicoferreira.lifestealer;
 
 import dev.chicoferreira.lifestealer.command.LifestealerCommand;
-import dev.chicoferreira.lifestealer.command.LifestealerCommandCommandAPIBackend;
+import dev.chicoferreira.lifestealer.command.LifestealerCommandBackend;
 import dev.chicoferreira.lifestealer.configuration.LifestealerConfiguration;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager;
 import dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionManager;
@@ -9,6 +9,7 @@ import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUserListener;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
+import dev.chicoferreira.lifestealer.user.persistent.ImportExportStorage;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageFactory;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageProperties;
@@ -30,6 +31,7 @@ public class Lifestealer extends JavaPlugin {
     private LifestealerHeartDropRestrictionManager heartDropRestrictionManager;
     private LifestealerExecutor executor;
     private UserPersistentStorage userPersistentStorage;
+    private ImportExportStorage importExportStorage;
     private LifestealerConfiguration configuration;
     private LifestealerUserListener userListener;
 
@@ -63,6 +65,8 @@ public class Lifestealer extends JavaPlugin {
 
         getLogger().info("Connected to database (" + this.userPersistentStorage.getDatabaseName() + ")");
 
+        this.importExportStorage = new ImportExportStorage(getDataFolder().toPath(), this.userPersistentStorage);
+
         this.executor = new LifestealerExecutor(this);
 
         this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), values.userGroupRules());
@@ -72,7 +76,7 @@ public class Lifestealer extends JavaPlugin {
         this.itemManager = new LifestealerHeartItemManager(values.heartItemSettings());
 
         LifestealerCommand command = new LifestealerCommand(this);
-        LifestealerCommandCommandAPIBackend commandAPIBackend = new LifestealerCommandCommandAPIBackend(command, this.itemManager);
+        LifestealerCommandBackend commandAPIBackend = new LifestealerCommandBackend(command, this);
         commandAPIBackend.registerCommand(this);
 
         this.heartDropRestrictionManager = new LifestealerHeartDropRestrictionManager(values.heartDropRestrictionActions());
@@ -203,5 +207,14 @@ public class Lifestealer extends JavaPlugin {
      */
     public UserPersistentStorage getUserPersistentStorage() {
         return userPersistentStorage;
+    }
+
+    /**
+     * Returns the import/export storage instance. You can use this to import and export users from the database.
+     *
+     * @return the import/export storage instance
+     */
+    public ImportExportStorage getImportExportStorage() {
+        return importExportStorage;
     }
 }

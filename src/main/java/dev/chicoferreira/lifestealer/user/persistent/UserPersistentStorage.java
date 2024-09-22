@@ -3,6 +3,7 @@ package dev.chicoferreira.lifestealer.user.persistent;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserManager;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -42,6 +43,8 @@ public interface UserPersistentStorage {
      */
     LifestealerUser loadUser(UUID uuid) throws Exception;
 
+    List<LifestealerUser> loadAllUsers() throws Exception;
+
     /**
      * Saves a user to the database.
      * This operation is blocking. Use {@link LifestealerUserManager#saveUserAsync(LifestealerUser)}
@@ -51,6 +54,8 @@ public interface UserPersistentStorage {
      * @throws Exception if an error occurs while saving the user
      */
     void saveUser(LifestealerUser user) throws Exception;
+
+    void saveAllUsers(List<LifestealerUser> users) throws Exception;
 
     /**
      * Deletes a user from the database.

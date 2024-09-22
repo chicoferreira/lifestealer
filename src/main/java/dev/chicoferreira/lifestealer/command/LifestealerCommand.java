@@ -339,6 +339,32 @@ public class LifestealerCommand {
         }
     }
 
+    public void subcommandStorageImport(CommandSender commandSender, String path) {
+        try {
+            int imported = this.lifestealer.getImportExportStorage().importFromFile(path);
+            LifestealerMessages.COMMAND_STORAGE_IMPORT_SUCCESS.sendTo(commandSender,
+                    Formatter.number("imported", imported),
+                    Placeholder.component("path", Component.text(path))
+            );
+        } catch (Exception e) {
+            LifestealerMessages.COMMAND_STORAGE_IMPORT_ERROR.sendTo(commandSender, Placeholder.component("path", Component.text(path)));
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while importing users", e);
+        }
+    }
+
+    public void subcommandStorageExport(CommandSender commandSender, String path) {
+        try {
+            int exported = this.lifestealer.getImportExportStorage().exportToFile(path);
+            LifestealerMessages.COMMAND_STORAGE_EXPORT_SUCCESS.sendTo(commandSender,
+                    Formatter.number("exported", exported),
+                    Placeholder.component("path", Component.text(path))
+            );
+        } catch (Exception e) {
+            LifestealerMessages.COMMAND_STORAGE_EXPORT_ERROR.sendTo(commandSender, Placeholder.component("path", Component.text(path)));
+            this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while exporting users", e);
+        }
+    }
+
     public static TagResolver either(@TagPattern String name, boolean value) {
         return TagResolver.resolver(name, (args, context) -> {
             final String ifFalse = args.popOr("Missing false branch").toString();
