@@ -137,13 +137,7 @@ public class LifestealerUserManager {
      * @return a {@link CompletableFuture} that will be completed when the user is saved
      */
     public CompletableFuture<Void> saveUserAsync(LifestealerUser user) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                saveUserSync(user);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }, this.executor.async());
+        return this.executor.executeAsync(() -> saveUserSync(user));
     }
 
     /**

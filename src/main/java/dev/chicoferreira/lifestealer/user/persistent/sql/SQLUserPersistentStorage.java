@@ -132,7 +132,9 @@ public class SQLUserPersistentStorage implements UserPersistentStorage {
     @Override
     public void saveUser(LifestealerUser user) throws Exception {
         try (Connection connection = connectionProvider.getConnection()) {
-            prepareUserSaveQuery(user, connection).execute();
+            try (PreparedStatement statement = prepareUserSaveQuery(user, connection)) {
+                statement.execute();
+            }
         }
     }
 
@@ -145,57 +147,49 @@ public class SQLUserPersistentStorage implements UserPersistentStorage {
     }
 
     private PreparedStatement prepareUserInsertQuery(LifestealerUser user, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_USER_STATEMENT)) {
-            statement.setString(1, user.getUuid().toString());
-            statement.setInt(2, user.getHearts());
-            if (user.getInternalBan() != null) {
-                statement.setTimestamp(3, Timestamp.from(user.getInternalBan().start()));
-                statement.setLong(4, user.getInternalBan().duration().getSeconds());
-            } else {
-                statement.setTimestamp(3, null);
-                statement.setInt(4, 0);
-            }
-            statement.setInt(5, user.getRulesModifier().maxHearts());
-            statement.setInt(6, user.getRulesModifier().minHearts());
-            statement.setLong(7, user.getRulesModifier().banTime().getSeconds());
-            statement.setInt(8, user.getRulesModifier().returnHearts());
-            return statement;
+        PreparedStatement statement = connection.prepareStatement(INSERT_USER_STATEMENT);
+        statement.setString(1, user.getUuid().toString());
+        statement.setInt(2, user.getHearts());
+        if (user.getInternalBan() != null) {
+            statement.setTimestamp(3, Timestamp.from(user.getInternalBan().start()));
+            statement.setLong(4, user.getInternalBan().duration().getSeconds());
+        } else {
+            statement.setTimestamp(3, null);
+            statement.setInt(4, 0);
         }
+        statement.setInt(5, user.getRulesModifier().maxHearts());
+        statement.setInt(6, user.getRulesModifier().minHearts());
+        statement.setLong(7, user.getRulesModifier().banTime().getSeconds());
+        statement.setInt(8, user.getRulesModifier().returnHearts());
+        return statement;
     }
 
     private PreparedStatement prepareUserUpdateQuery(LifestealerUser user, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER_STATEMENT)) {
-            statement.setInt(1, user.getHearts());
-            if (user.getInternalBan() != null) {
-                statement.setTimestamp(2, Timestamp.from(user.getInternalBan().start()));
-                statement.setLong(3, user.getInternalBan().duration().getSeconds());
-            } else {
-                statement.setTimestamp(2, null);
-                statement.setInt(3, 0);
-            }
-            statement.setInt(4, user.getRulesModifier().maxHearts());
-            statement.setInt(5, user.getRulesModifier().minHearts());
-            statement.setLong(6, user.getRulesModifier().banTime().getSeconds());
-            statement.setInt(7, user.getRulesModifier().returnHearts());
-            statement.setString(8, user.getUuid().toString());
-            return statement;
+        PreparedStatement statement = connection.prepareStatement(UPDATE_USER_STATEMENT);
+        statement.setInt(1, user.getHearts());
+        if (user.getInternalBan() != null) {
+            statement.setTimestamp(2, Timestamp.from(user.getInternalBan().start()));
+            statement.setLong(3, user.getInternalBan().duration().getSeconds());
+        } else {
+            statement.setTimestamp(2, null);
+            statement.setInt(3, 0);
         }
+        statement.setInt(4, user.getRulesModifier().maxHearts());
+        statement.setInt(5, user.getRulesModifier().minHearts());
+        statement.setLong(6, user.getRulesModifier().banTime().getSeconds());
+        statement.setInt(7, user.getRulesModifier().returnHearts());
+        statement.setString(8, user.getUuid().toString());
+        return statement;
     }
 
     @Override
     public void saveAllUsers(List<LifestealerUser> users) throws Exception {
+        // TODO: Make this a batch update
         try (Connection connection = connectionProvider.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                for (LifestealerUser user : users) {
-                    prepareUserSaveQuery(user, connection).addBatch();
+            for (LifestealerUser user : users) {
+                try (PreparedStatement statement = prepareUserSaveQuery(user, connection)) {
+                    statement.executeUpdate();
                 }
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                connection.setAutoCommit(true);
             }
         }
     }

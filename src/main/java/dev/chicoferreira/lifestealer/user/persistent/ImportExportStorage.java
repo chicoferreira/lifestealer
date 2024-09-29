@@ -1,10 +1,13 @@
 package dev.chicoferreira.lifestealer.user.persistent;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -16,7 +19,10 @@ public class ImportExportStorage {
     private final Path basePath;
     private final UserPersistentStorage userPersistentStorage;
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+            .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
+            .create();
 
     public ImportExportStorage(Path basePath, UserPersistentStorage userPersistentStorage) {
         this.basePath = basePath;
@@ -71,6 +77,38 @@ public class ImportExportStorage {
             return stream.filter(path -> path.toString().endsWith(".json")).toList();
         } catch (Exception e) {
             return List.of();
+        }
+    }
+
+    public static class InstantTypeAdapter implements JsonSerializer<Instant>, JsonDeserializer<Instant> {
+        public record SimpleInstant(long epochSecond, long nano) {
+        }
+
+        @Override
+        public Instant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            SimpleInstant instant = context.deserialize(json, SimpleInstant.class);
+            return Instant.ofEpochSecond(instant.epochSecond(), instant.nano());
+        }
+
+        @Override
+        public JsonElement serialize(Instant src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(new SimpleInstant(src.getEpochSecond(), src.getNano()));
+        }
+    }
+
+    public static class DurationTypeAdapter implements JsonSerializer<Duration>, JsonDeserializer<Duration> {
+        public record SimpleDuration(long seconds, int nano) {
+        }
+
+        @Override
+        public Duration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            SimpleDuration duration = context.deserialize(json, SimpleDuration.class);
+            return Duration.ofSeconds(duration.seconds(), duration.nano());
+        }
+
+        @Override
+        public JsonElement serialize(Duration src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(new SimpleDuration(src.getSeconds(), src.getNano()));
         }
     }
 }

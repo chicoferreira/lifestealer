@@ -2,10 +2,8 @@ package dev.chicoferreira.lifestealer;
 
 import org.bukkit.plugin.Plugin;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.logging.Level;
 
 public class LifestealerExecutor {
 
@@ -23,6 +21,20 @@ public class LifestealerExecutor {
 
     public Executor sync() {
         return (task) -> plugin.getServer().getScheduler().runTask(plugin, task);
+    }
+
+    public interface ThrowableRunnable {
+        void run() throws Throwable;
+    }
+
+    public CompletableFuture<Void> executeAsync(ThrowableRunnable runnable) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                runnable.run();
+            } catch (Throwable throwable) {
+                plugin.getLogger().log(Level.SEVERE, "An error occurred while executing a task asynchronously: ", throwable);
+            }
+        }, this.asyncExecutor);
     }
 
     public boolean shutdown() throws InterruptedException {
