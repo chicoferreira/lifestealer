@@ -65,7 +65,7 @@ public class Lifestealer extends JavaPlugin {
 
         getLogger().info("Connected to database (" + this.userPersistentStorage.getDatabaseName() + ")");
 
-        this.importExportStorage = new ImportExportStorage(getDataFolder().toPath(), this.userPersistentStorage);
+        this.importExportStorage = new ImportExportStorage(getDataFolder().toPath().resolve("exports"), this.userPersistentStorage);
 
         this.executor = new LifestealerExecutor(this);
 

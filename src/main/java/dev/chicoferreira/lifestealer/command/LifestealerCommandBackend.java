@@ -219,7 +219,7 @@ public class LifestealerCommandBackend {
                                     String fileName = "lifestealer_users_" + DEFAULT_EXPORT_FILENAME_FORMAT.format(LocalDateTime.now()) + ".json";
                                     command.subcommandStorageExport(sender, fileName);
                                 })
-                                .then(new StringArgument("file")
+                                .then(new GreedyStringArgument("file")
                                         .executes((sender, args) -> {
                                             command.subcommandStorageExport(sender, getArgument(args, "file"));
                                         })
@@ -269,7 +269,7 @@ public class LifestealerCommandBackend {
     }
 
     public Argument<@NotNull String> generateFileImportArgument(String name) {
-        return new StringArgument(name).replaceSuggestions(ArgumentSuggestions.strings((_s) ->
+        return new GreedyStringArgument(name).replaceSuggestions(ArgumentSuggestions.strings((_s) ->
                 lifestealer.getImportExportStorage().listFiles().stream().map(Path::toString).toArray(String[]::new)
         ));
     }

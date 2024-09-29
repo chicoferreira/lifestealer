@@ -40,7 +40,12 @@ public class ImportExportStorage {
      * @throws Exception If an error occurs while importing
      */
     public int importFromFile(String path) throws Exception {
-        Path readPath = basePath.resolve(path);
+        Path readPath = basePath.resolve(path).normalize();
+
+        if (!readPath.startsWith(basePath)) {
+            throw new IllegalArgumentException("Cannot read outside of the base directory");
+        }
+
         String json = Files.readString(readPath);
 
         LifestealerUser[] lifestealerUsers = gson.fromJson(json, LifestealerUser[].class);
@@ -57,24 +62,24 @@ public class ImportExportStorage {
      * @throws Exception If an error occurs while exporting
      */
     public int exportToFile(String path) throws Exception {
-        Path writePath = basePath.resolve(path);
+        Path writePath = basePath.resolve(path).normalize();
+
+        if (!writePath.startsWith(basePath)) {
+            throw new IllegalArgumentException("Cannot write outside of the base directory");
+        }
 
         List<LifestealerUser> lifestealerUsers = userPersistentStorage.loadAllUsers();
         String json = gson.toJson(lifestealerUsers);
 
+        Files.createDirectories(writePath.getParent());
         Files.writeString(writePath, json);
 
         return lifestealerUsers.size();
     }
 
-    /**
-     * Returns a list of all files in the plugin's folder that end with ".json".
-     *
-     * @return A list of all files in the plugin's folder that end with ".json"
-     */
     public List<Path> listFiles() {
-        try (Stream<Path> stream = Files.list(basePath)) {
-            return stream.filter(path -> path.toString().endsWith(".json")).toList();
+        try (Stream<Path> stream = Files.walk(basePath)) {
+            return stream.filter(path -> path.toFile().isFile()).map(basePath::relativize).toList();
         } catch (Exception e) {
             return List.of();
         }
