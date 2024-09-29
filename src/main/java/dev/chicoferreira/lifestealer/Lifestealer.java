@@ -98,12 +98,17 @@ public class Lifestealer extends JavaPlugin {
         }
 
         // Load all online players
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             try {
-                this.userManager.getOrLoadUser(onlinePlayer.getUniqueId());
+                LifestealerUser user = this.userManager.getOrLoadUser(player.getUniqueId());
+                LifestealerUser.Ban ban = this.userController.getBanIfNotExternalSettingEnabled(user);
+                if (ban != null) {
+                    player.kick(this.userListener.getBanMessageComponent(player, ban));
+                }
+                this.userController.updatePlayerHearts(player, user);
             } catch (Exception e) {
-                onlinePlayer.kick(values.errorKickMessage());
-                getLogger().log(Level.SEVERE, "Couldn't load user for player " + onlinePlayer.getName(), e);
+                player.kick(values.errorKickMessage());
+                getLogger().log(Level.SEVERE, "Couldn't load user for player " + player.getName(), e);
             }
         }
     }

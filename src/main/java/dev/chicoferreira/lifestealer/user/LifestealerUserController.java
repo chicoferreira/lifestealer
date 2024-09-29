@@ -301,6 +301,19 @@ public class LifestealerUserController {
     }
 
     /**
+     * Gets the ban information of a user if the external flag is disabled.
+     * If the user is not banned or the external flag is enabled, it will return null.
+     * <p>
+     * Use this to test if the player is being kicked by the plugin.
+     *
+     * @param user the user to check if they are banned
+     * @return the ban information of the user, or null if the user is not banned or the external flag is enabled
+     */
+    public @Nullable LifestealerUser.Ban getBanIfNotExternalSettingEnabled(@NotNull LifestealerUser user) {
+        return !getBanSettings().external() ? getBan(user) : null;
+    }
+
+    /**
      * Checks if a user is banned.
      *
      * @param user the user to check if they are banned

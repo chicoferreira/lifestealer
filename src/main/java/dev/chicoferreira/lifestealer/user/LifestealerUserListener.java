@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.logging.Level;
@@ -79,22 +80,23 @@ public class LifestealerUserListener implements Listener {
         Player player = event.getPlayer();
         try {
             LifestealerUser user = userManager.getOrLoadUser(player.getUniqueId());
-            if (!userController.getBanSettings().external()) {
-                LifestealerUser.Ban ban = userController.getBan(user);
-
-                if (ban != null) {
-                    Component kickMessageComponent = MiniMessage.builder().build().deserialize(
-                            userController.getBanSettings().joinMessage(),
-                            Placeholder.component("player", player.name()),
-                            Formatter.date("date", ban.endZoned()),
-                            DurationUtils.formatDurationTag("remaining", ban.remaining()));
-                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMessageComponent);
-                }
+            LifestealerUser.Ban ban = this.userController.getBanIfNotExternalSettingEnabled(user);
+            if (ban != null) {
+                Component kickMessageComponent = getBanMessageComponent(player, ban);
+                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMessageComponent);
             }
         } catch (Exception e) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, errorKickMessage);
             logger.log(Level.SEVERE, "An error occurred while loading user data", e);
         }
+    }
+
+    public @NotNull Component getBanMessageComponent(Player player, LifestealerUser.Ban ban) {
+        return MiniMessage.builder().build().deserialize(
+                userController.getBanSettings().joinMessage(),
+                Placeholder.component("player", player.name()),
+                Formatter.date("date", ban.endZoned()),
+                DurationUtils.formatDurationTag("remaining", ban.remaining()));
     }
 
     @EventHandler
