@@ -283,6 +283,6 @@ messages:
   command reload success: "<green>Configuration reloaded."
   command reload error: "<red>There was an error while reloading the configuration. Check console for more information. The plugin will run with the old configuration."
   command storage import success: "<green>Imported <white><imported></white> users from <white><path></white>. Restart the server to load the new users."
-  command storage import error: "<red>There was an error while importing users from <white><path></white>. Check console for more information."
+  command storage import error: "<red>An error occurred while importing users to <white><path></white>: <error>\nCheck the console for more details."
   command storage export success: "<green>Exported <white><exported></white> users to <white><path></white>."
-  command storage export error: "<red>There was an error while exporting users to <white><path></white>. Check console for more information."
+  command storage export error: "<red>An error occurred while exporting users to <white><path></white>: <error>\nCheck the console for more details."

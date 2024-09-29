@@ -347,7 +347,10 @@ public class LifestealerCommand {
                     Placeholder.component("path", Component.text(path))
             );
         } catch (Exception e) {
-            LifestealerMessages.COMMAND_STORAGE_IMPORT_ERROR.sendTo(commandSender, Placeholder.component("path", Component.text(path)));
+            LifestealerMessages.COMMAND_STORAGE_IMPORT_ERROR.sendTo(commandSender,
+                    Placeholder.component("path", Component.text(path)),
+                    Placeholder.component("error", Component.text(e.getMessage()))
+            );
             this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while importing users", e);
         }
     }
@@ -360,7 +363,10 @@ public class LifestealerCommand {
                     Placeholder.component("path", Component.text(path))
             );
         } catch (Exception e) {
-            LifestealerMessages.COMMAND_STORAGE_EXPORT_ERROR.sendTo(commandSender, Placeholder.component("path", Component.text(path)));
+            LifestealerMessages.COMMAND_STORAGE_EXPORT_ERROR.sendTo(commandSender,
+                    Placeholder.component("path", Component.text(path)),
+                    Placeholder.component("error", Component.text(e.getMessage()))
+            );
             this.lifestealer.getLogger().log(Level.SEVERE, "An error occurred while exporting users", e);
         }
     }
