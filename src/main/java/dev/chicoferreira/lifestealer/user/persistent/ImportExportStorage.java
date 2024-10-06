@@ -77,6 +77,11 @@ public class ImportExportStorage {
         return lifestealerUsers.size();
     }
 
+    /**
+     * Returns a list of all files in the base directory.
+     *
+     * @return A list of all files in the base directory
+     */
     public List<Path> listFiles() {
         try (Stream<Path> stream = Files.walk(basePath)) {
             return stream.filter(path -> path.toFile().isFile()).map(basePath::relativize).toList();
