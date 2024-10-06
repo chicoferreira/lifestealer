@@ -1,0 +1,13 @@
+dev.chicoferreira.lifestealer
+dev.chicoferreira.lifestealer.command
+dev.chicoferreira.lifestealer.configuration
+dev.chicoferreira.lifestealer.events
+dev.chicoferreira.lifestealer.item
+dev.chicoferreira.lifestealer.restriction
+dev.chicoferreira.lifestealer.restriction.restrictions
+dev.chicoferreira.lifestealer.user
+dev.chicoferreira.lifestealer.user.persistent
+dev.chicoferreira.lifestealer.user.persistent.sql
+dev.chicoferreira.lifestealer.user.persistent.sql.impl
+dev.chicoferreira.lifestealer.user.persistent.sql.impl.file
+dev.chicoferreira.lifestealer.user.rules
