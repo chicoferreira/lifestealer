@@ -19,5 +19,4 @@ jobs:
           java-version: 21
           target-folder: .
           project: gradle
-          without-deploy: true
           
