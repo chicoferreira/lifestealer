@@ -1,4 +1,4 @@
-name: Deploy Javadoc
+name: Build Javadoc
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  publish:
+  javadocs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
