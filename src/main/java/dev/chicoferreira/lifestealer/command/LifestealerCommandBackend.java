@@ -42,6 +42,7 @@ public class LifestealerCommandBackend {
 
     public void registerCommand(JavaPlugin plugin) {
         new CommandTree("lifestealer")
+                .withPermission("lifestealer.admin")
                 .then(new LiteralArgument("hearts")
                         .then(new LiteralArgument("set")
                                 .then(new IntegerArgument("amount")
