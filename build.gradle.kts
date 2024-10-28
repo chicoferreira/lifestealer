@@ -25,7 +25,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-bukkit-core:9.5.3")
+    compileOnly("dev.jorel:commandapi-bukkit-core:9.6.1")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     implementation("com.zaxxer:HikariCP:6.0.0")
