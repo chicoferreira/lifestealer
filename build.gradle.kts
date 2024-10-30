@@ -25,7 +25,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-bukkit-core:9.5.3")
+    compileOnly("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     implementation("com.zaxxer:HikariCP:6.0.0")
@@ -51,7 +51,6 @@ tasks {
     runServer {
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
-            hangar("CommandAPI", "9.5.3")
         }
     }
 }
@@ -60,10 +59,10 @@ bukkitPluginYaml {
     main = "dev.chicoferreira.lifestealer.Lifestealer"
     authors.add("chicoferreira")
     apiVersion = "1.21"
-    depend.add("CommandAPI")
     softDepend.add("PlaceholderAPI")
     libraries.add("com.zaxxer:HikariCP:6.0.0")
     libraries.add("com.h2database:h2:2.3.232")
     libraries.add("org.mariadb.jdbc:mariadb-java-client:3.4.1")
     libraries.add("org.postgresql:postgresql:42.7.4")
+    libraries.add("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
 }

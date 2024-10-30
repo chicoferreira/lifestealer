@@ -14,6 +14,8 @@ import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageFactory;
 import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageProperties;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,7 +38,14 @@ public class Lifestealer extends JavaPlugin {
     private LifestealerUserListener userListener;
 
     @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).silentLogs(true));
+    }
+
+    @Override
     public void onEnable() {
+        CommandAPI.onEnable();
+
         getLogger().info("hello!");
         this.configuration = new LifestealerConfiguration(this, "config.yml");
         LifestealerConfiguration.Values values;
@@ -148,6 +157,8 @@ public class Lifestealer extends JavaPlugin {
                 getLogger().log(Level.SEVERE, "An error occurred while shutting down database", e);
             }
         }
+
+        CommandAPI.onDisable();
     }
 
     /**
