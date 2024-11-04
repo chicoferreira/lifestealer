@@ -25,7 +25,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
+    compileOnly("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     implementation("com.zaxxer:HikariCP:6.0.0")
@@ -64,5 +64,5 @@ bukkitPluginYaml {
     libraries.add("com.h2database:h2:2.3.232")
     libraries.add("org.mariadb.jdbc:mariadb-java-client:3.5.0")
     libraries.add("org.postgresql:postgresql:42.7.4")
-    libraries.add("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
+    libraries.add("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
 }
