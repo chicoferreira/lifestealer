@@ -30,7 +30,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
     implementation("com.zaxxer:HikariCP:6.0.0")
     implementation("com.h2database:h2:2.3.232")
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.0")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.1")
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("com.google.code.gson:gson:2.11.0")
 }
@@ -62,7 +62,7 @@ bukkitPluginYaml {
     softDepend.add("PlaceholderAPI")
     libraries.add("com.zaxxer:HikariCP:6.0.0")
     libraries.add("com.h2database:h2:2.3.232")
-    libraries.add("org.mariadb.jdbc:mariadb-java-client:3.5.0")
+    libraries.add("org.mariadb.jdbc:mariadb-java-client:3.5.1")
     libraries.add("org.postgresql:postgresql:42.7.4")
     libraries.add("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
 }
