@@ -141,6 +141,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.NamespacedKeys.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.NamespacedKeys</a> - Class in <a href="dev/chicoferreira/lifestealer/configuration/package-summary.html">dev.chicoferreira.lifestealer.configuration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Particles.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.Particles</a> - Class in <a href="dev/chicoferreira/lifestealer/configuration/package-summary.html">dev.chicoferreira.lifestealer.configuration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Sounds.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.Sounds</a> - Class in <a href="dev/chicoferreira/lifestealer/configuration/package-summary.html">dev.chicoferreira.lifestealer.configuration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.TitleTimes.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.TitleTimes</a> - Class in <a href="dev/chicoferreira/lifestealer/configuration/package-summary.html">dev.chicoferreira.lifestealer.configuration</a></dt>
@@ -326,6 +328,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.MiniMessageComponents.html#deserialize(java.lang.reflect.Type,org.spongepowered.configurate.ConfigurationNode)" class="member-name-link">deserialize(Type, ConfigurationNode)</a> - Method in class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.MiniMessageComponents.html" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.MiniMessageComponents</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.NamespacedKeys.html#deserialize(java.lang.reflect.Type,org.spongepowered.configurate.ConfigurationNode)" class="member-name-link">deserialize(Type, ConfigurationNode)</a> - Method in class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.NamespacedKeys.html" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.NamespacedKeys</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Particles.html#deserialize(java.lang.reflect.Type,org.spongepowered.configurate.ConfigurationNode)" class="member-name-link">deserialize(Type, ConfigurationNode)</a> - Method in class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Particles.html" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.Particles</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Sounds.html#deserialize(java.lang.reflect.Type,org.spongepowered.configurate.ConfigurationNode)" class="member-name-link">deserialize(Type, ConfigurationNode)</a> - Method in class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Sounds.html" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.Sounds</a></dt>
 <dd>&nbsp;</dd>
@@ -1451,6 +1455,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Parses a string into a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link"><code>Duration</code></a>.</div>
 </dd>
+<dt><a href="dev/chicoferreira/lifestealer/PlayerNotification.html#particle()" class="member-name-link">particle()</a> - Method in record class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/PlayerNotification.html" title="class in dev.chicoferreira.lifestealer">PlayerNotification</a></dt>
+<dd>
+<div class="block">Returns the value of the <code>particle</code> record component.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Particles.html#%3Cinit%3E()" class="member-name-link">Particles()</a> - Constructor for class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/BukkitSerializers.Particles.html" title="class in dev.chicoferreira.lifestealer.configuration">BukkitSerializers.Particles</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/SQLHikariConnectionProperties.html#password()" class="member-name-link">password()</a> - Method in record class dev.chicoferreira.lifestealer.user.persistent.sql.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/SQLHikariConnectionProperties.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql">SQLHikariConnectionProperties</a></dt>
 <dd>
 <div class="block">Returns the value of the <code>password</code> record component.</div>
@@ -1471,7 +1481,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates player notification with a text message.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/PlayerNotification.html#%3Cinit%3E(java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional)" class="member-name-link">PlayerNotification(Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;Title.Times&gt;, Optional&lt;Sound&gt;)</a> - Constructor for record class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/PlayerNotification.html" title="class in dev.chicoferreira.lifestealer">PlayerNotification</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/PlayerNotification.html#%3Cinit%3E(java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional,java.util.Optional)" class="member-name-link">PlayerNotification(Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;String&gt;, Optional&lt;Title.Times&gt;, Optional&lt;Sound&gt;, Optional&lt;ParticleBuilder&gt;)</a> - Constructor for record class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/PlayerNotification.html" title="class in dev.chicoferreira.lifestealer">PlayerNotification</a></dt>
 <dd>
 <div class="block">Creates an instance of a <code>PlayerNotification</code> record class.</div>
 </dd>
