@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -7,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.inventory.ItemFlag;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
@@ -109,6 +111,31 @@ public class BukkitSerializers {
 
         private Duration fromTicks(int ticks) {
             return Duration.ofMillis(ticks * 50L);
+        }
+    }
+
+    public static class Particles implements TypeDeserializer<ParticleBuilder> {
+        @Override
+        public ParticleBuilder deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
+            String simpleParticleString = node.getString();
+            if (simpleParticleString != null) {
+                return new ParticleBuilder(Particle.valueOf(simpleParticleString));
+            }
+
+            if (node.isMap()) {
+                Particle particle = require(node.node("type"), Particle.class);
+                int count = node.node("count").getInt(1);
+                double offsetX = node.node("offset x").getDouble(0);
+                double offsetY = node.node("offset y").getDouble(0);
+                double offsetZ = node.node("offset z").getDouble(0);
+                double extra = node.node("extra").getDouble(0);
+                ParticleBuilder builder = new ParticleBuilder(particle);
+                builder.count(count);
+                builder.offset(offsetX, offsetY, offsetZ);
+                builder.extra(extra);
+                return builder;
+            }
+            return null;
         }
     }
 }

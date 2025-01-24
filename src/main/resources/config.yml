@@ -277,6 +277,12 @@ messages:
   consume heart success:
     action bar: "<white>+<amount><heart>"
     sound: minecraft:entity.player.levelup
+    particle:
+      type: "HEART" # List of particles: https://jd.papermc.io/paper/1.21.4/org/bukkit/Particle.html
+      count: 10 # The amount of particles to spawn
+      offset x: 0.5 # The maximum random offset between the player eye location and the spawned particle on the X axis
+      offset y: 1 # ... Y axis
+      offset z: 0.5 # ... Z axis
   consume heart already full:
     action bar: "<red>You can't consume any more hearts."
     sound: minecraft:entity.villager.no

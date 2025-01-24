@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.title.Title;
@@ -24,6 +25,7 @@ public class PlayerNotificationSerializer implements TypeDeserializer<PlayerNoti
         String subtitleMessage = node.node("subtitle").getString();
         Title.Times titleTimes = node.node("title times").get(Title.Times.class);
         Sound sound = node.node("sound").get(Sound.class);
+        ParticleBuilder particle = node.node("particle").get(ParticleBuilder.class);
 
         return new PlayerNotification(
                 Optional.ofNullable(message),
@@ -31,7 +33,8 @@ public class PlayerNotificationSerializer implements TypeDeserializer<PlayerNoti
                 Optional.ofNullable(titleMessage),
                 Optional.ofNullable(subtitleMessage),
                 Optional.ofNullable(titleTimes),
-                Optional.ofNullable(sound)
+                Optional.ofNullable(sound),
+                Optional.ofNullable(particle)
         );
     }
 }

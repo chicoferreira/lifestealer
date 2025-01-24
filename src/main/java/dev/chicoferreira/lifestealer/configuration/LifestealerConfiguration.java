@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.configuration;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.PlayerNotification;
 import dev.chicoferreira.lifestealer.item.LifestealerHeartItem;
@@ -173,6 +174,7 @@ public class LifestealerConfiguration {
                         .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
                         .register(UserPersistentStorageProperties.class, new StoragePropertiesSerializer(main.getDataPath()))
                         .register(UserPersistentStorageType.class, new EnumSerializer<>(UserPersistentStorageType.class))
+                        .register(ParticleBuilder.class, new BukkitSerializers.Particles())
                 ))
                 .path(this.configFilePath)
                 .build();
