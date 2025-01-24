@@ -43,7 +43,7 @@ public enum LifestealerMessages {
     private PlayerNotification message;
 
     public void sendTo(CommandSender sender, TagResolver... resolvers) {
-        message.sendTo(sender, resolvers);
+        message.sendTo(sender, TagResolver.resolver(resolvers));
     }
 
     public static void loadMessages(LifestealerConfiguration configuration) throws SerializationException {

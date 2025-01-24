@@ -3,7 +3,12 @@ package dev.chicoferreira.lifestealer;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
 import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -118,5 +123,14 @@ public class LifestealerPlaceholderExpansion extends PlaceholderExpansion {
                 yield null;
             }
         };
+    }
+
+    public static @NotNull TagResolver papiTag(final @NotNull Player player) {
+        return TagResolver.resolver("papi", (argumentQueue, context) -> {
+            final String papiPlaceholder = argumentQueue.popOr("papi tag requires an argument").value();
+            final String parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, '%' + papiPlaceholder + '%');
+            final Component componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder);
+            return Tag.selfClosingInserting(componentPlaceholder);
+        });
     }
 }

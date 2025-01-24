@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -44,6 +45,12 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
             .build();
 
     /**
+     * Additional tag resolvers to apply to the messages.
+     * Used in main class to add custom resolvers (for example, parsing PAPI placeholders).
+     */
+    public static BiFunction<CommandSender, TagResolver, TagResolver> ADDITIONAL_RESOLVERS = (a, b) -> b;
+
+    /**
      * Creates player notification with a text message.
      *
      * @param textMessage the text message to send to the player
@@ -55,11 +62,11 @@ public record PlayerNotification(@NotNull Optional<String> textMessage,
     /**
      * Sends the notification to the player.
      *
-     * @param sender    the player or console to send the notification to
-     * @param resolvers the adventure-api resolvers to apply to the messages (they act basically as placeholders)
+     * @param sender   the player or console to send the notification to
+     * @param resolver the adventure-api resolver to apply to the messages (they act basically as placeholders)
      */
-    public void sendTo(CommandSender sender, TagResolver... resolvers) {
-        Function<String, Component> parseComponent = string -> MINI_MESSAGE.deserialize(string, resolvers);
+    void sendTo(CommandSender sender, TagResolver resolver) {
+        Function<String, Component> parseComponent = string -> MINI_MESSAGE.deserialize(string, ADDITIONAL_RESOLVERS.apply(sender, resolver));
 
         textMessage.map(parseComponent).ifPresent(sender::sendMessage);
         actionBarMessage.map(parseComponent).ifPresent(sender::sendActionBar);

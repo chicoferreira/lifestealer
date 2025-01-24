@@ -211,6 +211,10 @@ messages:
   # Sends a green title and a blue subtitle to the player
 
   # » message key:
+  #    message: "<papi:player_uuid>"
+  # Uses PlaceholderAPI to parse %player_uuid% and sends it to the player (requires PlaceholderAPI to be installed)
+
+  # » message key:
   #     title: "<green>Hi"
   #     subtitle: "<blue>There"
   #     title times:

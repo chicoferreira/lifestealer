@@ -16,6 +16,7 @@ import dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorageProper
 import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -104,6 +105,13 @@ public class Lifestealer extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LifestealerPlaceholderExpansion(this, this.userController).register();
+
+            PlayerNotification.ADDITIONAL_RESOLVERS = (sender, tagResolver) -> {
+                if (sender instanceof Player player) {
+                    tagResolver = TagResolver.resolver(tagResolver, LifestealerPlaceholderExpansion.papiTag(player));
+                }
+                return tagResolver;
+            };
         }
 
         // Load all online players
