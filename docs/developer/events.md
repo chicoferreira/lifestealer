@@ -1,0 +1,1 @@
+# Lifestealer plugin events

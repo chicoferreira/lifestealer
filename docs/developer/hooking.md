@@ -1,0 +1,1 @@
+# Hooking to the Lifestealer plugin
