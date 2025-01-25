@@ -40,3 +40,7 @@ bin/
 
 ### Run server ###
 run/
+
+### Documentation ###
+node_modules/
+*/.vitepress/cache
