@@ -82,6 +82,8 @@ public class LifestealerUser {
      * This rule will have its values summed with the values in the rule given
      * by the {@link dev.chicoferreira.lifestealer.user.rules.LifestealerUserRulesController}
      * which is based on the user's permissions to get the final rule value.
+     * <p>
+     * Use {@link LifestealerUserController#computeUserRules(Player, LifestealerUser)} to get the final rule value.
      */
     public @NotNull LifestealerUserRules getRulesModifier() {
         return modifierRules;

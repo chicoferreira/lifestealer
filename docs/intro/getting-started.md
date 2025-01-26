@@ -19,5 +19,5 @@ directory. This file contains all the settings and options for the plugin. The p
 no database or additional configuration required.
 
 A default `H2` database is created to store player data and settings. If you would like to use a different database,
-check [[Configuration#Database]] for more information. You can change databases without losing any data with the
+check [Configuring Storage](/configuration/storage) for more information. You can change databases without losing any data with the
 Import/Export feature.
