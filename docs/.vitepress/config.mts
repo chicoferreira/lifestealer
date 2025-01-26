@@ -23,6 +23,7 @@ export default defineConfig({
         text: "Usage",
         items: [
           { text: "Overview", link: "/usage/overview" },
+          { text: "Rules", link: "/usage/rules" },
           { text: "Commands", link: "/usage/commands" },
           { text: "Permissions", link: "/usage/permissions" },
           { text: "Migrating Storage Type", link: "/usage/migrating-to-a-new-storage-type" },

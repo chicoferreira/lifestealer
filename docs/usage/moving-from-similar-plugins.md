@@ -5,7 +5,7 @@ Currently, Lifestealer **does not support** importing data from other plugins.
 This is a feature that is not planned to be added in the future due to the differences in the way data is stored
 and managed by each plugin.
 
-Lifestealer mainly uses permissions to attribute [rules](TODO) to players, while other plugins may not use
+Lifestealer mainly uses permissions to attribute [rules](/usage/rules) to players, while other plugins may not use
 permissions at all.
 
 For example, other plugin might have `PlayerA` with 15 max hearts and `PlayerB` with 20 max hearts. `PlayerA` purchased
