@@ -101,7 +101,7 @@ rules:
     - permission: "admin"
       # Change the maximum amount of hearts to 20
       max hearts: 20
-      # and the ban time to 0 seconds
+      # and the ban time to 15 seconds
       ban time: 15s
     # If the player has multiple groups, the overrides will be applied in the order they are defined here
     # So if a player has both "vip" and "admin" permissions, they will have:
@@ -114,12 +114,12 @@ rules:
 # When a player loses more hearts than the minimum amount defined in the rules, they will be banned for the time defined in the rules
 ban settings:
   # The message that will be sent to the player when they get banned and is online
-  # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
+  # For the duration placeholder check `duration format` section for configuration
   # For the date placeholder check https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html for usage and more examples
   kick message: "<red>You have been banned for <white><duration:'extended'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
 
   # The message that will be sent to the player when they try to join while banned
-  # For the duration placeholder check https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html for usage and more examples
+  # For the duration placeholder check `duration format` section for configuration
   # For the date placeholder check https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html for usage and more examples
   join message: "<red>You are banned for <white><remaining:'extended'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
 
