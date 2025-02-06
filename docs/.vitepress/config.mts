@@ -25,7 +25,7 @@ export default defineConfig({
           { text: "Overview", link: "/usage/overview" },
           { text: "Rules", link: "/usage/rules" },
           { text: "Commands", link: "/usage/commands" },
-          { text: "Permissions", link: "/usage/permissions" },
+          { text: "Terminology", link: "/usage/terminology" },
           { text: "Migrating Storage Type", link: "/usage/migrating-to-a-new-storage-type" },
           { text: "Moving from Similar Plugins", link: "/usage/moving-from-similar-plugins" },
           { text: "Backups", link: "/usage/backups" },

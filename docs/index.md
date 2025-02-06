@@ -8,11 +8,11 @@ hero:
   tagline: My great project tagline
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Documentation
+      link: /intro/welcome
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Developer API
+      link: /developer/reference
 
 features:
   - title: Feature A
