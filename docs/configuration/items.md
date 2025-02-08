@@ -14,6 +14,9 @@ items:
       display name: "<color:#ff0000>Normal Heart</color>"
       lore:
         - "<gray>Right click to add <white>+1<heart></white> to your health"
+      enchantments:
+        - name: "unbreaking"
+          level: 1
       glint: true
       custom model data: 144
       flags:
@@ -30,7 +33,7 @@ items:
 | `item.display name`      | Component           | The display name of the heart item.                                 | `"<red>Basic Heart"`                                                 |
 | `item.lore`              | List of Component   | The lore of the heart item.                                         | `"<gray>Right click to add <white>+1<heart></white> to your health"` |
 | `item.glint`             | Boolean             | Whether the heart item should glow.                                 | `true`                                                               |
-| `item.enchantments`      | List of Enchantment | The list of the item enchantments                                   | Check appendix TODO                                                  |
+| `item.enchantments`      | List of Enchantment | The list of the item enchantments                                   | Check [example](#example)                                            |
 | `item.flags`             | List of Flags       | The flags of the heart item.                                        | `["hide enchants"]`                                                  |
 | `item.custom model data` | Integer             | The custom model data of the heart item.                            | `144`                                                                |
 
@@ -41,7 +44,7 @@ The `item to drop when player dies` fieldis used to define which heart item shou
 This must exist in the `items` list above, otherwise the plugin will not load.
 
 The amount of hearts the player will lose will be the same as the `heart amount` defined in the chosen item, unless
-changed by other plugin that hooks into Lifestealer (See Developer API). TODO: Link to developer API
+changed by other plugin that hooks into Lifestealer (See [Developer API](/developer/events)).
 
 ## Adding new heart items
 
@@ -61,6 +64,4 @@ items:
 
 The only required properties are `name`, `heart amount` and `item.type`.
 
-You can give these heart items to players by using the `/lifestealer heart give <player> <item>` command. #TODO: Check
-if this is correct.
-
+You can give these heart items to players by using the `/lifestealer item give <heart> [player] [amount]` command.

@@ -1,4 +1,4 @@
-# Configuring ban settings
+# Configuring Ban Settings
 
 You can configure the ban settings in the `ban settings` section of the configuration file.
 
@@ -40,6 +40,6 @@ Lifestealer will neither kick nor ban players when they lose more hearts than th
 
 The commands in the `commands` field will be executed either way, so you can use it to trigger other ban systems.
 
-You can still use the Developer API (TODO: Link to developer API) and the [PAPI Placeholders](/integrations/papi) to
+You can still use the [Developer API](/developer/reference) and the [PAPI Placeholders](/integrations/papi) to
 check if a player is banned or not.
 

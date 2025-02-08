@@ -7,3 +7,7 @@ To create a backup, you can use the `/lifestealer export` command. This will cre
 with the current date.
 
 You can import the information in this file back using the `/lifestealer import <path>` command.
+
+---
+
+See [Command Reference](/usage/commands#storage-commands) for more information and usage on these commands.

@@ -3,6 +3,9 @@
 Lifestealer is a lifesteal hearts mechanic plugin for Minecraft servers. It introduces a gameplay element where players
 can steal hearts from one another making temporary bans if a player's hearts drop too low.
 
+If you are already familiar with lifestealing mechanics you might want
+to [skip to the configuration](/configuration/overview).
+
 ## Key Features
 
 - **Lifesteal Mechanics**  
@@ -38,8 +41,8 @@ can steal hearts from one another making temporary bans if a player's hearts dro
   titles, sounds and particle effects for every message.
 
 - **Extensibility and Integration**
-    - **Developer API:** Extend and modify Lifestealer behavior through a Developer API.
-    - **PlaceholderAPI Support:** Integrate PlaceholderAPI placeholders in messages to dynamically insert player data.
+  - **Developer API:** Extend and modify Lifestealer behavior through a Developer API.
+  - **PlaceholderAPI Support:** Integrate PlaceholderAPI placeholders in messages to dynamically insert player data.
 
 For more detailed information, please refer to the following guides:
 

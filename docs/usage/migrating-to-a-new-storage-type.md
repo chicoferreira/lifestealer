@@ -19,4 +19,33 @@ You can migrate storage types without losing any data.
 
 ## Generated Export File Format
 
-TODO
+```json
+[
+  {
+    "uuid": "e0980be7-b682-3dce-af99-a5d35421e77c",
+    "hearts": 10,
+    "modifierRules": {
+      "maxHearts": 0,
+      "minHearts": 0,
+      "banTime": {
+        "seconds": 0,
+        "nano": 0
+      },
+      "returnHearts": 0
+    }
+  },
+  {
+    "uuid": "57893787-d0d1-42e0-b7bd-becb1234743f",
+    "hearts": 15,
+    "modifierRules": {
+      "maxHearts": 0,
+      "minHearts": 0,
+      "banTime": {
+        "seconds": 0,
+        "nano": 0
+      },
+      "returnHearts": 0
+    }
+  }
+]
+```
