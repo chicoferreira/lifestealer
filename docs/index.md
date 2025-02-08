@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Lifestealer"
-  text: "A documentation website for the Lifestealer plugin."
+  text: "A documentation website for the Lifestealer Minecraft plugin"
   tagline: Lifesteal hearts mechanic with deep customization
   actions:
     - theme: brand

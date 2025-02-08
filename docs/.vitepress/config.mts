@@ -14,6 +14,17 @@ export default defineConfig({
       { text: "API", link: "/developer/reference"}
     ],
 
+    search: {
+      provider: 'local'
+    },
+
+    lastUpdated: {
+      text: 'Updated at',
+      formatOptions: {
+        dateStyle: 'short',
+      }
+    },
+
     sidebar: [
       {
         text: "Introduction",
@@ -66,5 +77,9 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/chicoferreira/lifestealer" },
     ],
+
+    footer: {
+      copyright: 'Copyright © 2025-present <a href="https://github.com/chicoferreira">chicoferreira</a>'
+    }
   },
 });
