@@ -31,7 +31,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("com.h2database:h2:2.3.232")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.5.1")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:postgresql:42.7.5")
     implementation("com.google.code.gson:gson:2.12.1")
 }
 
@@ -63,6 +63,6 @@ bukkitPluginYaml {
     libraries.add("com.zaxxer:HikariCP:6.2.1")
     libraries.add("com.h2database:h2:2.3.232")
     libraries.add("org.mariadb.jdbc:mariadb-java-client:3.5.1")
-    libraries.add("org.postgresql:postgresql:42.7.4")
+    libraries.add("org.postgresql:postgresql:42.7.5")
     libraries.add("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
 }
