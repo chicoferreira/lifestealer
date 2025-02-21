@@ -39,7 +39,7 @@ items:
 
 ## Defining which heart items should be dropped when a player dies
 
-The `item to drop when player dies` fieldis used to define which heart item should be dropped when a player dies.
+The `item to drop when player dies` field is used to define which heart item should be dropped when a player dies.
 
 This must exist in the `items` list above, otherwise the plugin will not load.
 

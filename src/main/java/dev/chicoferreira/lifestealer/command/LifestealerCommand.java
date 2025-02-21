@@ -38,12 +38,12 @@ public class LifestealerCommand {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
         LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().setHearts(target, user, amount);
 
-        LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS.sendTo(sender,
+        LifestealerMessages.COMMAND_USER_HEARTS_SET_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
 
-        LifestealerMessages.COMMAND_HEARTS_SET_SUCCESS_TARGET.sendTo(target,
+        LifestealerMessages.COMMAND_USER_HEARTS_SET_SUCCESS_TARGET.sendTo(target,
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
     }
@@ -52,13 +52,13 @@ public class LifestealerCommand {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
         LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().addHearts(target, user, amount);
 
-        LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS.sendTo(sender,
+        LifestealerMessages.COMMAND_USER_HEARTS_ADD_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
                 Formatter.number("added", result.difference()),
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
 
-        LifestealerMessages.COMMAND_HEARTS_ADD_SUCCESS_TARGET.sendTo(target,
+        LifestealerMessages.COMMAND_USER_HEARTS_ADD_SUCCESS_TARGET.sendTo(target,
                 Formatter.number("added", result.difference()),
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
@@ -68,13 +68,13 @@ public class LifestealerCommand {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
         LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().removeHearts(target, user, amount);
 
-        LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS.sendTo(sender,
+        LifestealerMessages.COMMAND_USER_HEARTS_REMOVE_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
                 Formatter.number("removed", -result.difference()),
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
 
-        LifestealerMessages.COMMAND_HEARTS_REMOVE_SUCCESS_TARGET.sendTo(target,
+        LifestealerMessages.COMMAND_USER_HEARTS_REMOVE_SUCCESS_TARGET.sendTo(target,
                 Formatter.number("removed", -result.difference()),
                 Formatter.number("new", result.newHearts()),
                 Formatter.number("previous", result.previousHearts()));
@@ -249,7 +249,6 @@ public class LifestealerCommand {
 
     public void subcommandUserSetRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
         try {
-
             LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
             LifestealerUserRules modifierRules = targetUser.getRulesModifier();
 

@@ -43,42 +43,7 @@ public class LifestealerCommandBackend {
     public void registerCommand(JavaPlugin plugin) {
         new CommandTree("lifestealer")
                 .withPermission("lifestealer.admin")
-                .then(new LiteralArgument("hearts")
-                        .then(new LiteralArgument("set")
-                                .then(new IntegerArgument("amount")
-                                        .executesPlayer((sender, args) -> {
-                                            command.subcommandHeartsSet(sender, getArgument(args, "amount"), sender);
-                                        })
-                                        .then(new EntitySelectorArgument.OnePlayer("player")
-                                                .executes((sender, args) -> {
-                                                    command.subcommandHeartsSet(sender, getArgument(args, "amount"), getArgument(args, "player"));
-                                                })
-                                        )
-                                )
-                        ).then(new LiteralArgument("add")
-                                .then(new IntegerArgument("amount")
-                                        .executesPlayer((sender, args) -> {
-                                            command.subcommandHeartsAdd(sender, getArgument(args, "amount"), sender);
-                                        })
-                                        .then(new EntitySelectorArgument.OnePlayer("player")
-                                                .executes((sender, args) -> {
-                                                    command.subcommandHeartsAdd(sender, getArgument(args, "amount"), getArgument(args, "player"));
-                                                })
-                                        )
-                                )
-                        ).then(new LiteralArgument("remove")
-                                .then(new IntegerArgument("amount")
-                                        .executesPlayer((sender, args) -> {
-                                            command.subcommandHeartsRemove(sender, getArgument(args, "amount"), sender);
-                                        })
-                                        .then(new EntitySelectorArgument.OnePlayer("player")
-                                                .executes((sender, args) -> {
-                                                    command.subcommandHeartsRemove(sender, getArgument(args, "amount"), getArgument(args, "player"));
-                                                })
-                                        )
-                                )
-                        )
-                ).then(new LiteralArgument("item")
+                .then(new LiteralArgument("item")
                         .then(new LiteralArgument("give")
                                 .then(generateItemTypeArgument("item")
                                         .then(new IntegerArgument("amount")
@@ -131,6 +96,42 @@ public class LifestealerCommandBackend {
                                 })
                         )
                 ).then(new LiteralArgument("user")
+                        .then(new LiteralArgument("hearts")
+                                .then(new LiteralArgument("set")
+                                        .then(new IntegerArgument("amount")
+                                                .executesPlayer((sender, args) -> {
+                                                    command.subcommandHeartsSet(sender, getArgument(args, "amount"), sender);
+                                                })
+                                                .then(new EntitySelectorArgument.OnePlayer("player")
+                                                        .executes((sender, args) -> {
+                                                            command.subcommandHeartsSet(sender, getArgument(args, "amount"), getArgument(args, "player"));
+                                                        })
+                                                )
+                                        )
+                                ).then(new LiteralArgument("add")
+                                        .then(new IntegerArgument("amount")
+                                                .executesPlayer((sender, args) -> {
+                                                    command.subcommandHeartsAdd(sender, getArgument(args, "amount"), sender);
+                                                })
+                                                .then(new EntitySelectorArgument.OnePlayer("player")
+                                                        .executes((sender, args) -> {
+                                                            command.subcommandHeartsAdd(sender, getArgument(args, "amount"), getArgument(args, "player"));
+                                                        })
+                                                )
+                                        )
+                                ).then(new LiteralArgument("remove")
+                                        .then(new IntegerArgument("amount")
+                                                .executesPlayer((sender, args) -> {
+                                                    command.subcommandHeartsRemove(sender, getArgument(args, "amount"), sender);
+                                                })
+                                                .then(new EntitySelectorArgument.OnePlayer("player")
+                                                        .executes((sender, args) -> {
+                                                            command.subcommandHeartsRemove(sender, getArgument(args, "amount"), getArgument(args, "player"));
+                                                        })
+                                                )
+                                        )
+                                )
+                        )
                         .then(new LiteralArgument("ban")
                                 .then(new EntitySelectorArgument.OnePlayer("player")
                                         .executes((sender, args) -> {

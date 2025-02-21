@@ -6,13 +6,13 @@ to acting upon the command sender.
 
 | **Command**                                                          | **Description**                                                            | **Documentation**                                       |
 |----------------------------------------------------------------------|----------------------------------------------------------------------------|---------------------------------------------------------|
-| `/lifestealer hearts set <amount> [player]`                          | Sets the heart count of a player.                                          | [Documentation](/usage/commands#set-hearts)             |
-| `/lifestealer hearts add <amount> [player]`                          | Adds hearts to a player's current count.                                   | [Documentation](/usage/commands#add-hearts)             |
-| `/lifestealer hearts remove <amount> [player]`                       | Removes hearts from a player's current count.                              | [Documentation](/usage/commands#remove-hearts)          |
 | `/lifestealer item give <item> [amount] [player]`                    | Gives heart items to a player.                                             | [Documentation](/usage/commands#give-heart-items)       |
 | `/lifestealer item take <item> [amount] [player]`                    | Removes heart items from a player's inventory.                             | [Documentation](/usage/commands#take-heart-items)       |
 | `/lifestealer item list`                                             | Lists all configured heart items.                                          | [Documentation](/usage/commands#list-heart-items)       |
-| `/lifestealer user ban <player> [duration]`                          | Bans a player for a specified duration (or default) based on heart rules.  | [Documentation](/usage/commands#ban-a-user)             |
+| `/lifestealer user hearts set <amount> [player]`                     | Sets the heart count of a player.                                          | [Documentation](/usage/commands#set-hearts)             |
+| `/lifestealer user hearts add <amount> [player]`                     | Adds hearts to a player's current count.                                   | [Documentation](/usage/commands#add-hearts)             |
+| `/lifestealer user hearts remove <amount> [player]`                  | Removes hearts from a player's current count.                              | [Documentation](/usage/commands#remove-hearts)          |
+| `/lifestealer user ban <player> [duration]`                          | Bans a player for a specified duration (or based on heart rules).          | [Documentation](/usage/commands#ban-a-user)             |
 | `/lifestealer user unban <player>`                                   | Unbans a previously banned player.                                         | [Documentation](/usage/commands#unban-a-user)           |
 | `/lifestealer user info [player]`                                    | Displays detailed information about a player's heart status and modifiers. | [Documentation](/usage/commands#user-information)       |
 | `/lifestealer user rulemodifier set <rule> <value> [player]`         | Sets a specific rule modifier for a player's configuration values.         | [Documentation](/usage/commands#set-a-rule-modifier)    |
@@ -31,76 +31,6 @@ All Lifestealer commands are subcommands of the base command:
 ```bash
 /lifestealer
 ```
-
-## Hearts Commands
-
-These commands allow you to modify a player's heart count.
-
-### Set Hearts
-
-**Usage:**
-
-```bash
-/lifestealer hearts set <amount> [player]
-```
-
-- **`<amount>`**: The new heart value to set (integer).
-- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
-
-**Example:**
-
-- Set your hearts to 10:
-  ```bash
-  /lifestealer hearts set 10
-  ```
-- Set Steve's hearts to 8:
-  ```bash
-  /lifestealer hearts set 8 Steve
-  ```
-
-### Add Hearts
-
-**Usage:**
-
-```bash
-/lifestealer hearts add <amount> [player]
-```
-
-- **`<amount>`**: The number of hearts to add (integer).
-- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
-
-**Example:**
-
-- Add 2 hearts to your total:
-  ```bash
-  /lifestealer hearts add 2
-  ```
-- Add 3 hearts to Alex:
-  ```bash
-  /lifestealer hearts add 3 Alex
-  ```
-
-### Remove Hearts
-
-**Usage:**
-
-```bash
-/lifestealer hearts remove <amount> [player]
-```
-
-- **`<amount>`**: The number of hearts to remove (integer).
-- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
-
-**Example:**
-
-- Remove 1 heart from your total:
-  ```bash
-  /lifestealer hearts remove 1
-  ```
-- Remove 2 hearts from Steve:
-  ```bash
-  /lifestealer hearts remove 2 Steve
-  ```
 
 ## Item Commands
 
@@ -166,7 +96,77 @@ Displays all configured heart items with details such as the heart amount and it
 
 ## User Commands
 
-These commands manage player bans, information, and rule modifiers.
+These commands manage player hearts, bans, information, and rule modifiers.
+
+### Hearts Commands
+
+These commands allow you to modify a player's heart count.
+
+#### Set Hearts
+
+**Usage:**
+
+```bash
+/lifestealer user hearts set <amount> [player]
+```
+
+- **`<amount>`**: The new heart value to set (integer).
+- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
+
+**Example:**
+
+- Set your hearts to 10:
+  ```bash
+  /lifestealer user hearts set 10
+  ```
+- Set Steve's hearts to 8:
+  ```bash
+  /lifestealer user hearts set 8 Steve
+  ```
+
+#### Add Hearts
+
+**Usage:**
+
+```bash
+/lifestealer user hearts add <amount> [player]
+```
+
+- **`<amount>`**: The number of hearts to add (integer).
+- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
+
+**Example:**
+
+- Add 2 hearts to your total:
+  ```bash
+  /lifestealer user hearts add 2
+  ```
+- Add 3 hearts to Alex:
+  ```bash
+  /lifestealer user hearts add 3 Alex
+  ```
+
+#### Remove Hearts
+
+**Usage:**
+
+```bash
+/lifestealer user hearts remove <amount> [player]
+```
+
+- **`<amount>`**: The number of hearts to remove (integer).
+- **`[player]`**: *(Optional)* The target player. If omitted, the command applies to the sender.
+
+**Example:**
+
+- Remove 1 heart from your total:
+  ```bash
+  /lifestealer user hearts remove 1
+  ```
+- Remove 2 hearts from Steve:
+  ```bash
+  /lifestealer user hearts remove 2 Steve
+  ```
 
 ### Ban a User
 

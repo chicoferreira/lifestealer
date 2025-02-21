@@ -14,7 +14,7 @@ ban settings:
   # The message that will be sent to the player when they try to join while banned
   join message: "<red>You are banned for <white><remaining:'extended'><red> for losing too many hearts.\nYou will be unbanned at <white><date:'yyyy-MM-dd HH:mm:ss'><red>."
 
-  # The commands that will be executed by the console when a player gets bellow the minimum amount of hearts
+  # The commands that will be executed by the console when a player gets below the minimum amount of hearts
   # The following placeholders can be used:
   # - <player>: the player's name that will be banned
   # - <duration>: the time in seconds the player will be banned for

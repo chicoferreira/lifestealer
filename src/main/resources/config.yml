@@ -236,18 +236,6 @@ messages:
   #       pitch: 0.2
   # Sends a green action bar message to the player and plays the level up sound with a volume of 0.5 and a pitch of 0.2
 
-  command hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><heart><green> (old: <white><previous><heart><green>)."
-  command hearts set success target:
-    sound: minecraft:entity.player.levelup
-  command hearts add success: "<green>Added <white><added><green><heart> to <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
-  command hearts add success target:
-    sound:
-      key: minecraft:entity.player.levelup
-      volume: 0.5
-      pitch: 0.2
-  command hearts remove success: "<green>Removed <white><removed><green><heart> from <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
-  command hearts remove success target:
-    sound: minecraft:entity.player.hurt
   command item give success: "<green>Gave <white>x<amount> <item></white> heart item to <white><target><green> (<white><rest></white> could not be given due to full inventory)."
   command item give success target:
     action bar: "<green>Received <white>x<amount> <item></white> heart items."
@@ -268,6 +256,18 @@ messages:
     <white>-    <green>Min Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionminhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierminhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<minhearts><heart>'><newline>
     <white>-    <green>Ban Time: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionbantime:short>'> <dark_gray>(permission)</dark_gray> + <modifierbantime:short> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<bantime:short>'><newline>
     <white>-    <green>Return Hearts: <white><online:'<hover:show_text:'Not online'><gray>???':'<permissionreturnhearts><heart>'> <dark_gray>(permission)</dark_gray> + <modifierreturnhearts><heart> <dark_gray>(modifier)</dark_gray> = <online:'<hover:show_text:'Not online'><gray>???':'<returnhearts><heart>'>"
+  command user hearts set success: "<green>Set <white><target><green>'s hearts to <white><new><heart><green> (old: <white><previous><heart><green>)."
+  command user hearts set success target:
+    sound: minecraft:entity.player.levelup
+  command user hearts add success: "<green>Added <white><added><green><heart> to <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
+  command user hearts add success target:
+    sound:
+      key: minecraft:entity.player.levelup
+      volume: 0.5
+      pitch: 0.2
+  command user hearts remove success: "<green>Removed <white><removed><green><heart> from <white><target><green> (new: <white><new><heart><green>, old: <white><previous><heart><green>)."
+  command user hearts remove success target:
+    sound: minecraft:entity.player.hurt
   command user set rule modifier success: "<green>Set <white><target></white>'s rule modifier <white><rule></white> to <white><value></white>."
   command user set rule modifier success target: [ ]
   command user adjust rule modifier success: "<green>Adjusted <white><target></white>'s rule modifier <white><rule></white> by <white><adjustment></white>."
