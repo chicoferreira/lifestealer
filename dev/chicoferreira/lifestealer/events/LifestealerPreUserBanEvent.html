@@ -105,7 +105,9 @@ implements org.bukkit.event.Cancellable</span></div>
  If you wish to listen to the command as well, you should use <a href="LifestealerPostUserBanEvent.html" title="class in dev.chicoferreira.lifestealer.events"><code>LifestealerPostUserBanEvent</code></a>.
  <p>
  This event is called before the user is kicked and the ban commands are executed.
- This event will still be called even if the external flag is set to true in the <a href="../user/LifestealerUserController.BanSettings.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUserController.BanSettings</code></a></div>
+ This event will still be called even if the external flag is set to true in the <a href="../user/LifestealerUserController.BanSettings.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUserController.BanSettings</code></a>
+ <p>
+ <b>Thread-safety (WARNING):</b> This event is called with a write lock active on the user.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

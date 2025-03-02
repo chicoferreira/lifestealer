@@ -96,13 +96,15 @@ loadScripts(document, 'script');</script>
 <div class="block">Called after a player has consumed a heart.
  This event is called after the hearts have been added to the player and the heart item has been removed.
  This event is called even if the player's hearts have not changed (e.g. the player is already at maximum hearts).
- This event is not cancellable.</div>
+ This event is not cancellable.
+ <p>
+ <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list-long">
 <li><a href="LifestealerPreConsumeHeartEvent.html" title="class in dev.chicoferreira.lifestealer.events"><code>LifestealerPreConsumeHeartEvent</code></a></li>
-<li><a href="../user/LifestealerUserController.html#addHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,int)"><code>LifestealerUserController.addHearts(Player, LifestealerUser, int)</code></a></li>
+<li><a href="../user/LifestealerUserController.html#addHearts(dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)"><code>LifestealerUserController.addHearts(LifestealerUser, LifestealerUserRules, int)</code></a></li>
 </ul>
 </dd>
 </dl>

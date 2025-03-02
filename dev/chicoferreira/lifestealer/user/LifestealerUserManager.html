@@ -103,8 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Map,dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)" class="member-name-link">LifestealerUserManager</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>,<wbr><a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&gt;&nbsp;users,
- <a href="persistent/UserPersistentStorage.html" title="interface in dev.chicoferreira.lifestealer.user.persistent">UserPersistentStorage</a>&nbsp;persistentStorage,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)" class="member-name-link">LifestealerUserManager</a><wbr>(<a href="persistent/UserPersistentStorage.html" title="interface in dev.chicoferreira.lifestealer.user.persistent">UserPersistentStorage</a>&nbsp;persistentStorage,
  <a href="../LifestealerExecutor.html" title="class in dev.chicoferreira.lifestealer">LifestealerExecutor</a>&nbsp;executor,
  int&nbsp;startingHearts)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -122,45 +121,35 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createUser(java.util.UUID)" class="member-name-link">createUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a new user for that UUID with the default values and caches it in memory.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOnlineUser(java.util.UUID)" class="member-name-link">getOnlineUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUser</code></a> of a player that is online.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOnlineUser(org.bukkit.entity.Player)" class="member-name-link">getOnlineUser</a><wbr>(org.bukkit.entity.Player&nbsp;player)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOnlineUser(java.util.UUID)" class="member-name-link">getOnlineUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUser</code></a> of a player that is online.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOrLoadUser(java.util.UUID)" class="member-name-link">getOrLoadUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOnlineUser(org.bukkit.entity.Player)" class="member-name-link">getOnlineUser</a><wbr>(org.bukkit.entity.Player&nbsp;player)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUser</code></a> of a player that is online.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOrLoadUser(java.util.UUID)" class="member-name-link">getOrLoadUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets or loads a user from the database synchronously.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStartingHearts()" class="member-name-link">getStartingHearts</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStartingHearts()" class="member-name-link">getStartingHearts</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the starting amount of hearts for new users.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDefaultUser(dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">isDefaultUser</a><wbr>(<a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&nbsp;user)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDefaultUser(dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">isDefaultUser</a><wbr>(<a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&nbsp;user)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if a user hasn't changed from the default values.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadUser(java.util.UUID)" class="member-name-link">loadUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Loads a user from the database.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerLoadedUser(dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">registerLoadedUser</a><wbr>(<a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&nbsp;lifestealerUser)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadUser(java.util.UUID)" class="member-name-link">loadUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Registers a loaded user to memory.</div>
+<div class="block">Loads a user from the database.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saveUserAsync(dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">saveUserAsync</a><wbr>(<a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&nbsp;user)</code></div>
@@ -195,10 +184,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.Map,dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)">
+<section class="detail" id="&lt;init&gt;(dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)">
 <h3>LifestealerUserManager</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LifestealerUserManager</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>,<wbr><a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&gt;&nbsp;users,
- <a href="persistent/UserPersistentStorage.html" title="interface in dev.chicoferreira.lifestealer.user.persistent">UserPersistentStorage</a>&nbsp;persistentStorage,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LifestealerUserManager</span><wbr><span class="parameters">(<a href="persistent/UserPersistentStorage.html" title="interface in dev.chicoferreira.lifestealer.user.persistent">UserPersistentStorage</a>&nbsp;persistentStorage,
  <a href="../LifestealerExecutor.html" title="class in dev.chicoferreira.lifestealer">LifestealerExecutor</a>&nbsp;executor,
  int&nbsp;startingHearts)</span></div>
 </section>
@@ -218,7 +206,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></span>&nbsp;<span class="element-name">loadUser</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</span>
                                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Loads a user from the database. This does not cache the user in memory.
- Can be run asynchronously.</div>
+ <b>Thread-safety:</b> Can be run asynchronously.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>uuid</code> - the uuid of the user to load</dd>
@@ -239,8 +227,7 @@ loadScripts(document, 'script');</script>
  If the user is not already loaded, it will be loaded from the database and cached in memory.
  If the user is not saved in the database, a new user will be created and cached in memory.
  <p>
- This method is not thread-safe and should only be called from the main thread.
- If you need to call this method from a different thread, check the example in <a href="LifestealerUserListener.html#onPreLogin(org.bukkit.event.player.AsyncPlayerPreLoginEvent)"><code>LifestealerUserListener.onPreLogin(AsyncPlayerPreLoginEvent)</code></a>.</div>
+ <b>Thread-safety:</b> This method is thread-safe and you can call it from any thread.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>uuid</code> - the uuid of the user to get or load</dd>
@@ -248,34 +235,6 @@ loadScripts(document, 'script');</script>
 <dd>the user if it's already loaded, otherwise loads it from the database and puts it in memory</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - if an error occurs while loading the user</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="createUser(java.util.UUID)">
-<h3>createUser</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></span>&nbsp;<span class="element-name">createUser</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</span></div>
-<div class="block">Creates a new user for that UUID with the default values and caches it in memory.
- This method does not save the user to the database.
- This method is not thread-safe and should only be called from the main thread.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>uuid</code> - the uuid of the user to create</dd>
-<dt>Returns:</dt>
-<dd>the created user</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="registerLoadedUser(dev.chicoferreira.lifestealer.user.LifestealerUser)">
-<h3>registerLoadedUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerLoadedUser</span><wbr><span class="parameters">(<a href="LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a>&nbsp;lifestealerUser)</span></div>
-<div class="block">Registers a loaded user to memory.
- This method is not thread-safe and should only be called from the main thread.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>lifestealerUser</code> - the user to register</dd>
 </dl>
 </section>
 </li>

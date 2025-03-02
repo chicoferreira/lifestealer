@@ -142,7 +142,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHearts()" class="member-name-link">getHearts</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="LifestealerUser.Ban.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser.Ban</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInternalBan()" class="member-name-link">getInternalBan</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -155,7 +157,29 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUuid()" class="member-name-link">getUuid</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readLock()" class="member-name-link">readLock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Locks the user for reading.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readUnlock()" class="member-name-link">readUnlock</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Unlocks the user after reading.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeLock()" class="member-name-link">writeLock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Locks the user for writing.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeUnlock()" class="member-name-link">writeUnlock</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Unlocks the user after writing.</div>
+</div>
 </div>
 </div>
 </div>
@@ -194,10 +218,43 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="readLock()">
+<h3>readLock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">readLock</span>()</div>
+<div class="block">Locks the user for reading. You need to use this method before reading any user information.
+ You also need to unlock the user after you're done reading.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="readUnlock()">
+<h3>readUnlock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">readUnlock</span>()</div>
+<div class="block">Unlocks the user after reading.
+ You need to call this method after you're done reading the user information.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="writeLock()">
+<h3>writeLock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeLock</span>()</div>
+<div class="block">Locks the user for writing. You need to use this method before writing any user information.
+ You also need to unlock the user after you're done writing.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="writeUnlock()">
+<h3>writeUnlock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeUnlock</span>()</div>
+<div class="block">Unlocks the user after writing.
+ You need to call this method after you're done writing the user information.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="getUuid()">
 <h3>getUuid</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">getUuid</span>()</div>
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the UUID of the user</dd>
@@ -208,6 +265,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getHearts()">
 <h3>getHearts</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getHearts</span>()</div>
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the amount of hearts the user has</dd>
@@ -221,7 +279,9 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="LifestealerUser.Ban.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser.Ban</a></span>&nbsp;<span class="element-name">getInternalBan</span>()</div>
 <div class="block">Gets the ban information of the user if they are banned, otherwise null.
  This method is only intended to be used by the <a href="LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUserController</code></a>.
- If you want to check if a player is banned, use <a href="LifestealerUserController.html#getBan(dev.chicoferreira.lifestealer.user.LifestealerUser)"><code>LifestealerUserController.getBan(LifestealerUser)</code></a>.</div>
+ If you want to check if a player is banned, use <a href="LifestealerUserController.html#getBan(dev.chicoferreira.lifestealer.user.LifestealerUser)"><code>LifestealerUserController.getBan(LifestealerUser)</code></a>.
+ <p>
+ <b>Thread-safety:</b> Requires a read lock on this user.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the ban information of the user if they have a banning record, otherwise null</dd>
@@ -238,7 +298,9 @@ loadScripts(document, 'script');</script>
  by the <a href="rules/LifestealerUserRulesController.html" title="class in dev.chicoferreira.lifestealer.user.rules"><code>LifestealerUserRulesController</code></a>
  which is based on the user's permissions to get the final rule value.
  <p>
- Use <a href="LifestealerUserController.html#computeUserRules(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser)"><code>LifestealerUserController.computeUserRules(Player, LifestealerUser)</code></a> to get the final rule value.</div>
+ Use <a href="LifestealerUserController.html#computeUserRules(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser)"><code>LifestealerUserController.computeUserRules(Player, LifestealerUser)</code></a> to get the final rule value.
+ <p>
+ <b>Thread-safety:</b> Requires a read lock on this user.</div>
 </section>
 </li>
 </ul>

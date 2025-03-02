@@ -98,7 +98,9 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">LifestealerPreConsumeHeartEvent</span>
 <span class="extends-implements">extends org.bukkit.event.Event
 implements org.bukkit.event.Cancellable</span></div>
-<div class="block">Event that is triggered before a player consumes a heart item that you can cancel.</div>
+<div class="block">Event that is triggered before a player consumes a heart item that you can cancel.
+ <p>
+ <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

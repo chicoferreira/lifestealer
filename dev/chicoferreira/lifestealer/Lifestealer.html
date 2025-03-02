@@ -177,7 +177,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reloadConfiguration()" class="member-name-link">reloadConfiguration</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Reloads the configuration and updates the plugin's settings.</div>
+</div>
 </div>
 </div>
 </div>
@@ -192,7 +194,7 @@ loadScripts(document, 'script');</script>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.bukkit.plugin.Plugin">Methods inherited from interface&nbsp;org.bukkit.plugin.Plugin</h3>
-<code>getComponentLogger, getDataPath, getLog4JLogger, getSLF4JLogger</code></div>
+<code>getComponentLogger, getLog4JLogger, getSLF4JLogger</code></div>
 </section>
 </li>
 </ul>
@@ -247,6 +249,9 @@ loadScripts(document, 'script');</script>
 <h3>reloadConfiguration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadConfiguration</span>()
                          throws <span class="exceptions">org.spongepowered.configurate.serialize.SerializationException</span></div>
+<div class="block">Reloads the configuration and updates the plugin's settings.
+ <p>
+ <b>Thread-safety:</b> This method is thread-safe.</div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code>org.spongepowered.configurate.serialize.SerializationException</code></dd>

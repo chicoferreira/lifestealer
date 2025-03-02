@@ -62,11 +62,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./dev/chicoferreira/lifestealer/restriction/LifestealerHeartDropRestrictionAction.html#param-actionIfRestricted"><code>actionIfRestricted</code></a> record component.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#addHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,int)" class="member-name-link">addHearts(Player, LifestealerUser, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>
-<div class="block">Adds hearts to the player health bar and saves the new amount in the database asynchronously.</div>
-</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#addHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)" class="member-name-link">addHearts(Player, LifestealerUser, LifestealerUserRules, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#addHearts(dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)" class="member-name-link">addHearts(LifestealerUser, LifestealerUserRules, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
 <dd>
 <div class="block">Adds hearts to the player health bar and saves the new amount in the database asynchronously.</div>
 </dd>
@@ -111,14 +107,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/command/LifestealerCommand.LifestealerRuleModifier.html#BANTIME" class="member-name-link">BANTIME</a> - Enum constant in enum class dev.chicoferreira.lifestealer.command.<a href="dev/chicoferreira/lifestealer/command/LifestealerCommand.LifestealerRuleModifier.html" title="enum class in dev.chicoferreira.lifestealer.command">LifestealerCommand.LifestealerRuleModifier</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#banUser(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">banUser(Player, LifestealerUser)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>
-<div class="block">Bans a user for the default ban time depending on its <a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" title="class in dev.chicoferreira.lifestealer.user.rules"><code>LifestealerUserRules</code></a>.</div>
-</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#banUser(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,java.time.Duration)" class="member-name-link">banUser(Player, LifestealerUser, Duration)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>
-<div class="block">Bans a user for a specific duration.</div>
-</dd>
 <dt><a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItem.html#baseItemStack()" class="member-name-link">baseItemStack()</a> - Method in record class dev.chicoferreira.lifestealer.item.<a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItem.html" title="class in dev.chicoferreira.lifestealer.item">LifestealerHeartItem</a></dt>
 <dd>
 <div class="block">Returns the value of the <a href="./dev/chicoferreira/lifestealer/item/LifestealerHeartItem.html#param-baseItemStack"><code>baseItemStack</code></a> record component.</div>
@@ -243,7 +231,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Calculates the <a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" title="class in dev.chicoferreira.lifestealer.user.rules"><code>LifestealerUserRules</code></a> that the permissions tested indicates.</div>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#computeUserRules(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">computeUserRules(Player, LifestealerUser)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Computes the <a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" title="class in dev.chicoferreira.lifestealer.user.rules"><code>LifestealerUserRules</code></a> of a player based on their permissions and the user's rules modifier.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/MySQLConnectionProvider.html#configure(com.zaxxer.hikari.HikariConfig)" class="member-name-link">configure(HikariConfig)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/MySQLConnectionProvider.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl">MySQLConnectionProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/SQLHikariConnectionProvider.html#configure(com.zaxxer.hikari.HikariConfig)" class="member-name-link">configure(HikariConfig)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/SQLHikariConnectionProvider.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl">SQLHikariConnectionProvider</a></dt>
@@ -284,10 +274,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#createStruct(java.lang.String,java.lang.Object%5B%5D)" class="member-name-link">createStruct(String, Object[])</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html#createUser(java.util.UUID)" class="member-name-link">createUser(UUID)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserManager</a></dt>
-<dd>
-<div class="block">Creates a new user for that UUID with the default values and caches it in memory.</div>
-</dd>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
@@ -524,6 +510,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html#executeAsync(dev.chicoferreira.lifestealer.LifestealerExecutor.ThrowableRunnable)" class="member-name-link">executeAsync(LifestealerExecutor.ThrowableRunnable)</a> - Method in class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html" title="class in dev.chicoferreira.lifestealer">LifestealerExecutor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#executeBanCommands(org.bukkit.entity.Player,java.time.Duration)" class="member-name-link">executeBanCommands(Player, Duration)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dd>
+<div class="block">Executes the ban commands.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/ImportExportStorage.html#exportToFile(java.lang.String)" class="member-name-link">exportToFile(String)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.<a href="dev/chicoferreira/lifestealer/user/persistent/ImportExportStorage.html" title="class in dev.chicoferreira.lifestealer.user.persistent">ImportExportStorage</a></dt>
 <dd>
 <div class="block">Exports every user to a file.</div>
@@ -732,7 +722,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html#getHeartItems()" class="member-name-link">getHeartItems()</a> - Method in class dev.chicoferreira.lifestealer.item.<a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html" title="class in dev.chicoferreira.lifestealer.item">LifestealerHeartItemManager</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#getHearts()" class="member-name-link">getHearts()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html#getHearts(org.bukkit.inventory.ItemStack)" class="member-name-link">getHearts(ItemStack)</a> - Method in class dev.chicoferreira.lifestealer.item.<a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html" title="class in dev.chicoferreira.lifestealer.item">LifestealerHeartItemManager</a></dt>
 <dd>
 <div class="block">Gets the amount of hearts an item stack gives.</div>
@@ -907,7 +899,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the user rules controller instance.</div>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#getUuid()" class="member-name-link">getUuid()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block"><b>Thread-safety:</b> Requires a read lock on this user.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/LifestealerPlaceholderExpansion.html#getVersion()" class="member-name-link">getVersion()</a> - Method in class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/LifestealerPlaceholderExpansion.html" title="class in dev.chicoferreira.lifestealer">LifestealerPlaceholderExpansion</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#getWarnings()" class="member-name-link">getWarnings()</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
@@ -1299,13 +1293,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserListener.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserListener</a> - Class in <a href="dev/chicoferreira/lifestealer/user/package-summary.html">dev.chicoferreira.lifestealer.user</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserListener.html#%3Cinit%3E(dev.chicoferreira.lifestealer.LifestealerExecutor,java.util.logging.Logger,dev.chicoferreira.lifestealer.item.LifestealerHeartItemManager,dev.chicoferreira.lifestealer.user.LifestealerUserController,dev.chicoferreira.lifestealer.user.LifestealerUserManager,dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestrictionManager,net.kyori.adventure.text.Component)" class="member-name-link">LifestealerUserListener(LifestealerExecutor, Logger, LifestealerHeartItemManager, LifestealerUserController, LifestealerUserManager, LifestealerHeartDropRestrictionManager, Component)</a> - Constructor for class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserListener.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserListener</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserListener.html#%3Cinit%3E(java.util.logging.Logger,dev.chicoferreira.lifestealer.Lifestealer,net.kyori.adventure.text.Component)" class="member-name-link">LifestealerUserListener(Logger, Lifestealer, Component)</a> - Constructor for class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserListener.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserListener</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserManager</a> - Class in <a href="dev/chicoferreira/lifestealer/user/package-summary.html">dev.chicoferreira.lifestealer.user</a></dt>
 <dd>
 <div class="block">Manages the <a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user"><code>LifestealerUser</code></a> instances and persistence of them.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html#%3Cinit%3E(java.util.Map,dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)" class="member-name-link">LifestealerUserManager(Map&lt;UUID, LifestealerUser&gt;, UserPersistentStorage, LifestealerExecutor, int)</a> - Constructor for class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserManager</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html#%3Cinit%3E(dev.chicoferreira.lifestealer.user.persistent.UserPersistentStorage,dev.chicoferreira.lifestealer.LifestealerExecutor,int)" class="member-name-link">LifestealerUserManager(UserPersistentStorage, LifestealerExecutor, int)</a> - Constructor for class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserManager</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer.user.rules">LifestealerUserRules</a> - Record Class in <a href="dev/chicoferreira/lifestealer/user/rules/package-summary.html">dev.chicoferreira.lifestealer.user.rules</a></dt>
 <dd>
@@ -1473,6 +1467,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./dev/chicoferreira/lifestealer/user/rules/LifestealerUserRulesGroup.html#param-permission"><code>permission</code></a> record component.</div>
 </dd>
+<dt><a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html#player(org.bukkit.entity.Player,java.lang.Runnable)" class="member-name-link">player(Player, Runnable)</a> - Method in class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html" title="class in dev.chicoferreira.lifestealer">LifestealerExecutor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/PlayerNotification.html" class="type-name-link" title="class in dev.chicoferreira.lifestealer">PlayerNotification</a> - Record Class in <a href="dev/chicoferreira/lifestealer/package-summary.html">dev.chicoferreira.lifestealer</a></dt>
 <dd>
 <div class="block">Represents a notification that can be sent to a player.</div>
@@ -1492,6 +1488,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="dev/chicoferreira/lifestealer/DurationUtils.DurationFormatSettings.TimeUnitTranslation.html#plural()" class="member-name-link">plural()</a> - Method in record class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/DurationUtils.DurationFormatSettings.TimeUnitTranslation.html" title="class in dev.chicoferreira.lifestealer">DurationUtils.DurationFormatSettings.TimeUnitTranslation</a></dt>
 <dd>
 <div class="block">Returns the value of the <code>plural</code> record component.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#postBanOperations(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.LifestealerUser.Ban)" class="member-name-link">postBanOperations(Player, LifestealerUser, LifestealerUser.Ban)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dd>
+<div class="block">Executes the ban commands and kicks the player.</div>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/UserPersistentStorageType.html#POSTGRESQL" class="member-name-link">POSTGRESQL</a> - Enum constant in enum class dev.chicoferreira.lifestealer.user.persistent.<a href="dev/chicoferreira/lifestealer/user/persistent/UserPersistentStorageType.html" title="enum class in dev.chicoferreira.lifestealer.user.persistent">UserPersistentStorageType</a></dt>
 <dd>&nbsp;</dd>
@@ -1524,27 +1524,33 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#readLock()" class="member-name-link">readLock()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
+<dd>
+<div class="block">Locks the user for reading.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#readUnlock()" class="member-name-link">readUnlock()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
+<dd>
+<div class="block">Unlocks the user after reading.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/command/LifestealerCommandBackend.html#registerCommand(org.bukkit.plugin.java.JavaPlugin)" class="member-name-link">registerCommand(JavaPlugin)</a> - Method in class dev.chicoferreira.lifestealer.command.<a href="dev/chicoferreira/lifestealer/command/LifestealerCommandBackend.html" title="class in dev.chicoferreira.lifestealer.command">LifestealerCommandBackend</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html#registerItem(dev.chicoferreira.lifestealer.item.LifestealerHeartItem)" class="member-name-link">registerItem(LifestealerHeartItem)</a> - Method in class dev.chicoferreira.lifestealer.item.<a href="dev/chicoferreira/lifestealer/item/LifestealerHeartItemManager.html" title="class in dev.chicoferreira.lifestealer.item">LifestealerHeartItemManager</a></dt>
 <dd>
 <div class="block">Registers the item in the item manager.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html#registerLoadedUser(dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">registerLoadedUser(LifestealerUser)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserManager.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserManager</a></dt>
-<dd>
-<div class="block">Registers a loaded user to memory.</div>
-</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#releaseSavepoint(java.sql.Savepoint)" class="member-name-link">releaseSavepoint(Savepoint)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/configuration/LifestealerConfiguration.html#reloadConfig()" class="member-name-link">reloadConfig()</a> - Method in class dev.chicoferreira.lifestealer.configuration.<a href="dev/chicoferreira/lifestealer/configuration/LifestealerConfiguration.html" title="class in dev.chicoferreira.lifestealer.configuration">LifestealerConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/Lifestealer.html#reloadConfiguration()" class="member-name-link">reloadConfiguration()</a> - Method in class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/Lifestealer.html" title="class in dev.chicoferreira.lifestealer">Lifestealer</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Reloads the configuration and updates the plugin's settings.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.Ban.html#remaining()" class="member-name-link">remaining()</a> - Method in record class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.Ban.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser.Ban</a></dt>
 <dd>
 <div class="block">Gets the remaining <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link"><code>Duration</code></a> of the ban.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#removeHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,int)" class="member-name-link">removeHearts(Player, LifestealerUser, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#removeHearts(dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)" class="member-name-link">removeHearts(LifestealerUser, LifestealerUserRules, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
 <dd>
 <div class="block">Removes hearts from the player health bar and saves the new amount in the database asynchronously.</div>
 </dd>
@@ -1663,11 +1669,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the groups that will be used to calculate the rules based on the permissions.</div>
 </dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,int)" class="member-name-link">setHearts(Player, LifestealerUser, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>
-<div class="block">Sets the amount of hearts a player health has.</div>
-</dd>
-<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setHearts(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)" class="member-name-link">setHearts(Player, LifestealerUser, LifestealerUserRules, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setHearts(dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules,int)" class="member-name-link">setHearts(LifestealerUser, LifestealerUserRules, int)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
 <dd>
 <div class="block">Sets the amount of hearts a player health has.</div>
 </dd>
@@ -1686,7 +1688,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#setReadOnly(boolean)" class="member-name-link">setReadOnly(boolean)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setRulesModifier(dev.chicoferreira.lifestealer.user.LifestealerUser,dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules)" class="member-name-link">setRulesModifier(LifestealerUser, LifestealerUserRules)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Sets the rules modifier of a user.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#setSavepoint()" class="member-name-link">setSavepoint()</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#setSavepoint(java.lang.String)" class="member-name-link">setSavepoint(String)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
@@ -1713,6 +1717,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html#setTypeMap(java.util.Map)" class="member-name-link">setTypeMap(Map&lt;String, Class&lt;?&gt;&gt;)</a> - Method in class dev.chicoferreira.lifestealer.user.persistent.sql.impl.file.<a href="dev/chicoferreira/lifestealer/user/persistent/sql/impl/file/NonClosableConnectionWrapper.html" title="class in dev.chicoferreira.lifestealer.user.persistent.sql.impl.file">NonClosableConnectionWrapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setUserBanned(dev.chicoferreira.lifestealer.user.LifestealerUser,java.time.Duration)" class="member-name-link">setUserBanned(LifestealerUser, Duration)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dd>
+<div class="block">Bans a user for a specific duration.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html#setUserBanned(org.bukkit.entity.Player,dev.chicoferreira.lifestealer.user.LifestealerUser)" class="member-name-link">setUserBanned(Player, LifestealerUser)</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUserController.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUserController</a></dt>
+<dd>
+<div class="block">Bans a user for the default ban time depending on its <a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" title="class in dev.chicoferreira.lifestealer.user.rules"><code>LifestealerUserRules</code></a>.</div>
+</dd>
 <dt><a href="dev/chicoferreira/lifestealer/restriction/LifestealerHeartDropAction.html#shouldDropItem()" class="member-name-link">shouldDropItem()</a> - Method in enum class dev.chicoferreira.lifestealer.restriction.<a href="dev/chicoferreira/lifestealer/restriction/LifestealerHeartDropAction.html" title="enum class in dev.chicoferreira.lifestealer.restriction">LifestealerHeartDropAction</a></dt>
 <dd>
 <div class="block">Returns if the item should be dropped.</div>
@@ -1836,8 +1848,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the value of the <a href="./dev/chicoferreira/lifestealer/PlayerNotification.html#param-subtitleMessage"><code>subtitleMessage</code></a> record component.</div>
 </dd>
 <dt><a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html#sum(dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules)" class="member-name-link">sum(LifestealerUserRules)</a> - Method in record class dev.chicoferreira.lifestealer.user.rules.<a href="dev/chicoferreira/lifestealer/user/rules/LifestealerUserRules.html" title="class in dev.chicoferreira.lifestealer.user.rules">LifestealerUserRules</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html#sync()" class="member-name-link">sync()</a> - Method in class dev.chicoferreira.lifestealer.<a href="dev/chicoferreira/lifestealer/LifestealerExecutor.html" title="class in dev.chicoferreira.lifestealer">LifestealerExecutor</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:T">T</h2>
@@ -2061,6 +2071,14 @@ the order they are declared.</div>
 <dt><a href="dev/chicoferreira/lifestealer/restriction/restrictions/WorldSpecificHeartDropRestriction.html#%3Cinit%3E(java.lang.String)" class="member-name-link">WorldSpecificHeartDropRestriction(String)</a> - Constructor for record class dev.chicoferreira.lifestealer.restriction.restrictions.<a href="dev/chicoferreira/lifestealer/restriction/restrictions/WorldSpecificHeartDropRestriction.html" title="class in dev.chicoferreira.lifestealer.restriction.restrictions">WorldSpecificHeartDropRestriction</a></dt>
 <dd>
 <div class="block">Creates an instance of a <code>WorldSpecificHeartDropRestriction</code> record class.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#writeLock()" class="member-name-link">writeLock()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
+<dd>
+<div class="block">Locks the user for writing.</div>
+</dd>
+<dt><a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html#writeUnlock()" class="member-name-link">writeUnlock()</a> - Method in class dev.chicoferreira.lifestealer.user.<a href="dev/chicoferreira/lifestealer/user/LifestealerUser.html" title="class in dev.chicoferreira.lifestealer.user">LifestealerUser</a></dt>
+<dd>
+<div class="block">Unlocks the user after writing.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:Z">Z</h2>

@@ -97,7 +97,9 @@ loadScripts(document, 'script');</script>
  player gets banned if they have less than the minimum amount of hearts.
  <p>
  This event won't be called if the heart drop was restricted by a <a href="../restriction/LifestealerHeartDropRestriction.html" title="interface in dev.chicoferreira.lifestealer.restriction"><code>LifestealerHeartDropRestriction</code></a>
- that produced <a href="../restriction/LifestealerHeartDropAction.html#shouldRemoveHearts()"><code>LifestealerHeartDropAction.shouldRemoveHearts()</code></a> true.</div>
+ that produced <a href="../restriction/LifestealerHeartDropAction.html#shouldRemoveHearts()"><code>LifestealerHeartDropAction.shouldRemoveHearts()</code></a> true.
+ <p>
+ <b>Thread-safety (WARNING):</b> This event is called with a write lock active on the user.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
