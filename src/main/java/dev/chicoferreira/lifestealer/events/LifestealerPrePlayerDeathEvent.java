@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player dies, before the hearts have been removed from the player.
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.
  */
 public class LifestealerPrePlayerDeathEvent extends Event implements Cancellable {
 

@@ -24,7 +24,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    paperweight.foliaDevBundle("1.21.4-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
@@ -34,6 +34,8 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.5")
     implementation("com.google.code.gson:gson:2.12.1")
 }
+
+runPaper.folia.registerTask()
 
 tasks {
     test {
@@ -60,6 +62,7 @@ bukkitPluginYaml {
     authors.add("chicoferreira")
     apiVersion = "1.21"
     softDepend.add("PlaceholderAPI")
+    foliaSupported = true
     libraries.add("com.zaxxer:HikariCP:6.2.1")
     libraries.add("com.h2database:h2:2.3.232")
     libraries.add("org.mariadb.jdbc:mariadb-java-client:3.5.1")

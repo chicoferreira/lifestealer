@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Stores lifesteal information about a player, such has the amount of hearts they have, the heart cap, etc.
@@ -18,6 +19,7 @@ import java.util.UUID;
 @ConfigSerializable
 public class LifestealerUser {
 
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final @NotNull UUID uuid;
     private int hearts;
     private @Nullable Ban ban;
@@ -31,6 +33,40 @@ public class LifestealerUser {
     }
 
     /**
+     * Locks the user for reading. You need to use this method before reading any user information.
+     * You also need to unlock the user after you're done reading.
+     */
+    public void readLock() {
+        lock.readLock().lock();
+    }
+
+    /**
+     * Unlocks the user after reading.
+     * You need to call this method after you're done reading the user information.
+     */
+    public void readUnlock() {
+        lock.readLock().unlock();
+    }
+
+    /**
+     * Locks the user for writing. You need to use this method before writing any user information.
+     * You also need to unlock the user after you're done writing.
+     */
+    public void writeLock() {
+        lock.writeLock().lock();
+    }
+
+    /**
+     * Unlocks the user after writing.
+     * You need to call this method after you're done writing the user information.
+     */
+    public void writeUnlock() {
+        lock.writeLock().unlock();
+    }
+
+    /**
+     * <b>Thread-safety:</b> Requires a read lock on this user.
+     *
      * @return the UUID of the user
      */
     public @NotNull UUID getUuid() {
@@ -38,6 +74,8 @@ public class LifestealerUser {
     }
 
     /**
+     * <b>Thread-safety:</b> Requires a read lock on this user.
+     *
      * @return the amount of hearts the user has
      */
     public int getHearts() {
@@ -48,6 +86,8 @@ public class LifestealerUser {
      * Gets the ban information of the user if they are banned, otherwise null.
      * This method is only intended to be used by the {@link LifestealerUserController}.
      * If you want to check if a player is banned, use {@link LifestealerUserController#getBan(LifestealerUser)}.
+     * <p>
+     * <b>Thread-safety:</b> Requires a read lock on this user.
      *
      * @return the ban information of the user if they have a banning record, otherwise null
      */
@@ -58,6 +98,8 @@ public class LifestealerUser {
     /**
      * Sets the ban information of the user.
      * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
+     * <p>
+     * <b>Thread-safety:</b> Requires a write lock on this user.
      *
      * @param ban the ban information of the user
      */
@@ -68,7 +110,9 @@ public class LifestealerUser {
     /**
      * Sets the amount of hearts the user has.
      * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
-     * If you want to set the amount of hearts of a player, use {@link LifestealerUserController#setHearts(Player, LifestealerUser, int)}.
+     * If you want to set the amount of hearts of a player, use {@link LifestealerUserController#setHearts(LifestealerUser, LifestealerUserRules, int)}.
+     * <p>
+     * <b>Thread-safety:</b> Requires a write lock on this user.
      *
      * @param hearts the amount of hearts to set
      */
@@ -84,6 +128,8 @@ public class LifestealerUser {
      * which is based on the user's permissions to get the final rule value.
      * <p>
      * Use {@link LifestealerUserController#computeUserRules(Player, LifestealerUser)} to get the final rule value.
+     * <p>
+     * <b>Thread-safety:</b> Requires a read lock on this user.
      */
     public @NotNull LifestealerUserRules getRulesModifier() {
         return modifierRules;
@@ -93,6 +139,8 @@ public class LifestealerUser {
      * Sets the modifier for the rules of the user internally without saving to the database.
      * Only intended to be used by the {@link LifestealerUserController} as this will not save the changes to the database.
      * If you want to change the rules modifier of a player, use {@link LifestealerUserController#setRulesModifier(LifestealerUser, LifestealerUserRules)}.
+     * <p>
+     * <b>Thread-safety:</b> Requires a write lock on this user.
      *
      * @param rulesModifier the modifier rules of the user
      */

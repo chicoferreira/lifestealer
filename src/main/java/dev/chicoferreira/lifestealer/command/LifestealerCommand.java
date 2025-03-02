@@ -14,6 +14,7 @@ import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +37,22 @@ public class LifestealerCommand {
 
     public void subcommandHeartsSet(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().setHearts(target, user, amount);
+        LifestealerUserController.ChangeHeartsResult result;
+        try {
+            user.writeLock();
+            LifestealerUserRules rules = this.lifestealer.getUserController().computeUserRules(target, user);
+            result = this.lifestealer.getUserController().setHearts(user, rules, amount);
+        } finally {
+            user.writeUnlock();
+        }
+        target.getScheduler().execute(this.lifestealer, () -> {
+            user.readLock();
+            try {
+                this.lifestealer.getUserController().updatePlayerHearts(target, user);
+            } finally {
+                user.readUnlock();
+            }
+        }, null, 0);
 
         LifestealerMessages.COMMAND_USER_HEARTS_SET_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -50,7 +66,23 @@ public class LifestealerCommand {
 
     public void subcommandHeartsAdd(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().addHearts(target, user, amount);
+        LifestealerUserController.ChangeHeartsResult result;
+        try {
+            user.writeLock();
+            LifestealerUserRules rules = this.lifestealer.getUserController().computeUserRules(target, user);
+            result = this.lifestealer.getUserController().addHearts(user, rules, amount);
+        } finally {
+            user.writeUnlock();
+        }
+
+        target.getScheduler().execute(this.lifestealer, () -> {
+            user.readLock();
+            try {
+                this.lifestealer.getUserController().updatePlayerHearts(target, user);
+            } finally {
+                user.readUnlock();
+            }
+        }, null, 0);
 
         LifestealerMessages.COMMAND_USER_HEARTS_ADD_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -66,7 +98,24 @@ public class LifestealerCommand {
 
     public void subcommandHeartsRemove(CommandSender sender, int amount, Player target) {
         LifestealerUser user = this.lifestealer.getUserManager().getOnlineUser(target);
-        LifestealerUserController.ChangeHeartsResult result = this.lifestealer.getUserController().removeHearts(target, user, amount);
+
+        LifestealerUserController.ChangeHeartsResult result;
+        try {
+            user.writeLock();
+            LifestealerUserRules rules = this.lifestealer.getUserController().computeUserRules(target, user);
+            result = this.lifestealer.getUserController().removeHearts(user, rules, amount);
+        } finally {
+            user.writeUnlock();
+        }
+
+        target.getScheduler().execute(this.lifestealer, () -> {
+            user.readLock();
+            try {
+                this.lifestealer.getUserController().updatePlayerHearts(target, user);
+            } finally {
+                user.readUnlock();
+            }
+        }, null, 0);
 
         LifestealerMessages.COMMAND_USER_HEARTS_REMOVE_SUCCESS.sendTo(sender,
                 Placeholder.component("target", target.name()),
@@ -81,35 +130,39 @@ public class LifestealerCommand {
     }
 
     public void subcommandItemGive(CommandSender sender, LifestealerHeartItem item, int amount, Player target) {
-        int rest = this.lifestealer.getItemManager().giveHeartItems(target, item, amount);
-        int given = amount - rest;
+        target.getScheduler().execute(this.lifestealer, () -> {
+            int rest = this.lifestealer.getItemManager().giveHeartItems(target, item, amount);
+            int given = amount - rest;
 
-        LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS.sendTo(sender,
-                Placeholder.component("target", target.name()),
-                Placeholder.unparsed("item", item.typeName()),
-                Formatter.number("amount", given),
-                Formatter.number("rest", rest));
+            LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS.sendTo(sender,
+                    Placeholder.component("target", target.name()),
+                    Placeholder.unparsed("item", item.typeName()),
+                    Formatter.number("amount", given),
+                    Formatter.number("rest", rest));
 
-        LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS_TARGET.sendTo(target,
-                Placeholder.unparsed("item", item.typeName()),
-                Formatter.number("amount", given),
-                Formatter.number("rest", rest));
+            LifestealerMessages.COMMAND_ITEM_GIVE_SUCCESS_TARGET.sendTo(target,
+                    Placeholder.unparsed("item", item.typeName()),
+                    Formatter.number("amount", given),
+                    Formatter.number("rest", rest));
+        }, null, 0);
     }
 
     public void subcommandItemTake(CommandSender sender, String itemTypeName, int amount, Player target) {
-        int rest = this.lifestealer.getItemManager().takeHeartItems(target, itemTypeName, amount);
-        int taken = amount - rest;
+        target.getScheduler().execute(this.lifestealer, () -> {
+            int rest = this.lifestealer.getItemManager().takeHeartItems(target, itemTypeName, amount);
+            int taken = amount - rest;
 
-        LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS.sendTo(sender,
-                Placeholder.component("target", target.name()),
-                Placeholder.unparsed("item", itemTypeName),
-                Formatter.number("amount", taken),
-                Formatter.number("rest", rest));
+            LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS.sendTo(sender,
+                    Placeholder.component("target", target.name()),
+                    Placeholder.unparsed("item", itemTypeName),
+                    Formatter.number("amount", taken),
+                    Formatter.number("rest", rest));
 
-        LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS_TARGET.sendTo(target,
-                Placeholder.unparsed("item", itemTypeName),
-                Formatter.number("amount", taken),
-                Formatter.number("rest", rest));
+            LifestealerMessages.COMMAND_ITEM_TAKE_SUCCESS_TARGET.sendTo(target,
+                    Placeholder.unparsed("item", itemTypeName),
+                    Formatter.number("amount", taken),
+                    Formatter.number("rest", rest));
+        }, null, 0);
     }
 
     public void subcommandItemList(CommandSender sender) {
@@ -132,14 +185,42 @@ public class LifestealerCommand {
     public void subcommandBanUser(CommandSender sender, Player target) {
         LifestealerUser targetUser = this.lifestealer.getUserManager().getOnlineUser(target);
 
-        LifestealerUser.Ban ban = this.lifestealer.getUserController().banUser(target, targetUser);
+        LifestealerUser.Ban ban;
+        try {
+            targetUser.writeLock();
+            ban = this.lifestealer.getUserController().setUserBanned(target, targetUser);
+        } finally {
+            targetUser.writeUnlock();
+        }
+
+        target.getScheduler().execute(this.lifestealer, () -> {
+            this.lifestealer.getUserController().postBanOperations(target, targetUser, ban);
+        }, null, 0);
+        Bukkit.getGlobalRegionScheduler().execute(this.lifestealer, () -> {
+            this.lifestealer.getUserController().executeBanCommands(target, ban.duration());
+        });
+
         subcommandBanSendSuccessMessage(sender, target, ban);
     }
 
     public void subcommandBanUserDuration(CommandSender sender, @NotNull Player target, @NotNull Duration duration) {
         LifestealerUser targetUser = this.lifestealer.getUserManager().getOnlineUser(target);
 
-        LifestealerUser.Ban ban = this.lifestealer.getUserController().banUser(target, targetUser, duration);
+        LifestealerUser.Ban ban;
+        try {
+            targetUser.writeLock();
+            ban = this.lifestealer.getUserController().setUserBanned(targetUser, duration);
+        } finally {
+            targetUser.writeUnlock();
+        }
+
+        target.getScheduler().execute(this.lifestealer, () -> {
+            this.lifestealer.getUserController().postBanOperations(target, targetUser, ban);
+        }, null, 0);
+        Bukkit.getGlobalRegionScheduler().execute(this.lifestealer, () -> {
+            this.lifestealer.getUserController().executeBanCommands(target, ban.duration());
+        });
+
         subcommandBanSendSuccessMessage(sender, target, ban);
     }
 
@@ -155,12 +236,18 @@ public class LifestealerCommand {
             LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
             Component targetName = this.getPlayerName(target);
 
-            if (!this.lifestealer.getUserController().isBanned(targetUser)) {
-                LifestealerMessages.COMMAND_UNBAN_NOT_BANNED.sendTo(sender, Placeholder.component("target", targetName));
-                return;
+            try {
+                targetUser.writeLock();
+                if (!this.lifestealer.getUserController().isBanned(targetUser)) {
+                    LifestealerMessages.COMMAND_UNBAN_NOT_BANNED.sendTo(sender, Placeholder.component("target", targetName));
+                    return;
+                }
+
+                this.lifestealer.getUserController().unbanUser(targetUser);
+            } finally {
+                targetUser.writeUnlock();
             }
 
-            this.lifestealer.getUserController().unbanUser(targetUser);
             LifestealerMessages.COMMAND_UNBAN_SUCCESS.sendTo(sender, Placeholder.component("target", targetName));
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
@@ -185,19 +272,37 @@ public class LifestealerCommand {
     public void subcommandUserInfo(CommandSender sender, @NotNull OfflinePlayer player) {
         try {
             LifestealerUser user = this.lifestealer.getUserManager().getOrLoadUser(player.getUniqueId());
-            LifestealerUser.Ban ban = this.lifestealer.getUserController().getBan(user);
+            LifestealerUser.Ban ban;
+            LifestealerUserRules rules;
+            LifestealerUserRules rulesModifier;
+            int hearts;
 
-            LifestealerUserRules rules = player instanceof Player onlinePlayer
-                    ? this.lifestealer.getUserController().computeUserRules(onlinePlayer, user)
-                    : null;
+            user.writeLock();
+            boolean downgraded = false;
+            try {
+                ban = this.lifestealer.getUserController().getBan(user);
+                user.readLock();
+                try {
+                    user.writeUnlock();
+                    downgraded = true;
 
-            int modifierMaxHearts = user.getRulesModifier().maxHearts();
-            int modifierMinHearts = user.getRulesModifier().minHearts();
-            int modifierReturnHearts = user.getRulesModifier().returnHearts();
-            Duration modifierBanTime = user.getRulesModifier().banTime();
+                    rules = player instanceof Player onlinePlayer
+                            ? this.lifestealer.getUserController().computeUserRules(onlinePlayer, user)
+                            : null;
+                    rulesModifier = user.getRulesModifier();
+                    hearts = user.getHearts();
+                } finally {
+                    user.readUnlock();
+                }
+            } finally {
+                if (!downgraded) {
+                    user.writeUnlock();
+                }
+            }
+
             LifestealerMessages.COMMAND_USER_INFO.sendTo(sender,
                     Placeholder.component("player", this.getPlayerName(player)),
-                    Formatter.number("hearts", user.getHearts()),
+                    Formatter.number("hearts", hearts),
                     either("banned", ban != null),
                     DurationUtils.formatDurationTag("remaining", ban != null ? ban.duration() : Duration.ZERO),
                     Formatter.date("date", ban != null ? ban.endZoned() : ZonedDateTime.now()),
@@ -206,14 +311,14 @@ public class LifestealerCommand {
                     Formatter.number("minhearts", rules != null ? rules.minHearts() : 0),
                     Formatter.number("returnhearts", rules != null ? rules.returnHearts() : 0),
                     DurationUtils.formatDurationTag("bantime", rules != null ? rules.banTime() : Duration.ZERO),
-                    Formatter.number("modifiermaxhearts", modifierMaxHearts),
-                    Formatter.number("modifierminhearts", modifierMinHearts),
-                    Formatter.number("modifierreturnhearts", modifierReturnHearts),
-                    DurationUtils.formatDurationTag("modifierbantime", modifierBanTime),
-                    Formatter.number("permissionmaxhearts", rules != null ? rules.maxHearts() - modifierMaxHearts : 0),
-                    Formatter.number("permissionminhearts", rules != null ? rules.minHearts() - modifierMinHearts : 0),
-                    Formatter.number("permissionreturnhearts", rules != null ? rules.returnHearts() - modifierReturnHearts : 0),
-                    DurationUtils.formatDurationTag("permissionbantime", rules != null ? rules.banTime().minus(modifierBanTime) : Duration.ZERO)
+                    Formatter.number("modifiermaxhearts", rulesModifier.maxHearts()),
+                    Formatter.number("modifierminhearts", rulesModifier.minHearts()),
+                    Formatter.number("modifierreturnhearts", rulesModifier.returnHearts()),
+                    DurationUtils.formatDurationTag("modifierbantime", rulesModifier.banTime()),
+                    Formatter.number("permissionmaxhearts", rules != null ? rules.maxHearts() - rulesModifier.maxHearts() : 0),
+                    Formatter.number("permissionminhearts", rules != null ? rules.minHearts() - rulesModifier.minHearts() : 0),
+                    Formatter.number("permissionreturnhearts", rules != null ? rules.returnHearts() - rulesModifier.returnHearts() : 0),
+                    DurationUtils.formatDurationTag("permissionbantime", rules != null ? rules.banTime().minus(rulesModifier.banTime()) : Duration.ZERO)
             );
         } catch (Exception e) {
             LifestealerMessages.COMMAND_ERROR_RETRIEVING_USER.sendTo(sender);
@@ -250,16 +355,21 @@ public class LifestealerCommand {
     public void subcommandUserSetRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
         try {
             LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
-            LifestealerUserRules modifierRules = targetUser.getRulesModifier();
+            targetUser.writeLock();
+            try {
+                LifestealerUserRules modifierRules = targetUser.getRulesModifier();
 
-            LifestealerUserRules newModifierRules = modifierRules.with(builder -> switch (rule) {
-                case MAXHEARTS -> builder.maxHearts(value);
-                case MINHEARTS -> builder.minHearts(value);
-                case BANTIME -> builder.banTime(Duration.ofSeconds(value));
-                case RETURNHEARTS -> builder.returnHearts(value);
-            });
+                LifestealerUserRules newModifierRules = modifierRules.with(builder -> switch (rule) {
+                    case MAXHEARTS -> builder.maxHearts(value);
+                    case MINHEARTS -> builder.minHearts(value);
+                    case BANTIME -> builder.banTime(Duration.ofSeconds(value));
+                    case RETURNHEARTS -> builder.returnHearts(value);
+                });
 
-            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+                this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+            } finally {
+                targetUser.writeUnlock();
+            }
 
             LifestealerMessages.COMMAND_USER_SET_RULE_MODIFIER_SUCCESS.sendTo(sender,
                     Placeholder.component("target", this.getPlayerName(target)),
@@ -280,16 +390,21 @@ public class LifestealerCommand {
     public void subcommandUserAdjustRuleModifier(CommandSender sender, OfflinePlayer target, LifestealerRuleModifier rule, int value) {
         try {
             LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
-            LifestealerUserRules modifierRules = targetUser.getRulesModifier();
+            targetUser.writeLock();
+            try {
+                LifestealerUserRules modifierRules = targetUser.getRulesModifier();
 
-            LifestealerUserRules newModifierRules = modifierRules.withSum(builder -> switch (rule) {
-                case MAXHEARTS -> builder.maxHearts(value);
-                case MINHEARTS -> builder.minHearts(value);
-                case BANTIME -> builder.banTime(Duration.ofSeconds(value));
-                case RETURNHEARTS -> builder.returnHearts(value);
-            });
+                LifestealerUserRules newModifierRules = modifierRules.withSum(builder -> switch (rule) {
+                    case MAXHEARTS -> builder.maxHearts(value);
+                    case MINHEARTS -> builder.minHearts(value);
+                    case BANTIME -> builder.banTime(Duration.ofSeconds(value));
+                    case RETURNHEARTS -> builder.returnHearts(value);
+                });
 
-            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+                this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+            } finally {
+                targetUser.writeUnlock();
+            }
 
             String adjustment = value > 0 ? "+" + value : String.valueOf(value);
 
@@ -314,7 +429,12 @@ public class LifestealerCommand {
             LifestealerUser targetUser = this.lifestealer.getUserManager().getOrLoadUser(target.getUniqueId());
 
             LifestealerUserRules newModifierRules = LifestealerUserRules.zeroed();
-            this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+            targetUser.writeLock();
+            try {
+                this.lifestealer.getUserController().setRulesModifier(targetUser, newModifierRules);
+            } finally {
+                targetUser.writeUnlock();
+            }
 
             LifestealerMessages.COMMAND_USER_RESET_RULE_MODIFIERS_SUCCESS.sendTo(sender,
                     Placeholder.component("target", this.getPlayerName(target)));
