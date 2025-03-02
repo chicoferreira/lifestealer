@@ -34,7 +34,8 @@ If you encounter any issues with Lifestealer, please consider
 
 ## Currently supported versions
 
-The plugin is developed and compiled against Paper 1.21.1 and API version 1.21.
+The plugin is developed and compiled against Paper 1.20.6 and API version 1.20.6, with additional support for Folia
+servers.
 
 ### List of tested versions
 
@@ -42,5 +43,6 @@ The plugin is developed and compiled against Paper 1.21.1 and API version 1.21.
 - 1.21.3
 - 1.21.1
 - 1.21
+- 1.20.6
 
-Versions under 1.21 are not supported.
+Versions under 1.20.6 may not be supported.
