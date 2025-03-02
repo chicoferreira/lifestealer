@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Event that is called after a user has been banned and the ban commands have been executed.
  * This event will still be called even if the external flag is set to true in the {@link dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings}
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.
  */
 public class LifestealerPostUserBanEvent extends Event {
 

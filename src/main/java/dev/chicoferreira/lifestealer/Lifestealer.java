@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 public class Lifestealer extends JavaPlugin {
@@ -80,7 +80,7 @@ public class Lifestealer extends JavaPlugin {
         this.executor = new LifestealerExecutor(this);
 
         this.userRulesController = new LifestealerUserRulesController(values.defaultUserRules(), values.userGroupRules());
-        this.userManager = new LifestealerUserManager(new HashMap<>(), this.userPersistentStorage, this.executor, values.startingHearts());
+        this.userManager = new LifestealerUserManager(this.userPersistentStorage, this.executor, values.startingHearts());
         this.userController = new LifestealerUserController(this.userManager, this.userRulesController, values.banSettings());
 
         this.itemManager = new LifestealerHeartItemManager(values.heartItemSettings());
@@ -91,15 +91,7 @@ public class Lifestealer extends JavaPlugin {
 
         this.heartDropRestrictionManager = new LifestealerHeartDropRestrictionManager(values.heartDropRestrictionActions());
 
-        this.userListener = new LifestealerUserListener(
-                this.executor,
-                this.getLogger(),
-                this.itemManager,
-                this.userController,
-                this.userManager,
-                this.heartDropRestrictionManager,
-                values.errorKickMessage()
-        );
+        this.userListener = new LifestealerUserListener(this.getLogger(), this, values.errorKickMessage());
 
         Bukkit.getPluginManager().registerEvents(this.userListener, this);
 
@@ -118,11 +110,28 @@ public class Lifestealer extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             try {
                 LifestealerUser user = this.userManager.getOrLoadUser(player.getUniqueId());
-                LifestealerUser.Ban ban = this.userController.getBanIfNotExternalSettingEnabled(user);
-                if (ban != null) {
-                    player.kick(this.userListener.getBanMessageComponent(player, ban));
+
+                user.writeLock();
+                LifestealerUser.Ban ban;
+                try {
+                    ban = this.userController.getBanIfNotExternalSettingEnabled(user);
+                } finally {
+                    user.writeUnlock();
                 }
-                this.userController.updatePlayerHearts(player, user);
+
+                player.getScheduler().execute(this, () -> {
+                    if (ban != null) {
+                        player.kick(this.userListener.getBanMessageComponent(player, ban));
+                        return;
+                    }
+
+                    user.readLock();
+                    try {
+                        this.getUserController().updatePlayerHearts(player, user);
+                    } finally {
+                        user.readUnlock();
+                    }
+                }, null, 0);
             } catch (Exception e) {
                 player.kick(values.errorKickMessage());
                 getLogger().log(Level.SEVERE, "Couldn't load user for player " + player.getName(), e);
@@ -130,19 +139,31 @@ public class Lifestealer extends JavaPlugin {
         }
     }
 
-    public void reloadConfiguration() throws SerializationException {
-        this.configuration.reloadConfig();
-        LifestealerConfiguration.Values values = this.configuration.loadConfig();
-        LifestealerMessages.loadMessages(this.configuration);
-        DurationUtils.setFormats(values.durationFormats());
+    private final ReentrantLock reloadLock = new ReentrantLock();
 
-        this.userRulesController.setDefaultRule(values.defaultUserRules());
-        this.userRulesController.setGroupRules(values.userGroupRules());
-        this.userController.setBanSettings(values.banSettings());
-        this.userManager.setStartingHearts(values.startingHearts());
-        this.itemManager.updateSettings(values.heartItemSettings());
-        this.heartDropRestrictionManager.setActions(values.heartDropRestrictionActions());
-        this.userListener.setErrorKickMessage(values.errorKickMessage());
+    /**
+     * Reloads the configuration and updates the plugin's settings.
+     * <p>
+     * <b>Thread-safety:</b> This method is thread-safe.
+     */
+    public void reloadConfiguration() throws SerializationException {
+        reloadLock.lock();
+        try {
+            this.configuration.reloadConfig();
+            LifestealerConfiguration.Values values = this.configuration.loadConfig();
+            LifestealerMessages.loadMessages(this.configuration);
+            DurationUtils.setFormats(values.durationFormats());
+
+            this.userRulesController.setDefaultRule(values.defaultUserRules());
+            this.userRulesController.setGroupRules(values.userGroupRules());
+            this.userController.setBanSettings(values.banSettings());
+            this.userManager.setStartingHearts(values.startingHearts());
+            this.itemManager.updateSettings(values.heartItemSettings());
+            this.heartDropRestrictionManager.setActions(values.heartDropRestrictionActions());
+            this.userListener.setErrorKickMessage(values.errorKickMessage());
+        } finally {
+            reloadLock.unlock();
+        }
     }
 
     @Override

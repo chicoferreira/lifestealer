@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * This event won't be called if the heart drop was restricted by a {@link dev.chicoferreira.lifestealer.restriction.LifestealerHeartDropRestriction}
  * that produced {@link LifestealerHeartDropAction#shouldRemoveHearts()} true.
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with a write lock active on the user.
  */
 public class LifestealerPostPlayerDeathEvent extends Event {
 

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages the {@link LifestealerUser} instances and persistence of them.
@@ -22,8 +23,8 @@ public class LifestealerUserManager {
     private final LifestealerExecutor executor;
     private int startingHearts;
 
-    public LifestealerUserManager(Map<UUID, LifestealerUser> users, UserPersistentStorage persistentStorage, LifestealerExecutor executor, int startingHearts) {
-        this.users = users;
+    public LifestealerUserManager(UserPersistentStorage persistentStorage, LifestealerExecutor executor, int startingHearts) {
+        this.users = new ConcurrentHashMap<>();
         this.persistentStorage = persistentStorage;
         this.executor = executor;
         this.startingHearts = startingHearts;
@@ -31,7 +32,7 @@ public class LifestealerUserManager {
 
     /**
      * Loads a user from the database. This does not cache the user in memory.
-     * Can be run asynchronously.
+     * <b>Thread-safety:</b> Can be run asynchronously.
      *
      * @param uuid the uuid of the user to load
      * @return the loaded user or null if the user is not saved in the database
@@ -46,51 +47,36 @@ public class LifestealerUserManager {
      * If the user is not already loaded, it will be loaded from the database and cached in memory.
      * If the user is not saved in the database, a new user will be created and cached in memory.
      * <p>
-     * This method is not thread-safe and should only be called from the main thread.
-     * If you need to call this method from a different thread, check the example in {@link LifestealerUserListener#onPreLogin(AsyncPlayerPreLoginEvent)}.
+     * <b>Thread-safety:</b> This method is thread-safe and you can call it from any thread.
      *
      * @param uuid the uuid of the user to get or load
      * @return the user if it's already loaded, otherwise loads it from the database and puts it in memory
      * @throws Exception if an error occurs while loading the user
      */
     public @NotNull LifestealerUser getOrLoadUser(UUID uuid) throws Exception {
-        LifestealerUser user = users.get(uuid);
-        if (user == null) {
-            user = loadUser(uuid);
-            if (user != null) {
-                users.put(uuid, user);
+        try {
+            return users.computeIfAbsent(uuid, key -> {
+                try {
+                    // Attempt to load an existing user.
+                    LifestealerUser loaded = loadUser(key);
+                    if (loaded != null) {
+                        return loaded;
+                    }
+                    // If not found, create a new user.
+                    return new LifestealerUser(key, getStartingHearts(), null, LifestealerUserRules.zeroed());
+                } catch (Exception ex) {
+                    // Wrap checked exceptions in a RuntimeException so they can be thrown inside the lambda.
+                    throw new RuntimeException(ex);
+                }
+            });
+        } catch (RuntimeException ex) {
+            // Unwrap the original exception if it was thrown.
+            if (ex.getCause() instanceof Exception) {
+                throw (Exception) ex.getCause();
             }
+            throw ex;
         }
 
-        if (user == null) {
-            user = createUser(uuid);
-        }
-
-        return user;
-    }
-
-    /**
-     * Creates a new user for that UUID with the default values and caches it in memory.
-     * This method does not save the user to the database.
-     * This method is not thread-safe and should only be called from the main thread.
-     *
-     * @param uuid the uuid of the user to create
-     * @return the created user
-     */
-    public @NotNull LifestealerUser createUser(UUID uuid) {
-        LifestealerUser user = new LifestealerUser(uuid, getStartingHearts(), null, LifestealerUserRules.zeroed());
-        users.put(uuid, user);
-        return user;
-    }
-
-    /**
-     * Registers a loaded user to memory.
-     * This method is not thread-safe and should only be called from the main thread.
-     *
-     * @param lifestealerUser the user to register
-     */
-    public void registerLoadedUser(LifestealerUser lifestealerUser) {
-        users.put(lifestealerUser.getUuid(), lifestealerUser);
     }
 
     /**

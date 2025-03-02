@@ -1,7 +1,8 @@
 package dev.chicoferreira.lifestealer.events;
 
-import dev.chicoferreira.lifestealer.user.LifestealerUserController;
 import dev.chicoferreira.lifestealer.user.LifestealerUser;
+import dev.chicoferreira.lifestealer.user.LifestealerUserController;
+import dev.chicoferreira.lifestealer.user.rules.LifestealerUserRules;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,9 +14,11 @@ import org.jetbrains.annotations.NotNull;
  * This event is called after the hearts have been added to the player and the heart item has been removed.
  * This event is called even if the player's hearts have not changed (e.g. the player is already at maximum hearts).
  * This event is not cancellable.
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.
  *
  * @see LifestealerPreConsumeHeartEvent
- * @see LifestealerUserController#addHearts(Player, LifestealerUser, int)
+ * @see LifestealerUserController#addHearts(LifestealerUser, LifestealerUserRules, int)
  */
 public class LifestealerPostConsumeHeartEvent extends Event {
 

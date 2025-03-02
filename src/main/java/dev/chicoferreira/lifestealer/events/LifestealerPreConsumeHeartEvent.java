@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Event that is triggered before a player consumes a heart item that you can cancel.
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with no active locks on the user.
  */
 public class LifestealerPreConsumeHeartEvent extends Event implements Cancellable {
 

@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.*;
@@ -19,8 +20,8 @@ public class LifestealerExecutor {
         return this.asyncExecutor;
     }
 
-    public Executor sync() {
-        return (task) -> plugin.getServer().getScheduler().runTask(plugin, task);
+    public Executor player(Player player, Runnable retired) {
+        return (runnable) -> player.getScheduler().execute(this.plugin, runnable, retired, 0);
     }
 
     public interface ThrowableRunnable {

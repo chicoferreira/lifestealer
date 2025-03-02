@@ -18,6 +18,8 @@ import java.time.Duration;
  * <p>
  * This event is called before the user is kicked and the ban commands are executed.
  * This event will still be called even if the external flag is set to true in the {@link dev.chicoferreira.lifestealer.user.LifestealerUserController.BanSettings}
+ * <p>
+ * <b>Thread-safety (WARNING):</b> This event is called with a write lock active on the user.
  */
 public class LifestealerPreUserBanEvent extends Event implements Cancellable {
 
