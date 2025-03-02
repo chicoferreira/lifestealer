@@ -31,7 +31,8 @@ export default defineConfig({
         items: [
           { text: "Welcome to Lifestealer Docs", link: "/intro/welcome" },
           { text: "Purchasing", link: "/intro/purchasing" },
-          { text: "Getting Started", link: "/intro/getting-started" }
+          { text: "Getting Started", link: "/intro/getting-started" },
+          { text: "Changelog", link: "/intro/changelog" },
         ],
       },
       {
