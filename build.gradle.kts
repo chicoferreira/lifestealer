@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation(platform("org.junit:junit-bom:5.12.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
