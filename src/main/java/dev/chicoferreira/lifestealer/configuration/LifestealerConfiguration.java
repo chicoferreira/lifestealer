@@ -172,7 +172,7 @@ public class LifestealerConfiguration {
                         .register(LifestealerHeartDropAction.class, new EnumSerializer<>(LifestealerHeartDropAction.class))
                         .register(LifestealerHeartDropRestrictionAction.class, new LifestealerHeartDropRestrictionActionSerializer())
                         .register(LifestealerHeartDropRestriction.class, new LifestealerHeartDropRestrictionSerializer())
-                        .register(UserPersistentStorageProperties.class, new StoragePropertiesSerializer(main.getDataPath()))
+                        .register(UserPersistentStorageProperties.class, new StoragePropertiesSerializer(main.getDataFolder().toPath()))
                         .register(UserPersistentStorageType.class, new EnumSerializer<>(UserPersistentStorageType.class))
                         .register(ParticleBuilder.class, new BukkitSerializers.Particles())
                 ))

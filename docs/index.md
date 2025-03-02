@@ -22,7 +22,7 @@ features:
     details: "Implements a hearts-stealing system where players lose or gain hearts based on in-game events."
   - title: "Configuration"
     details: "Deeply customize messages, items, rules and bans settings, and storage options using an extensive configuration file."
-  - title: "Integrations"
-    details: "Seamlessly integrate Lifestealer with other plugins using its useful built-in commands and full support for PlaceholderAPI."
+  - title: "Folia Ready"
+    details: "Fully supports Folia server, leveraging multi-threaded region handling for improved performance and scalability on large-scale servers."
 
 ---

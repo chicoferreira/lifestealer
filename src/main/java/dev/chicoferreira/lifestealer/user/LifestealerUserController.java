@@ -140,7 +140,7 @@ public class LifestealerUserController {
      * @param user   the user related to the player
      */
     public void updatePlayerHearts(@NotNull Player player, @NotNull LifestealerUser user) {
-        AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attribute != null) {
             attribute.setBaseValue(user.getHearts() * 2);
         }

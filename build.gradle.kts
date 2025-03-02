@@ -18,13 +18,15 @@ repositories {
 
     maven("https://repo.codemc.org/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    paperweight.foliaDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+
     compileOnly("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
     compileOnly("org.spongepowered:configurate-yaml:4.1.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
@@ -60,7 +62,7 @@ tasks {
 bukkitPluginYaml {
     main = "dev.chicoferreira.lifestealer.Lifestealer"
     authors.add("chicoferreira")
-    apiVersion = "1.21"
+    apiVersion = "1.20.6"
     softDepend.add("PlaceholderAPI")
     foliaSupported = true
     libraries.add("com.zaxxer:HikariCP:6.2.1")

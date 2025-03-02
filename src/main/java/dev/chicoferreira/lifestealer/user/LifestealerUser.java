@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @ConfigSerializable
 public class LifestealerUser {
 
-    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final transient ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final @NotNull UUID uuid;
     private int hearts;
     private @Nullable Ban ban;
