@@ -7,7 +7,12 @@ extensible, and performant.
 ## Demonstrations
 
 ### Main mechanic
+
 ![Demo](/demo.gif)
 
+> [!NOTE]
+> The texture pack is not included. Check the [texturing page](/usage/texturing) for more information.
+
 ### `/lifestealer user info` output
+
 ![`/lifestealer user info` output](/user_info_output.png)

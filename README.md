@@ -5,6 +5,8 @@ It enables dynamic gameplay where players gain or lose hearts by eliminating opp
 Highly configurable, extensible, and made to integrate seamlessly with other plugins.
 
 ![Demo](/docs/public/demo.gif)
+> [!NOTE]
+> The texture pack is not included.
 
 ## Documentation
 
