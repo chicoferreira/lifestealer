@@ -1,5 +1,6 @@
 package dev.chicoferreira.lifestealer.command;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import dev.chicoferreira.lifestealer.DurationUtils;
 import dev.chicoferreira.lifestealer.Lifestealer;
 import dev.chicoferreira.lifestealer.command.LifestealerCommand.LifestealerRuleModifier;
@@ -9,6 +10,8 @@ import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 
 import static dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import static dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -38,6 +42,23 @@ public class LifestealerCommandBackend {
             throw CommandAPI.failWithString("Argument " + argument + " is required");
         }
         return t;
+    }
+
+    public @NotNull OfflinePlayer getOfflinePlayerArgument(CommandArguments args, String argument) throws WrapperCommandSyntaxException {
+        List<PlayerProfile> profiles = getArgument(args, argument);
+        if (profiles.size() != 1) {
+            throw CommandAPI.failWithString("Argument " + argument + " must resolve to exactly one player");
+        }
+
+        PlayerProfile profile = profiles.getFirst();
+        if (profile.getId() != null) {
+            return Bukkit.getOfflinePlayer(profile.getId());
+        }
+        if (profile.getName() != null) {
+            return Bukkit.getOfflinePlayer(profile.getName());
+        }
+
+        throw CommandAPI.failWithString("Argument " + argument + " must resolve to a player with a UUID or name");
     }
 
     public void registerCommand(JavaPlugin plugin) {
@@ -144,15 +165,15 @@ public class LifestealerCommandBackend {
                                         )
                                 )
                         ).then(new LiteralArgument("unban")
-                                .then(new OfflinePlayerArgument("player")
+                                .then(new PlayerProfileArgument("player")
                                         .executes((sender, args) -> {
-                                            command.subcommandUnbanUser(sender, getArgument(args, "player"));
+                                            command.subcommandUnbanUser(sender, getOfflinePlayerArgument(args, "player"));
                                         })
                                 )
                         ).then(new LiteralArgument("info")
-                                .then(new OfflinePlayerArgument("player")
+                                .then(new PlayerProfileArgument("player")
                                         .executes((sender, args) -> {
-                                            command.subcommandUserInfo(sender, getArgument(args, "player"));
+                                            command.subcommandUserInfo(sender, getOfflinePlayerArgument(args, "player"));
                                         })
                                 ).executesPlayer((sender, args) -> {
                                     command.subcommandUserInfo(sender, sender);

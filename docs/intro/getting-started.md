@@ -6,7 +6,8 @@ the plugin on your server and configuring it to your liking.
 ## Installation
 
 To install the Lifestealer plugin on your server, you will need to download the latest version of the plugin from the
-store you purchased it from. Once you have the plugin file, you can upload it to your server's `plugins` directory.
+store you purchased it from. Install [CommandAPI](https://commandapi.jorel.dev/) as a separate plugin first, then upload
+Lifestealer to your server's `plugins` directory.
 
 The plugin should be compatible with any Paper server running Minecraft 1.21 or later. If you see any errors or issues
 when starting your server with the plugin installed, please check the console for error messages and report them here:
