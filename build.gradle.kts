@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.chicoferreira"
-version = "1.1.0"
+version = "1.1.1"
 description = "Simple and performant lifesteal plugin for managing player hearts"
 
 java {
